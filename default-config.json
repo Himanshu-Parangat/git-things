@@ -1,0 +1,8 @@
+{
+  "go": "installed",
+  "tailwind": "linked",
+  "htmx": "linked",
+  "test": {
+    "status": "on"
+  }
+}
