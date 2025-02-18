@@ -6,21 +6,21 @@ BIN_DIR=bin
 .DEFAULT_GOAL := help  
 
 help:
-	@echo -e "\nAvailable targets:"
-	@echo -e "  make build    - Compile the Go program"
-	@echo -e "  make run      - Build and run the program"
-	@echo -e "  make clean    - Remove built files"
-	@echo -e "  make help     - Show this help message\n"
+	@printf "\nAvailable targets:\n"
+	@printf "  make build    - Compile the Go program\n"
+	@printf "  make run      - Build and run the program\n"
+	@printf "  make clean    - Remove built files\n"
+	@printf "  make help     - Show this help message\n\n"
 
 build:
-	@echo -e "\nEnsure the $(BIN_DIR) directory"
+	@printf "\nEnsure the %s directory\n" "$(BIN_DIR)"
 	mkdir -p $(BIN_DIR)
-	@echo -e "\nBuilding the binary"
+	@printf "\nBuilding the binary\n"
 	go build -o $(BIN_DIR)/$(APP_NAME) main.go
 
 run: build
 	./$(BIN_DIR)/$(APP_NAME)
 
 clean:
-	@echo -e "\nRemoving $(BIN_DIR)"
+	@printf "\nRemoving %s\n" "$(BIN_DIR)"
 	rm -rf $(BIN_DIR)
