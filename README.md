@@ -1,3 +1,5 @@
+
+
 # Installation
 
 seting up `goth` stack
@@ -8,3 +10,5 @@ seting up `goth` stack
 - [ ] temple
 
 check : [config](./config.json)
+
+> this repo is for testing CI/CD pipeline and git hub stuff. there isn't any meaningful thing going one here.
