@@ -7,36 +7,36 @@ body:
     attributes:
       value: |
         ## Issue Details
-        Please provide detailed information for this issue by filling out the sections below.
+        Please provide the necessary details for this issue by completing the sections below.
   - type: input
     id: title-input
     attributes:
       label: "Issue Title (with optional scope)"
-      description: "Provide a concise title for the issue. Using a conventional commit style (e.g., `feat(ui): add dropdown for settings`) helps maintain consistency."
+      description: "Enter a brief, descriptive title for the issue. A conventional commit style (e.g., `feat(ui): add dropdown for settings`) is recommended."
       placeholder: "feat(scope): Brief description of the issue"
   - type: checkboxes
     id: duplicate-check
     attributes:
-      label: "Duplicate Check"
-      description: "Confirm that you have reviewed both open and closed issues for duplicates before submitting. Check the box if this issue is unique."
+      label: "Duplicate Check *"
+      description: "Before creating a new issue, ensure you have searched both open and closed issues for similar problems. Do not create duplicate issues."
       options:
-        - label: "I have verified and this issue is unique."
-          value: unique
+        - label: "I have searched the existing issues and confirmed this issue is unique."
+          required: true
   - type: textarea
     id: bullet-details
     attributes:
-      label: "Key Details"
-      description: "Outline the main points, steps, or context for this issue in bullet format."
-      placeholder: "- Point one\n- Point two\n- Additional details"
+      label: "Key Points"
+      description: "List the key points or steps related to the issue in bullet format."
+      placeholder: |
+        - First key point
+        - Second key point
+        - Additional details
   - type: dropdown
     id: work-on-issue
     attributes:
-      label: "Do you intend to work on this issue?"
-      description: "Select your preferred option."
+      label: "Will you be working on this issue?"
+      description: "Select whether you intend to work on resolving this issue."
       options:
-        - label: "Yes, I will work on this issue."
-          value: yes
-        - label: "No, I will not be working on this issue."
-          value: no
-        - label: "I'm unsure at the moment."
-          value: unsure
+        - "Yes, I will work on this issue."
+        - "No, I will not work on this issue."
+        - "I'm unsure at this moment."
