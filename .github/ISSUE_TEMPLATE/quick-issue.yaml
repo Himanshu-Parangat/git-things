@@ -1,0 +1,42 @@
+name: Quick Issue
+description: "Create a new issue following our standardized template."
+title: "[Scope(optional)]: Short Title"
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Issue Details
+        Please fill out the sections below.
+  - type: input
+    id: title-input
+    attributes:
+      label: "Name (scope<optional>): Short Title"
+      description: "Enter a brief title. A conventional commit style (e.g., `feat(ui): add dropdown for settings`) can be useful for consistency."
+      placeholder: "feat(scope): short description"
+  - type: checkbox
+    id: duplicate-check
+    attributes:
+      label: "Duplicate Check"
+      description: "I have checked both open and closed issues for duplicates. This one is unique."
+      options:
+        - label: "Yes, I've checked and this issue is unique."
+          value: unique
+  - type: textarea
+    id: bullet-details
+    attributes:
+      label: "Bullet Point Explanation"
+      description: "List the key points or steps in bullet format."
+      placeholder: "- First point\n- Second point\n- Additional details"
+  - type: dropdown
+    id: work-on-issue
+    attributes:
+      label: "Do you want to work on this issue?"
+      description: "Select an option."
+      options:
+        - label: "Yes"
+          value: yes
+        - label: "No"
+          value: no
+        - label: "Unsure"
+          value: unsure
