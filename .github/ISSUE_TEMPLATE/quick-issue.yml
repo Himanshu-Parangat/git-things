@@ -16,6 +16,14 @@ body:
         > - **Initial Triage:** Captures key info for follow-up.  
         > - **Versatile:** Works for any type of issue.  
 
+ - type: dropdown
+    id: Heading
+    attributes:
+      label: "Issue is going to be created. "
+      description: "by coninuing, you are about to creat the issue for project `git-things`"
+      options:
+        - "contine"
+
   - type: markdown
     attributes:
       value: |
@@ -24,24 +32,6 @@ body:
         We appreciate your effort.  
 
         Please fill out the section below with the **essential details** for your report.  
-
-  - type: textarea
-    id: description
-    attributes:
-      label: "ISSUE REPORT"
-      description: |
-        **ISSUE REPORT - Please read carefully before describing your issue.**
-
-        Provide a clear and concise description of the issue.
-        Do not edit this introductory text, focus on describing the problem below.
-  
-        ---
-
-        **Your Issue Description Starts Here:**
-        ...
-      placeholder: "Describe what happened..."
-    validations:
-      required: true
 
   - type: checkboxes
     id: duplicate-check
