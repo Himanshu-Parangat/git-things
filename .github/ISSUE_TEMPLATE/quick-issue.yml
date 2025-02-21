@@ -38,6 +38,7 @@ body:
     id: bullet-details
     attributes:
       label: "Issue's Key Points"
+      required: true
       description: "Summarize the main points or steps related to the issue using bullet points."
       placeholder: |
         - First key point
