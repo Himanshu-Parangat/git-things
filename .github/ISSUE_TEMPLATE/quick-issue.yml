@@ -25,9 +25,14 @@ body:
 
         Please fill out the section below with the **essential details** for your report.  
 
-  - type: markdown
+  - type: textarea
+    id: description
     attributes:
-      value: "# folow up"
+      lable: "ISSUE REPORT"
+      description: "issue details are as follwed"
+      Placeholder: "what happed?"
+    validations:
+      required: true
 
   - type: checkboxes
     id: duplicate-check
