@@ -6,11 +6,14 @@ body:
   - type: markdown
     attributes:
       value: |
-        Quick & Simple: Only asks for the basics.
-        User-Friendly: Ideal for non tech users.
-        Minimal Steps: Keeps reporting fast and easy.
-        Initial Triage: Captures key info for follow up.
-        Versatile: Works for any type of issue.
+        > **Note:**  
+        > This template is ideal for users who might not be technical or familiar with detailed issue reporting—anyone can contribute.  
+        >  
+        > - **Quick & Simple:** Only asks for the basics.  
+        > - **User-Friendly:** Ideal for non-tech users.  
+        > - **Minimal Steps:** Keeps reporting fast and easy.  
+        > - **Initial Triage:** Captures key info for follow-up.  
+        > - **Versatile:** Works for any type of issue.
   - type: markdown
     attribute:
       value: |
