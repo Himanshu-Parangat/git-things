@@ -1,7 +1,7 @@
 name: Quick Report
 description: "A minimal template for fast and straightforward reports."
 title: "[Quick Report]:"
-labels: ["bug", "need triage"]
+labels: ["need triage"]
 body:
   - type: markdown
     attributes:
