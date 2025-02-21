@@ -43,8 +43,6 @@ body:
         - First key point
         - Second key point
         - Additional details
-      validations:
-        required: true
 
   - type: dropdown
     id: work-on-issue
