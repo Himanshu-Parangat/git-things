@@ -3,7 +3,18 @@ description: File a bug report.
 title: "[Bug]: "
 labels: ["bug", "need triage"]
 assignees:
-  - octocat
+  - type: dropdown
+    id: assignTo
+    attributes:
+      label: "Assign to"
+      description: Do you want to work on this issue?
+      options:
+        - unsure at the moment
+        - no, i will not
+        - yes, i would love to
+      default: 0
+    validations:
+      required: true
 body:
   - type: markdown
     attributes:
