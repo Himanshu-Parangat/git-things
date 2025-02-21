@@ -25,13 +25,15 @@ body:
 
         Please fill out the section below with the **essential details** for your report.  
 
-
-  - type: input
-    id: section_heading  # You can give it an ID if needed
+  - type: dropdown
+    id: heading
     attributes:
-      label: "issue is created for"
-      placeholder: "g"
-      description: "gg"
+      label: "Creating an Issue"
+      description: "You are about to create an issue for the project. This issue will be publicly visible to developers and users alike. Please double-check your submission to ensure accuracy and that you have not clicked it accidentally."
+      options:
+        - "Yes, I have checked"
+        - "it's just a draft"
+
 
   - type: checkboxes
     id: duplicate-check
@@ -61,6 +63,7 @@ body:
         - "Yes, I will work on this issue."
         - "No, I am not able to work on this issue."
         - "Not sure yet."
+
   - type: checkboxes
     id: terms
     attributes:
