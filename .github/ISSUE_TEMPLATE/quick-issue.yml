@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         > **Note:** 
-        > This template is intend for non-developers who need a quick straightforward way to reports issue. Developers or those with detailed technical info should use an alternative template. 
+        > This template is intend for non-developers who need a quick straightforward way to reports issue. developers or those with detailed technical info should use an alternative template. 
         >  
         > - **Quick & Simple:** Only asks for the basics.  
         > - **User-Friendly:** Ideal for non-tech users.  
