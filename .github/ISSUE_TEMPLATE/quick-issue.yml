@@ -16,13 +16,12 @@ body:
         > - **Initial Triage:** Captures key info for follow-up.  
         > - **Versatile:** Works for any type of issue.  
 
- - type: dropdown
-    id: Heading
+  - type: input
+    id: section_heading  # You can give it an ID if needed
     attributes:
-      label: "Issue is going to be created. "
-      description: "by coninuing, you are about to creat the issue for project `git-things`"
-      options:
-        - "contine"
+      label: "issue is created for"
+      placeholder: ""
+      description: ""
 
   - type: markdown
     attributes:
