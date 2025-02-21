@@ -28,10 +28,10 @@ body:
   - type: dropdown
     id: heading
     attributes:
-      label: "Creating an Issue"
+      label: "Issue Submission"
       description: "You are about to create an issue for the project. This issue will be publicly visible to developers and users alike. Please double-check your submission to ensure accuracy and that you have not clicked it accidentally."
       options:
-        - "Yes, I have checked"
+        - "yes, i am aware that this issue will be public."
     validations:
       required: true
 
