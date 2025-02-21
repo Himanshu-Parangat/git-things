@@ -20,8 +20,7 @@ body:
     id: section_heading  # You can give it an ID if needed
     attributes:
       label: "issue is created for"
-      placeholder: ""
-      description: ""
+
 
   - type: markdown
     attributes:
