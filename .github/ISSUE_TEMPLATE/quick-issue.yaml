@@ -5,8 +5,7 @@ labels: []
 body:
   - type: markdown
     attributes:
-      value: |
-> Please provide the necessary details for this issue by completing the sections below.
+      value: "> Please provide the necessary details for this issue by completing the sections below."
   - type: checkboxes
     id: duplicate-check
     attributes:
