@@ -32,8 +32,6 @@ body:
       description: "You are about to create an issue for the project. This issue will be publicly visible to developers and users alike. Please double-check your submission to ensure accuracy and that you have not clicked it accidentally."
       options:
         - "Yes, I have checked"
-        - "it's just a draft"
-
 
   - type: checkboxes
     id: duplicate-check
