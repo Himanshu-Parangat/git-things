@@ -33,7 +33,7 @@ body:
       description: "You are about to create an issue for the project. This issue will be publicly visible to developers and users alike. Please double-check your submission to ensure accuracy and that you have not clicked it accidentally."
       options:
         - "Yes, I'm aware that this issue will be public"
-        - "I'm aware this is public, but I'd like to have a private discussion"
+        - "I'm aware this will be public, but I'd like to have a private discussion"
     validations:
       required: true
 
