@@ -7,10 +7,10 @@ body:
     attributes:
       value: |
         > **Note:**
-        > - This template is intended for non-developers who need a quick, straightforward way to report issues.  
-        > - Developers or those with detailed technical info should use an alternative template.  
+        > This template is intended for non-developers who need a quick, straightforward way to report issues.  
+        > Developers or those with detailed technical info should use an alternative template.  
         > 
-        >  **key points:**
+        > **key points:**
         > - **Quick & Simple:** Only the essentials are required.  
         > - **User-Friendly:** Perfect for non-tech users.  
         > - **Minimal Steps:** Ensures a fast and easy reporting process.  
