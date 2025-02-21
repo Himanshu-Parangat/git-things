@@ -1,20 +1,7 @@
-name: Bug Report
-description: File a bug report.
+name: Detailed report
+description: File a detaield report.
 title: "[Bug]: "
-labels: ["bug", "need triage"]
-assignees:
-  - type: dropdown
-    id: assignTo
-    attributes:
-      label: "Assign to"
-      description: Do you want to work on this issue?
-      options:
-        - unsure at the moment
-        - no, i will not
-        - yes, i would love to
-      default: 0
-    validations:
-      required: true
+labels: ["bug", "need triage"]  
 body:
   - type: markdown
     attributes:
@@ -28,6 +15,18 @@ body:
       placeholder: ex. email@example.com
     validations:
       required: false
+  - type: dropdown
+    id: assignTo
+    attributes:
+      label: "Assign to"
+      description: Do you want to work on this issue?
+      options:
+        - unsure at the moment
+        - no, i will not
+        - yes, i would love to
+      default: 0
+    validations:
+      required: true
   - type: textarea
     id: what-happened
     attributes:
