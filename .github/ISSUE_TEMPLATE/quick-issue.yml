@@ -28,9 +28,18 @@ body:
   - type: textarea
     id: description
     attributes:
-      lable: "ISSUE REPORT"
-      description: "issue details are as follwed"
-      Placeholder: "what happed?"
+      label: "ISSUE REPORT"
+      description: |
+        **ISSUE REPORT - Please read carefully before describing your issue.**
+
+        Provide a clear and concise description of the issue.
+        Do not edit this introductory text, focus on describing the problem below.
+  
+        ---
+
+        **Your Issue Description Starts Here:**
+        ...
+      placeholder: "Describe what happened..."
     validations:
       required: true
 
