@@ -18,12 +18,8 @@ body:
   
   - type: markdown
     attributes:
-      value: |
-        Thank you for your time!  
-        We appreciate your effort.  
-
-        Please fill out the section below with the essential details for your report.    
-
+      value: "  "
+    
   - type: markdown
     attributes:
       value: "**`Thank you`** for your time! We appreciate your effort. Please `fill out` the section below with the `essential details` for your report."
