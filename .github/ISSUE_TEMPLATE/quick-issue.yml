@@ -15,13 +15,15 @@ body:
         > - **Minimal Steps:** Keeps reporting fast and easy.  
         > - **Initial Triage:** Captures key info for follow-up.  
         > - **Versatile:** Works for any type of issue.
-  
+
   - type: markdown
     attributes:
       value: |
-        > **Note:**  
-        "**`Thank you`** for your time! We appreciate your effort. Please `fill out` the section below with the `essential details` for your report."
-     
+        Thank you for your time!  
+        We appreciate your effort.  
+
+        Please fill out the section below with the essential details for your report.    
+  
   - type: checkboxes
     id: duplicate-check
     attributes:
