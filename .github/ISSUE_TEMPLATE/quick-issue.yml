@@ -52,3 +52,69 @@ body:
         - "Yes, I will work on this issue."
         - "No, I am not able to work on this issue."
         - "Not sure yet."
+
+
+
+
+name: Quick Issue
+description: "A minimal template for fast and straightforward reports."
+title: "[Quick Report]:"
+labels: ["bug", "need triage"] 
+body:
+  - type: markdown
+    attributes:
+      value: |
+        > **Note:** 
+        > This template is intend for non-developers who need a quick straightforward way to reports issue. 
+        > Developers or those with detailed technical info should use an alternative template. 
+        >  
+        > - **Quick & Simple:** Only asks for the basics.  
+        > - **User-Friendly:** Ideal for non-tech users.  
+        > - **Minimal Steps:** Keeps reporting fast and easy.  
+        > - **Initial Triage:** Captures key info for follow-up.  
+        > - **Versatile:** Works for any type of issue.
+  
+  - type: markdown
+    attributes:
+      value: " "
+
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for your time!  
+        We appreciate your effort.  
+
+        Please fill out the section below with the essential details for your report.    
+ 
+  - type: markdown
+    attributes:
+      value: "**`Thank you`** for your time! We appreciate your effort. Please `fill out` the section below with the `essential details` for your report."
+   
+  - type: checkboxes
+    id: duplicate-check
+    attributes:
+      label: "Duplicate Check"
+      description: "Before submitting, verify that you haven't already reported this issue by checking both open and closed issues."
+      options:
+        - label: "I have reviewed existing issues and confirmed this report is unique."
+          required: true
+  
+  - type: textarea
+    id: bullet-details
+    attributes:
+      label: "Issue's Key Points"
+      description: "Summarize the main points or steps related to the issue using bullet points."
+      placeholder: |
+        - First key point
+        - Second key point
+        - Additional details
+  
+  - type: dropdown
+    id: work-on-issue
+    attributes:
+      label: "Are you planning to work on this issue?"
+      description: "Let us know if you intend to address this issue yourself."
+      options:
+        - "Yes, I will work on this issue."
+        - "No, I am not able to work on this issue."
+        - "Not sure yet."
