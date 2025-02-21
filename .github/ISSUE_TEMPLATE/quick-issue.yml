@@ -31,7 +31,7 @@ body:
   - type: textarea
     id: bullet-details
     attributes:
-      label: "Key Points"
+      label: "Issue's Key Points"
       description: "Summarize the main points or steps related to the issue using bullet points."
       placeholder: |
         - First key point
