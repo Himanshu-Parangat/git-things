@@ -16,12 +16,6 @@ body:
         > - **Initial Triage:** Captures key info for follow-up.  
         > - **Versatile:** Works for any type of issue.  
 
-  - type: input
-    id: section_heading  # You can give it an ID if needed
-    attributes:
-      label: "issue is created for"
-
-
   - type: markdown
     attributes:
       value: |
@@ -30,6 +24,14 @@ body:
         We appreciate your effort.  
 
         Please fill out the section below with the **essential details** for your report.  
+
+
+  - type: input
+    id: section_heading  # You can give it an ID if needed
+    attributes:
+      label: "issue is created for"
+      placeholder: "g"
+      description: "gg"
 
   - type: checkboxes
     id: duplicate-check
