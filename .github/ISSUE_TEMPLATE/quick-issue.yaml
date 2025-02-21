@@ -9,7 +9,7 @@ body:
       Quick & Simple: Only asks for the basics.
       User-Friendly: Ideal for non tech users.
       Minimal Steps: Keeps reporting fast and easy.
-      Initial Triage: Captures key info for follow-up.
+      Initial Triage: Captures key info for follow up.
       Versatile: Works for any type of issue.
   - type: markdown
     attribute:
