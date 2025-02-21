@@ -19,9 +19,6 @@ body:
   - type: markdown
     attributes:
       value: "`Thank you` for your time! We appreciate your effort. Please `fill out` the section below with the `essential details` for your report."
- - type: markdown
-    attributes:
-      value: "Please fill out the sections below with the essential details for your report."
   
   - type: checkboxes
     id: duplicate-check
