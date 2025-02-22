@@ -29,7 +29,7 @@ body:
   - type: dropdown
     id: heading
     attributes:
-      label: "## 1. Quick Report, Issue Submission:"
+      label: "1. Quick Report, Issue Submission:"
       description: "You are about to create an issue report for the project. This issue report will be publicly visible to developers and users alike. Please double-check your submission to ensure accuracy and that you have not clicked it accidentally."
       options:
         - "Yes, I'm aware that this issue will be public"
@@ -40,7 +40,7 @@ body:
   - type: checkboxes
     id: duplicate-check
     attributes:
-      label: "2. Duplicate Check"
+      label: "2. Duplicate Check:"
       description: Before submitting, verify that Somone haven't already reported this issue by checking both "open" AND "closed" issues.
       options:
         - label: "I have reviewed existing issues and confirmed this report is unique."
@@ -49,14 +49,14 @@ body:
   - type: input
     id: Issue-title
     attributes:
-      label: "3. Issue Title"
+      label: "3. Issue Title:"
       description: "Provide a short and clear title for the issue."
       placeholder: Brief issue summary
 
   - type: textarea
     id: Issue-description
     attributes:
-      label: "4. Issue Description"
+      label: "4. Issue Description:"
       description: "Summarize the main points or steps related to the issue using bullet points."
       placeholder: |
         - First key point
@@ -80,7 +80,7 @@ body:
   - type: checkboxes
     id: terms
     attributes:
-      label: "6. Code of Conduct"
+      label: "6. Code of Conduct:"
       description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com). 
       options:
         - label: I agree to follow this project's Code of Conduct
