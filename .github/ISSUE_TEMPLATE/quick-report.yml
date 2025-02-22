@@ -46,8 +46,15 @@ body:
         - label: "I have reviewed existing issues and confirmed this report is unique."
           required: true
 
+  - type: input
+    id: Issue-title
+    attributes:
+      label: "Issue Title"
+      description: "Provide a short and clear title for the issue."
+      placeholder: Brief issue summary
+
   - type: textarea
-    id: bullet-details
+    id: Issue-description
     attributes:
       label: "Issue Description"
       description: "Summarize the main points or steps related to the issue using bullet points."
