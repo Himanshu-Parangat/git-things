@@ -41,7 +41,7 @@ body:
     id: duplicate-check
     attributes:
       label: "Duplicate Check"
-      description: "Before submitting, verify that Somone haven't already reported this issue by checking both open and closed issues."
+      description: Before submitting, verify that Somone haven't already reported this issue by checking both "open" AND "closed" issues.
       options:
         - label: "I have reviewed existing issues and confirmed this report is unique."
           required: true
