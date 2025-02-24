@@ -57,7 +57,7 @@ body:
       required: true
 
   - type: input
-    id: issue_scope
+    id: issue-scope
     attributes:
       label: "Where did you find it?"
       description: |
@@ -74,7 +74,7 @@ body:
       required: true
 
   - type: input
-    id: Issue-title
+    id: issue-title
     attributes:
       label: "Issue Title:"
       description: "Provide a short and clear title for the issue."
@@ -160,4 +160,4 @@ body:
       description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/Himanshu-Parangat/cnss/blob/main/CODE_OF_CONDUCT.md). 
       options:
         - label: I agree to follow this project's Code of Conduct
-          required: false
+          required: true
