@@ -128,17 +128,17 @@ body:
     validations:
       required: false
 
-  - type: file
-    id: screenshots_or_attachments
-    attributes:
-      label: "Screenshots/Attachments: (Optional)"
-      description: |
-        Please attach any relevant screenshots, screen recordings, or log files that can help us understand the issue better.
-        You can drag and drop files into this area.
-      multiple: true
-      accept: ".png, .jpg, .jpeg, .gif, .mp4, .log, .txt, .md, .html, .diff"
-    validations:
-      required: false
+#  - type: file
+#    id: screenshots_or_attachments
+#    attributes:
+#      label: "Screenshots/Attachments: (Optional)"
+#      description: |
+#        Please attach any relevant screenshots, screen recordings, or log files that can help us understand the issue better.
+#        You can drag and drop files into this area.
+#      multiple: true
+#      accept: ".png, .jpg, .jpeg, .gif, .mp4, .log, .txt, .md, .html, .diff"
+#    validations:
+#      required: false
 
 
   - type: textarea
