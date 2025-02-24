@@ -14,8 +14,7 @@ body:
     attributes:
       value: |
 
-        **Thank you** for your time!  
-        your effort is really appreciate.  
+        **Thank you** for your time! Your effort is greatly appreciated. 
 
         Please fill out the section below with the **essential details** for your report.  
 
@@ -34,10 +33,10 @@ body:
     id: duplicate-check
     attributes:
       label: "Duplicate Check:"
-      description: Before submitting, verify that Somone haven't already reported this issue by checking both "open" AND "closed" issues.
+      description: Before submitting, verify that Someone haven't already reported this issue by checking both "open" AND "closed" issues.
       options:
         - label: "I have reviewed existing issues and confirmed this report is unique."
-          required: true
+          required: false
 
   - type: dropdown
     id: regression
@@ -53,7 +52,7 @@ body:
         - "No, this bug has always existed"
         - "No, this issue is with a feature that was recently introduced"
         - "No, this is a documentation issue"
-        - "I donΓÇÖt know, IΓÇÖm new to the project"
+        - "I don’t know, I’m new to the project"
     validations:
       required: true
 
@@ -63,14 +62,16 @@ body:
       label: "Where did you find it?"
       description: |
         Please specify where you observed the issue. This could be a file path, directory, UI element, or any specific location within the project.
-        this will help diagnose the problem faster and narrow down scope. For example:
-        - `cnss/testing-env/server/main.go`
-        - `Settings page > config setion`
-        - `API response from /headers endpoint`
+        this will help diagnose the problem faster and narrow down scope.
+
+        > **For example:**  
+        > - `cnss/testing-env/server/main.go`
+        > - `Settings page > Config section`
+        > - `API response from /headers endpoint`
 
       placeholder: "In dashboard ui button x"
     validations:
-      required: false
+      required: true
 
   - type: input
     id: Issue-title
@@ -83,10 +84,11 @@ body:
     id: bullet-details
     attributes:
       label: "Issue Description:"
-      description: "Describe the issue in details. use bullet points where possible. Avoid large text blocks, attach relevant content using the button below."
+      description: "Describe the issue in details. Use bullet points where possible. Avoid large text blocks, attach relevant content using the button below."
       placeholder: |
         - First key point
         - Second key point
+        - Affected Component
         - Additional details
 
   - type: textarea
@@ -98,7 +100,7 @@ body:
         I expected [the feature] to [action] and [result].
         For example: I expected the page to load quickly and display the correct information.
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: actual_behavior
@@ -109,7 +111,7 @@ body:
         Instead, [the feature] [action] and [result].
         For example: Instead, the page took a long time to load and displayed an error message.
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: steps_to_reproduce
@@ -128,18 +130,6 @@ body:
     validations:
       required: false
 
-#  - type: file
-#    id: screenshots_or_attachments
-#    attributes:
-#      label: "Screenshots/Attachments: (Optional)"
-#      description: |
-#        Please attach any relevant screenshots, screen recordings, or log files that can help us understand the issue better.
-#        You can drag and drop files into this area.
-#      multiple: true
-#      accept: ".png, .jpg, .jpeg, .gif, .mp4, .log, .txt, .md, .html, .diff"
-#    validations:
-#      required: false
-
 
   - type: textarea
     id: proposed_solution
@@ -148,7 +138,7 @@ body:
       description: |
         If you have any ideas about how to fix the issue, please share them here. This is optional.  Even if you're not sure, any insights you have might be helpful.
       placeholder: |
-        I suspect the problem might be related to [area of the code/system] and could potentially be fixed by [your suggested approach].  For example, perhaps adjusting the timeout value or checking for null pointers.
+        I suspect the problem might be related to [area of the code/system] and could potentially be fixed by [your suggested approach].
     validations:
       required: false
 
@@ -170,4 +160,4 @@ body:
       description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/Himanshu-Parangat/cnss/blob/main/CODE_OF_CONDUCT.md). 
       options:
         - label: I agree to follow this project's Code of Conduct
-          required: true
+          required: false
