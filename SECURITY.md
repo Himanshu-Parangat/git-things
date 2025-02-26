@@ -51,8 +51,9 @@ Our process for handling security reports:
 5. **Recognition (Optional):** With your permission, we may publicly acknowledge your responsible disclosure.
 
 ## 4. What is a Security Issue?
-
-A **critical security issue** is something that:
+>  [!note]
+> - A **critical security issue** is something that includes, but is not limited to, the following. 
+> - If an issue is not mentioned but you believe it poses a security risk, **please do report** it.
 
 - **Compromises Confidentiality:** Could lead to unauthorized access or exposure of sensitive data like:
   - API keys
