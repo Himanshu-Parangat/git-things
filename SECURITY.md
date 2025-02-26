@@ -71,7 +71,6 @@ Our process for handling security reports:
 ### 4.1 Examples of Security Issues
 
 - Exposed API keys or login credentials.
-- SQL Injection vulnerabilities.
 - Cross-Site Scripting (XSS) vulnerabilities.
 - Remote Code Execution (RCE) vulnerabilities.
 - Insecure Direct Object Reference vulnerabilities.
