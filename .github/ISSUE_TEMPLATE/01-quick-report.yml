@@ -1,7 +1,7 @@
 name: Quick Report
 description: "A minimal template for fast and straightforward reports."
 title: "[Quick Report]:"
-labels: ["need triage"]
+labels: ["needs-triage"]
 body:
   - type: markdown
     attributes:
@@ -21,15 +21,14 @@ body:
     attributes:
       value: |
 
-        **Thank you** for your time!  
-        We appreciate your effort.  
+        **Thank you** for your time! Your effort is greatly appreciated.
 
         Please fill out the section below with the **essential details** for your report.  
 
   - type: dropdown
     id: heading
     attributes:
-      label: "1. Quick Report, Issue Submission:"
+      label: "Quick Report, Issue Submission:"
       description: "You are about to create an issue report for the project. This issue report will be publicly visible to developers and users alike. Please double-check your submission to ensure accuracy and that you have not clicked it accidentally."
       options:
         - "Yes, I'm aware that this issue will be public"
@@ -40,27 +39,28 @@ body:
   - type: checkboxes
     id: duplicate-check
     attributes:
-      label: "2. Duplicate Check:"
-      description: Before submitting, verify that Somone haven't already reported this issue by checking both "open" AND "closed" issues.
+      label: "Duplicate Check:"
+      description: Before submitting, verify that Someone haven't already reported this issue by checking both "open" AND "closed" issues.
       options:
         - label: "I have reviewed existing issues and confirmed this report is unique."
-          required: true
+          required: false
 
   - type: input
     id: Issue-title
     attributes:
-      label: "3. Issue Title:"
+      label: "Issue Title:"
       description: "Provide a short and clear title for the issue."
       placeholder: Brief issue summary
 
   - type: textarea
-    id: Issue-description
+    id: bullet-details
     attributes:
-      label: "4. Issue Description:"
-      description: "Summarize the main points or steps related to the issue using bullet points."
+      label: "Issue Description:"
+      description: "Describe the issue in details. Use bullet points where possible. Avoid large text blocks, attach relevant content using the button below."
       placeholder: |
         - First key point
         - Second key point
+        - Affected Component
         - Additional details
 
         - What did you expect to happen?
@@ -70,7 +70,7 @@ body:
   - type: dropdown
     id: work-on-issue
     attributes:
-      label: "5. Are you planning to work on this issue?"
+      label: "Are you planning to work on this issue?"
       description: "Let us know if you intend to address this issue yourself."
       options:
         - "Yes, I will work on this issue."
@@ -80,8 +80,8 @@ body:
   - type: checkboxes
     id: terms
     attributes:
-      label: "6. Code of Conduct:"
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com). 
+      label: "Code of Conduct:"
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/Himanshu-Parangat/cnss/blob/main/CODE_OF_CONDUCT.md). 
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
