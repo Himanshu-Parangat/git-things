@@ -18,7 +18,7 @@
 
 ## 1. Security Policy Overview
 
-This document details the security policy for this repository. It is designed for reporting **critical security vulnerabilities** that could negatively inpact users, contributors, collaborators, the project itself, the repository owner/maintainer, and everyone else involved significantly.
+This document details the security policy for this project. It is designed for reporting **critical security vulnerabilities** that could negatively inpact users, contributors, collaborators, the project itself, the repository owner/maintainer, and everyone else involved significantly.
 
 ### Key Points:
 
