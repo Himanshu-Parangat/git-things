@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        > **Note:**  
+        > **Note:**
         > - This template is for **feature requests, idea proposals, suggestions, and improvements.**
         > - Use this template to **propose new features or suggest enhancements** to existing ones.
 
@@ -41,7 +41,7 @@ body:
   - type: input
     id: request-title
     attributes:
-      label: "Title:"
+      label: "Request Title:"
       description: "Provide a short and clear title for the request."
       placeholder: "Brief Request summary"
     validations:
@@ -50,7 +50,7 @@ body:
   - type: textarea
     id: bullet-details
     attributes:
-      label: "Description:"
+      label: "Request Description:"
       description: "Describe the request in detail. Use bullet points where possible. Avoid large text blocks, attach relevant content using the button below."
       placeholder: |
         - First key point
@@ -63,7 +63,7 @@ body:
   - type: input
     id: affected-components
     attributes:
-      label: "Affected Components/Files/Modules"
+      label: "Affected Components/Files/Modules:"
       description: |
         Please specify the components, files, or modules that will be affected by this  proposal. This helps identify potential conflicts and coordinate with other contributors.
         > **Examples:**
@@ -73,7 +73,7 @@ body:
         > - `Dashboard UI (specifically the button x component)`
       placeholder: "This will impact functionality related to..."
     validations:
-      required: true
+      required: false
 
   - type: textarea
     id: solution-and-context
