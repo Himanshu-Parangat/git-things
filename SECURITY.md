@@ -120,7 +120,3 @@ This policy covers all parts of this project:
 
 - **Policy Changes:** This security policy may be updated periodically.
 - **Regular Review:** Please check back here for the most current version of the policy.
-
----
-
-This document ensures that security concerns are addressed efficiently and responsibly.
