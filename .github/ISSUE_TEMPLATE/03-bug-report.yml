@@ -1,12 +1,12 @@
 name: Bug Report
-description: "A template for reporting bugs or something that doesn't seem right"
+description: "A template for reporting bugs or something that doesn't seem right."
 title: "[Bug]:"
 labels: ["needs-triage"]
 body:
   - type: markdown
     attributes:
       value: |
-        > **Note:**  
+        > **Note:**
         > - For **bugs/issues/unexpected Behavior:** Use this template.
         > - For **critical security issues:** Contact privately.
 
@@ -52,7 +52,7 @@ body:
         - "No, this bug has always existed"
         - "No, this issue is with a feature that was recently introduced"
         - "No, this is a documentation issue"
-        - "I don’t know, I’m new to the project"
+        - "I don't know, I'm new to the project"
     validations:
       required: true
 
