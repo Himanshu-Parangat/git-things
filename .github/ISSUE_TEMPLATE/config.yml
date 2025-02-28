@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
-  - name: "Reprort critical security vulnerabilities"
-    url: "https://github.com/Himanshu-Parangat/git-things/blob/main/.github/SECURITY.md"
-    about: "privately Reprort following security policy"
+  - name: "Vulnerability Disclosure Form"
+    url: "https://forms.gle/Vfgfgdfwer"
+    about: "privately Reprort issue following security policy"
   - name: "CODE OF CONDUCT"
     url: "https://github.com/Himanshu-Parangat/cnss/blob/main/CODE_OF_CONDUCT.md"
     about: "please follow code of conduct & maintain decorum."
