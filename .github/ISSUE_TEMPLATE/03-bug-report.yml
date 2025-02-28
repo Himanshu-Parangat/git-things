@@ -8,7 +8,8 @@ body:
       value: |
         > **Note:**
         > - For **bugs/issues/unexpected Behavior:** Use this template.
-        > - For **critical security issues:**, please follow our [Security Policy](https://github.com/Himanshu-Parangat/cnss/security/policy) and report privately via the Vulnerability Disclosure Form.
+        > - For **critical security issues:** please follow our [Security Policy](https://github.com/Himanshu-Parangat/cnss/security/policy).
+        > - Report privately via the **Vulnerability Disclosure Form**.
 
   - type: markdown
     attributes:
