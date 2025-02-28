@@ -8,8 +8,8 @@ body:
       value: |
         > **Note:**
         > - For **bugs/issues/unexpected Behavior:** Use this template.
-        > - For **critical security Vulnerability:** Do not repot them publicly.
-        > - Instead, submit the `Vulnerability Disclosure Form` as outlined in our [Security Policy](https://github.com/Himanshu-Parangat/git-things/security/policy) for such repot.
+        > - For **critical security Vulnerability:** Do not repot them here publicly.
+        > - Instead, submit the `Vulnerability Disclosure Form` as outlined in our [Security Policy](https://github.com/Himanshu-Parangat/git-things/security/policy).
 
 
   - type: markdown
