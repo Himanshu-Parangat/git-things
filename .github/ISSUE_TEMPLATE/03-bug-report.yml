@@ -8,7 +8,7 @@ body:
       value: |
         > **Note:**
         > - For **bugs/issues/unexpected Behavior:** Use this template.
-        > - For **critical security issues:** Contact privately.
+        > - For **critical security issues:** Contact privately, Uue **[Vulnerability Disclosure Form:](example.com)** from [security poloicy](https://github.com/Himanshu-Parangat/git-things/blob/main/.github/SECURITY.md).
 
   - type: markdown
     attributes:
