@@ -27,6 +27,7 @@ OS=$(shell go env GOOS)
 .PHONY: help ensure metadata \
     build-reverseProxy build-waf build-server build-application build-simulator build-all \
     run-reverseProxy run-waf run-server run-application run-simulator \
+		deps-reverseProxy deps-waf deps-server deps-application deps-simulator \
     clean-reverseProxy clean-waf clean-server clean-application clean-simulator clean-all
 
 # wild match if target does not match anything match help.
