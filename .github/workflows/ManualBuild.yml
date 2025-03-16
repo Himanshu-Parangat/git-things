@@ -4,8 +4,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  cache-go-modules:
+    uses: ./.github/workflows/GoCache.yml
+
   manual_job:
     runs-on: ubuntu-latest
+    needs: cache-go-modules
 
     steps:
       - name: Checkout repository
@@ -17,10 +21,10 @@ jobs:
       - name: Build All components
         run: make build-all
 
-      - name: Upload Each File While Keeping Original Names
+      - name: Upload Each Artifact Files With Names
         uses: actions/upload-artifact@v4
         with:
-          name: Built-Binarys
+          name: Built-Binarys-bundle
           path: bin/*
           if-no-files-found: error
           retention-days: 7
