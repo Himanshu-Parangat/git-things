@@ -12,5 +12,11 @@ jobs:
         with:
           go-version: 'stable'
 
+      - name: make file finding
+        run: echo "finding make file"
+
+      - name: Listing all file
+        run: ls --all
+
       - name: Fetch Dependency
-        run: make deps-all
+        run: make
