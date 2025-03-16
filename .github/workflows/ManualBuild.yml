@@ -17,8 +17,10 @@ jobs:
       - name: Build All components
         run: make build-all
 
-      - name: upload artifacts
+      - name: Upload Each File While Keeping Original Names
         uses: actions/upload-artifact@v4
         with:
-          name: Built Binaries
-          path: bin/
+          name: Built-Binarys
+          path: bin/*
+          if-no-files-found: error
+          retention-days: 7
