@@ -1,8 +1,0 @@
-{
-  "go": "installed",
-  "tailwind": "optional",
-  "htmx": "linked",
-  "test": {
-    "status": "missing"
-  }
-}
