@@ -37,7 +37,7 @@ func index(w http.ResponseWriter, resp *http.Request) {
 
 	fmt.Fprintf(w, "%v", message)
 }
-
+<>
 func main() {
 	http.HandleFunc("/", index)
 
