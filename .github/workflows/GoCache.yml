@@ -15,43 +15,87 @@ jobs:
         with:
           go-version: 'stable'
 
-      - name: Cache Go modules (Reverse Proxy)
-        uses: actions/cache@v4
+
+      - name: Cache Reverse Proxy
+        id: cache-reverse-proxy
+        run: |
+          if [ -f firewall/reverseProxy/go.sum ]; then
+            echo "CACHE_KEY=${{ runner.os }}-go-reverseProxy-$(sha256sum firewall/reverseProxy/go.sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+          else
+            echo "CACHE_KEY=" >> $GITHUB_OUTPUT
+          fi
+      - uses: actions/cache@v4
+        if: ${{ steps.cache-reverse-proxy.outputs.CACHE_KEY != '' }}
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-reverseProxy-${{ hashFiles('firewall/reverseProxy/go.sum') }}
+          key: ${{ steps.cache-reverse-proxy.outputs.CACHE_KEY }}
           restore-keys: |
             ${{ runner.os }}-go-reverseProxy-
 
-      - name: Cache Go modules (WAF)
-        uses: actions/cache@v4
+
+      - name: Cache WAF
+        id: cache-waf
+        run: |
+          if [ -f firewall/waf/go.sum ]; then
+            echo "CACHE_KEY=${{ runner.os }}-go-waf-$(sha256sum firewall/waf/go.sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+          else
+            echo "CACHE_KEY=" >> $GITHUB_OUTPUT
+          fi
+      - uses: actions/cache@v4
+        if: ${{ steps.cache-waf.outputs.CACHE_KEY != '' }}
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-waf-${{ hashFiles('firewall/waf/go.sum') }}
+          key: ${{ steps.cache-waf.outputs.CACHE_KEY }}
           restore-keys: |
             ${{ runner.os }}-go-waf-
 
-      - name: Cache Go modules (Application)
-        uses: actions/cache@v4
+
+      - name: Cache Application
+        id: cache-application
+        run: |
+          if [ -f testing-env/application/go.sum ]; then
+            echo "CACHE_KEY=${{ runner.os }}-go-application-$(sha256sum testing-env/application/go.sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+          else
+            echo "CACHE_KEY=" >> $GITHUB_OUTPUT
+          fi
+      - uses: actions/cache@v4
+        if: ${{ steps.cache-application.outputs.CACHE_KEY != '' }}
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-application-${{ hashFiles('testing-env/application/go.sum') }}
+          key: ${{ steps.cache-application.outputs.CACHE_KEY }}
           restore-keys: |
             ${{ runner.os }}-go-application-
 
-      - name: Cache Go modules (Server)
-        uses: actions/cache@v4
+
+      - name: Cache Server
+        id: cache-server
+        run: |
+          if [ -f testing-env/server/go.sum ]; then
+            echo "CACHE_KEY=${{ runner.os }}-go-server-$(sha256sum testing-env/server/go.sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+          else
+            echo "CACHE_KEY=" >> $GITHUB_OUTPUT
+          fi
+      - uses: actions/cache@v4
+        if: ${{ steps.cache-server.outputs.CACHE_KEY != '' }}
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-server-${{ hashFiles('testing-env/server/go.sum') }}
+          key: ${{ steps.cache-server.outputs.CACHE_KEY }}
           restore-keys: |
             ${{ runner.os }}-go-server-
 
-      - name: Cache Go modules (Simulator)
-        uses: actions/cache@v4
+
+      - name: Cache Simulator
+        id: cache-simulator
+        run: |
+          if [ -f testing-env/simulator/go.sum ]; then
+            echo "CACHE_KEY=${{ runner.os }}-go-simulator-$(sha256sum testing-env/simulator/go.sum | cut -d' ' -f1)" >> $GITHUB_OUTPUT
+          else
+            echo "CACHE_KEY=" >> $GITHUB_OUTPUT
+          fi
+      - uses: actions/cache@v4
+        if: ${{ steps.cache-simulator.outputs.CACHE_KEY != '' }}
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-simulator-${{ hashFiles('testing-env/simulator/go.sum') }}
+          key: ${{ steps.cache-simulator.outputs.CACHE_KEY }}
           restore-keys: |
             ${{ runner.os }}-go-simulator-
-

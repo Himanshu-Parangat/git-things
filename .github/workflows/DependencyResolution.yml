@@ -1,0 +1,16 @@
+name: Dependency resolution 
+
+on:
+  workflow_call:
+
+jobs:
+  dependency_resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+
+      - name: Fetch Dependency
+        run: make deps-all

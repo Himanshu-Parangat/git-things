@@ -4,27 +4,39 @@ on:
   workflow_dispatch:
 
 jobs:
+
+  dependency_resolve:
+    uses: ./.github/workflows/DependencyResolution.yml
+
   cache-go-modules:
     uses: ./.github/workflows/GoCache.yml
+    needs: dependency_resolve
+
+  prepare_application:
+    uses: ./.github/workflows/PrepareApplication.yml
+    needs: cache-go-modules
+
+  prepare_reverse_proxy:
+    uses: ./.github/workflows/PrepareReverseProxy.yml
+    needs: cache-go-modules
+
+  prepare_server:
+    uses: ./.github/workflows/PrepareServer.yml
+    needs: cache-go-modules
+
+  prepare_simulator:
+    uses: ./.github/workflows/PrepareSimulator.yml
+    needs: cache-go-modules
+
+  prepare_waf:
+    uses: ./.github/workflows/PrepareWaf.yml
+    needs: cache-go-modules
 
   manual_job:
     runs-on: ubuntu-latest
-    needs: cache-go-modules
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Display Build Help message
-        run: make help
-
-      - name: Build All components
-        run: make build-all
-
-      - name: Upload Each Artifact Files With Names
-        uses: actions/upload-artifact@v4
-        with:
-          name: Built-Binarys-bundle
-          path: bin/*
-          if-no-files-found: error
-          retention-days: 7
+    needs: 
+      - prepare_application
+      - prepare_reverse_proxy
+      - prepare_server
+      - prepare_simulator
+      - prepare_waf
