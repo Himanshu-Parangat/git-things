@@ -7,15 +7,51 @@ jobs:
   cache:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
           go-version: 'stable'
 
-      - name: Cache Go modules
+      - name: Cache Go modules (Reverse Proxy)
         uses: actions/cache@v4
         with:
           path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          key: ${{ runner.os }}-go-reverseProxy-${{ hashFiles('firewall/reverseProxy/go.sum') }}
           restore-keys: |
-            ${{ runner.os }}-go-
+            ${{ runner.os }}-go-reverseProxy-
+
+      - name: Cache Go modules (WAF)
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-waf-${{ hashFiles('firewall/waf/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-waf-
+
+      - name: Cache Go modules (Application)
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-application-${{ hashFiles('testing-env/application/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-application-
+
+      - name: Cache Go modules (Server)
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-server-${{ hashFiles('testing-env/server/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-server-
+
+      - name: Cache Go modules (Simulator)
+        uses: actions/cache@v4
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-simulator-${{ hashFiles('testing-env/simulator/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-simulator-
+
