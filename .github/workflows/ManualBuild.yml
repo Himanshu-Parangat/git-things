@@ -40,3 +40,7 @@ jobs:
       - prepare_server
       - prepare_simulator
       - prepare_waf
+
+    steps:
+    - name: Notify
+      run: echo "completed the workflow!!"
