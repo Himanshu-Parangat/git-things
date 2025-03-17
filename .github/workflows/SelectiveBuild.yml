@@ -17,8 +17,5 @@ jobs:
       - name: Create Hello World file
         run: echo "compiling, stuff!"
 
-      - name: Create Hello World file
-        run: ls > log.txt
-
       - name: Run Make
         run: make
