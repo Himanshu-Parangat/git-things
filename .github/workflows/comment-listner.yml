@@ -35,4 +35,8 @@ jobs:
             repo: context.repo.repo,
             workflow_id: 'build-and-test.yml',
             ref: context.payload.issue.pull_request.head.ref,
+            inputs: {
+              pr_number: context.payload.issue.number,
+              pr_sha: context.payload.issue.pull_request.head.sha
+            }
           });
