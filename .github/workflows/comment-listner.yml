@@ -14,29 +14,24 @@ jobs:
     steps:
     - name: Check comment
       id: check_comment
-      uses: actions/github-script@v3
-      with:
-        script: |
-          const comment = context.payload.comment.body;
-          if (comment === '/run-build-test') {
-            return 'run-build-test';
-          } else {
-            return 'no-action';
-          }
-      continue-on-error: true
+      run: |
+        COMMENT_BODY="${{ github.event.comment.body }}"
+        if [[ "$COMMENT_BODY" == "/run-build-test" ]]; then
+          echo "RESULT=run-build-test" >> $GITHUB_ENV
+        else
+          echo "RESULT=no-action" >> $GITHUB_ENV
+        fi
 
     - name: Trigger workflow
-      if: steps.check_comment.outputs.result == 'run-build-test'
-      uses: actions/github-script@v3
-      with:
-        script: |
-          github.actions.createWorkflowDispatch({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            workflow_id: 'build-and-test.yml',
-            ref: context.payload.issue.pull_request.head.ref,
-            inputs: {
-              pr_number: context.payload.issue.number,
-              pr_sha: context.payload.issue.pull_request.head.sha
+      if: env.RESULT == 'run-build-test'
+      run: |
+        curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/actions/workflows/build-and-test.yml/dispatches \
+          -d '{
+            "ref": "${{ github.event.issue.pull_request.head.ref }}",
+            "inputs": {
+              "pr_number": "${{ github.event.issue.number }}",
+              "pr_sha": "${{ github.event.issue.pull_request.head.sha }}"
             }
-          });
+          }'
