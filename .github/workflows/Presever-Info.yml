@@ -1,5 +1,8 @@
 name: Context Preserve
 
+permissions:
+  actions: write
+
 on:
   workflow_dispatch:
     inputs:
@@ -15,13 +18,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Get PR Number
+      - name: Fetch PR data
+        id: GetPullRequestData
         run: |
-          PR_NUMBER=$(gh api "${{ github.event.inputs.PullRequestLink }}" | jq '.number')
-          echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
-
-      - name: Get SHA for the latest commit in Pull Request
-        run: echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+          PR_JSON=$(gh pr view "${{ github.event.inputs.PullRequestLink }}" --json number,headRefOid)
+          if [ $? -ne 0 ]; then
+            echo "Error: Failed to fetch PR data."
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Delete existing artifact (if any)
         uses: geekyeggo/delete-artifact@v2
@@ -31,13 +37,11 @@ jobs:
 
       - name: Save PR Number and SHA as artifacts
         run: |
-          echo "${PR_NUMBER}" > pr_number.txt
-          echo "${COMMIT_SHA}" > commit_sha.txt
+          echo "$PR_JSON" > PullRequestData.txt
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: context-metadata
           path: |
-            pr_number.txt
-            commit_sha.txt
+            PullRequestData.txt
