@@ -16,8 +16,10 @@ jobs:
       id: check_comment
       run: |
         COMMENT_BODY="${{ github.event.comment.body }}"
-        if [[ "$COMMENT_BODY" == "/run-build-test" ]]; then
+        if [[ "$COMMENT_BODY" == *"/run-test-build"* ]]; then
           echo "RESULT=run-build-test" >> $GITHUB_ENV
+          echo "PR_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
+          echo "PR_SHA=${{ github.event.issue.pull_request.head.sha }}" >> $GITHUB_ENV
         else
           echo "RESULT=no-action" >> $GITHUB_ENV
         fi
