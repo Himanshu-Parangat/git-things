@@ -1,0 +1,76 @@
+name: Build and Test
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  checks: write
+  contents: read
+
+jobs:
+  run-build-test:
+    if: contains(github.event.comment.body, '/run-build-test')
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create Check Run
+      id: create_check_run
+      uses: actions/github-script@v3
+      with:
+        script: |
+          const checkRun = await github.checks.create({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            name: 'Build and Test',
+            head_sha: context.payload.pull_request.head.sha,
+            status: 'in_progress',
+          });
+          return checkRun.data.id;
+
+
+    - name: Show files
+      run: ls 
+
+    - name: Print Running Message (Red)
+      run: echo -e "\033[31mRunning test flow...\033[0m"
+
+    - name: Print Completed Message (Green)
+      run: echo -e "\033[32mTest flow completed successfully!\033[0m"
+
+    - name: Update status
+      run: |
+        if [ $? -eq 0 ]; then
+          echo "::set-output name=status::success"
+        else
+          echo "::set-output name=status::failure"
+        fi
+
+    - name: Update Check Run Status to Success
+      if: success()
+      uses: actions/github-script@v3
+      with:
+        script: |
+          await github.checks.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            check_run_id: steps.create_check_run.outputs.check_run_id,
+            conclusion: 'success',
+            status: 'completed',
+          });
+    
+    - name: Update Check Run Status to Failure
+      if: failure()
+      uses: actions/github-script@v3
+      with:
+        script: |
+          await github.checks.update({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            check_run_id: steps.create_check_run.outputs.check_run_id,
+            conclusion: 'failure',
+            status: 'completed',
+          });

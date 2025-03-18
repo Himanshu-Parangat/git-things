@@ -5,19 +5,38 @@ on:
     types:
       - labeled
 
+permissions:
+  pull-requests: write
+  issues: write
+
 jobs:
   run-test:
-    if: github.event.label.name == 'run test'  # Runs only if 'run test' label is added
+    if: github.event.label.name == 'run test'
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check for "needs rework" label
+        id: check_rework
+        run: |
+          if [[ "${{ github.event.label.name }}" == "needs rework" ]]; then
+            echo "REWORK=true" >> "$GITHUB_ENV"
+          else
+            echo "REWORK=false" >> "$GITHUB_ENV"
+          fi
+
+      - name: Fail if "needs rework" label exists
+        if: env.REWORK == 'true'
+        run: |
+          echo "::error::Workflow failed due to 'needs rework' label."
+          exit 1
+
       - name: Print Running Message (Red)
-        run: echo -e "\033[31mRunning flow...\033[0m"  # Prints in red
+        run: echo -e "\033[31mRunning test flow...\033[0m"
 
       - name: Print Completed Message (Green)
-        run: echo -e "\033[32mCompleted\033[0m"  # Prints in green
+        run: echo -e "\033[32mTest flow completed successfully!\033[0m"
 
-      - name: Add PR Comment
+      - name: Add PR Comment - Success
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -26,5 +45,19 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.payload.pull_request.number,
-              body: "✅ Finished."
+              body: "✅ Test run completed successfully."
             })
+
+      - name: Add PR Comment - Failure (if test failed)
+        if: ${{ failure() }}
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: "❌ Test run failed. Please check the workflow logs for details."
+            })
+

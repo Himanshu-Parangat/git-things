@@ -1,0 +1,38 @@
+name: Comment Listener
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+
+jobs:
+  check-comment:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check comment
+      id: check_comment
+      uses: actions/github-script@v3
+      with:
+        script: |
+          const comment = context.payload.comment.body;
+          if (comment === '/run-build-test') {
+            return 'run-build-test';
+          } else {
+            return 'no-action';
+          }
+      continue-on-error: true
+
+    - name: Trigger workflow
+      if: steps.check_comment.outputs.result == 'run-build-test'
+      uses: actions/github-script@v3
+      with:
+        script: |
+          github.actions.createWorkflowDispatch({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            workflow_id: 'build-and-test.yml',
+            ref: context.payload.issue.pull_request.head.ref,
+          });
