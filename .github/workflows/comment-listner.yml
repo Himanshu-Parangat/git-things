@@ -4,33 +4,25 @@ on:
   issue_comment:
     types: [created]
 
-permissions:
-  contents: read
-  issues: read
-  actions: write 
-
 jobs:
   check-comment:
     runs-on: ubuntu-latest
 
     steps:
+
+    - name: Print pull Request sha (Red)
+      run: echo -e "\033[31m PR SHA => ${{ github.event.issue.pull_request.head.sha }}...\033[0m"
+
+    - name: Print Pull Request number (Green)
+      run: echo -e "\033[32m PR number is => ${{ github.event.issue.number }} \033[0m"
+
     - name: Check comment
       id: check_comment
       run: |
         COMMENT_BODY="${{ github.event.comment.body }}"
         if [[ "$COMMENT_BODY" == *"/run-test-build"* ]]; then
-          echo "RESULT=run-build-test" >> $GITHUB_ENV
-          echo "PR_NUMBER=${{ github.event.issue.number }}" >> $GITHUB_ENV
-          echo "PR_SHA=${{ github.event.issue.pull_request.head.sha }}" >> $GITHUB_ENV
+          echo "manual trigger commad detected \033[32m `/run-test-build` \033[0m continuing workflow... "
         else
-          echo "RESULT=no-action" >> $GITHUB_ENV
+          echo "No trigger detected \033[31m `/run-test-build` \033[0m exiting.."
+          exit 1
         fi
-
-    - name: Trigger workflow
-      if: env.RESULT == 'run-build-test'
-      uses: peter-evans/repository-dispatch@v2
-      with:
-        token: ${{ secrets.PAT }}
-        repository: Himanshu-Parangat/git-things
-        event-type: run-build-test
-        client-payload: '{"pr_number": "${{ env.PR_NUMBER }}", "pr_sha": "${{ env.PR_SHA }}"}'
