@@ -1,0 +1,41 @@
+name: Context Preserve
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Context-Preserver:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get PR Number (if applicable)
+        run: |
+          PR_NUMBER=$(gh pr list --head "${{ github.ref_name }}" --state open --json number --jq '.[0].number' || echo "none")
+          echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Commit SHA
+        run: echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+
+      - name: Delete existing artifact (if any)
+        uses: geekyeggo/delete-artifact@v2
+        with:
+          name: context-metadata
+        continue-on-error: true
+
+      - name: Save PR Number and SHA as artifacts
+        run: |
+          echo "${PR_NUMBER}" > pr_number.txt
+          echo "${COMMIT_SHA}" > commit_sha.txt
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: context-metadata
+          path: |
+            pr_number.txt
+            commit_sha.txt
