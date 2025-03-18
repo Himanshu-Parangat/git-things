@@ -1,9 +1,11 @@
 name: Context Preserve
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   workflow_dispatch:
+    inputs:
+      PullRequestLink:
+        description: "Enter the Pull Request Link"
+        required: true
 
 jobs:
   Context-Preserver:
@@ -12,17 +14,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.ref }}
 
-      - name: Get PR Number (if applicable)
+      - name: Get PR Number
         run: |
-          PR_NUMBER=$(gh pr list --head "${{ github.ref_name }}" --state open --json number --jq '.[0].number' || echo "none")
+          PR_NUMBER=$(gh api "${{ github.event.inputs.PullRequestLink }}" | jq '.number')
           echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Get Commit SHA
+      - name: Get SHA for the latest commit in Pull Request
         run: echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Delete existing artifact (if any)
