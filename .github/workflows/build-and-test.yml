@@ -17,24 +17,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Debug Context
-      run: echo "${{ toJson(github) }}"
-
     - name: Create Check Run
       id: create_check_run
       uses: actions/github-script@v3
       with:
         script: |
           const issueNumber = context.payload.issue.number;
-          console.log(`Issue Number: ${issueNumber}`);
-
           const { data: pull } = await github.rest.pulls.get({
             owner: context.repo.owner,
             repo: context.repo.repo,
             pull_number: issueNumber
           });
-
-          console.log(`Pull Request Data: ${JSON.stringify(pull, null, 2)}`);
 
           const checkRun = await github.rest.checks.create({
             owner: context.repo.owner,
