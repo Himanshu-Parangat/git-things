@@ -8,6 +8,8 @@ on:
 permissions:
   pull-requests: write
   issues: write
+  checks: write  # Required to update the check status
+
 jobs:
   comment_action:
     runs-on: ubuntu-latest
@@ -21,7 +23,8 @@ jobs:
         if: contains(github.event.comment.body, '/needs-rework')
         run: |
           echo "Comment triggered with /needs-rework command. exiting"
-          exit 1
+          exit 1  # This will fail the check
+
       - name: Add comment to PR
         uses: actions/github-script@v7
         with:
@@ -32,6 +35,44 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.payload.issue.number,
-                body: "Workflow triggered by comment."
+                body: "✅ Workflow successfully completed."
               })
             }
+
+      - name: Report Success to Checks
+        if: success()  # Runs only if the previous steps succeed
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: checkRun } = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: "Comment Triggered Workflow",
+              head_sha: context.payload.issue.pull_request.head.sha,
+              status: "completed",
+              conclusion: "success",
+              output: {
+                title: "Workflow Completed",
+                summary: "The workflow has successfully completed."
+              }
+            });
+
+      - name: Report Failure to Checks
+        if: failure()  # Runs only if a step fails
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: checkRun } = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: "Comment Triggered Workflow",
+              head_sha: context.payload.issue.pull_request.head.sha,
+              status: "completed",
+              conclusion: "failure",
+              output: {
+                title: "Workflow Failed",
+                summary: "The workflow failed due to /needs-rework command."
+              }
+            });
