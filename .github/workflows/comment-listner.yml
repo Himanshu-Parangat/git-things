@@ -30,6 +30,7 @@ jobs:
       if: env.RESULT == 'run-build-test'
       uses: peter-evans/repository-dispatch@v2
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.PAT }}
+        repository: Himanshu-Parangat/git-things
         event-type: run-build-test
         client-payload: '{"pr_number": "${{ env.PR_NUMBER }}", "pr_sha": "${{ env.PR_SHA }}"}'
