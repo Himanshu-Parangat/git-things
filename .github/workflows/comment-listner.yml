@@ -1,8 +1,8 @@
 name: Comment Listener
 
 on:
-  issue_comment:
-    types: [created]
+  pull_request_review:
+    types: [submitted]
 
 permissions:
   contents: read
@@ -23,8 +23,8 @@ jobs:
     - name: Check comment
       id: check_comment
       run: |
-        COMMENT_BODY="${{ github.event.comment.body }}"
-        if [[ "$COMMENT_BODY" == *"/run-test-build"* ]]; then
+        REVIEW_BODY="${{ github.event.review.body }}"
+        if [[ "$REVIEW_BODY" == *"/run-test-build"* ]]; then
           echo -e "manual trigger commad detected \033[32m `/run-test-build` \033[0m continuing workflow... "
           echo "TRIGGER=build-and-test.yml" >> $GITHUB_ENV 
         else
