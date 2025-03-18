@@ -23,6 +23,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Debug Input Values
+      run: |
+        echo -e "\033[34mPull Request Number:\033[0m \033[1;33m${{ github.event.inputs.pr_number }}\033[0m"
+        echo -e "\033[34mPull Request SHA:\033[0m \033[1;32m${{ github.event.inputs.pr_sha }}\033[0m"
 
     - name: Show files
       run: ls 
