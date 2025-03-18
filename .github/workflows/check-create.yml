@@ -5,6 +5,7 @@ on:
 
 permissions:
   actions: write
+  pull-requests: write
 
 jobs:
   check-pr:
@@ -16,16 +17,17 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: artifact-test
+          name: context-metadata
           path: artifact
+
+      - name: Unzip Artifact
+        run: unzip artifact/context-metadata.zip -d artifact/
 
       - name: Extract PR Info
         run: |
-          SHA=$(jq -r '.headRefOid' artifact/artifact.json)
-          PR_NUMBER=$(jq -r '.number' artifact/artifact.json)
-          echo "SHA=$SHA" >> $GITHUB_ENV
-          echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-          echo "PR_URL=https://github.com/${{ github.repository }}/pull/$PR_NUMBER" >> $GITHUB_ENV
+          SHA=$(cat artifact/PullRequestData.txt | jq -r .headRefOid) >> $GITHUB_ENV
+          PR_NUMBER=$(cat artifact/PullRequestData.txt | jq -r .number) >> $GITHUB_ENV
+          PR_URL=$(cat artifact/PullRequestData.txt | jq -r .url) >> $GITHUB_ENV
 
       - name: Run Simple Check
         run: |
