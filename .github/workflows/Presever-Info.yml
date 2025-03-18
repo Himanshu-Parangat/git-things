@@ -21,7 +21,7 @@ jobs:
       - name: Fetch PR data
         id: GetPullRequestData
         run: |
-          gh pr view "${{ github.event.inputs.PullRequestLink }}" --json number,headRefOid > PullRequestData.txt 
+          gh pr view "${{ github.event.inputs.PullRequestLink }}" --json number,headRefOid,url > PullRequestData.txt
           if [ $? -ne 0 ]; then
             echo "Error: Failed to fetch PR data."
             exit 1
