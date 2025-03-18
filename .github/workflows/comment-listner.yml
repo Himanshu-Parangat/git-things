@@ -21,8 +21,8 @@ jobs:
       run: |
         COMMENT_BODY="${{ github.event.comment.body }}"
         if [[ "$COMMENT_BODY" == *"/run-test-build"* ]]; then
-          echo "manual trigger commad detected \033[32m `/run-test-build` \033[0m continuing workflow... "
+          echo -e "manual trigger commad detected \033[32m `/run-test-build` \033[0m continuing workflow... "
         else
-          echo "No trigger detected \033[31m `/run-test-build` \033[0m exiting.."
+          echo -e "No trigger detected \033[31m `/run-test-build` \033[0m exiting.."
           exit 1
         fi
