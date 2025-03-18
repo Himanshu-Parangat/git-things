@@ -4,11 +4,10 @@ on:
   issue_comment:
     types: [created, edited]
 
-
 permissions:
   pull-requests: write
   issues: write
-  checks: write  # Required to update the check status
+  checks: write  # Required to update check status
 
 jobs:
   comment_action:
@@ -39,17 +38,33 @@ jobs:
               })
             }
 
-      - name: Report Success to Checks
-        if: success()  # Runs only if the previous steps succeed
+      - name: Get PR Details
+        id: get-pr
+        if: github.event.issue.pull_request  # Ensure it's a PR
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data: checkRun } = await github.rest.checks.create({
+            const pr = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.issue.number
+            });
+            return pr.data.head.sha;
+        result-encoding: string
+
+      - name: Report Success to Checks
+        if: success() && github.event.issue.pull_request
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const sha = "${{ steps.get-pr.outputs.result }}";
+            github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: "Comment Triggered Workflow",
-              head_sha: context.payload.issue.pull_request.head.sha,
+              head_sha: sha,
               status: "completed",
               conclusion: "success",
               output: {
@@ -59,16 +74,17 @@ jobs:
             });
 
       - name: Report Failure to Checks
-        if: failure()  # Runs only if a step fails
+        if: failure() && github.event.issue.pull_request
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data: checkRun } = await github.rest.checks.create({
+            const sha = "${{ steps.get-pr.outputs.result }}";
+            github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: "Comment Triggered Workflow",
-              head_sha: context.payload.issue.pull_request.head.sha,
+              head_sha: sha,
               status: "completed",
               conclusion: "failure",
               output: {
@@ -76,3 +92,4 @@ jobs:
                 summary: "The workflow failed due to /needs-rework command."
               }
             });
+
