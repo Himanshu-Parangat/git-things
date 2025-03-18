@@ -15,7 +15,7 @@ jobs:
       run: ls 
 
     - name: Run Build Process
-      run: Make
+      run: make
 
     - name: Print Running Message (Red)
       run: echo -e "\033[31mRunning test flow...\033[0m"
