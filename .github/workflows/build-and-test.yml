@@ -17,27 +17,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Create Check Run
-      id: create_check_run
-      uses: actions/github-script@v3
-      with:
-        script: |
-          const issueNumber = context.payload.issue.number;
-          const { data: pull } = await github.rest.pulls.get({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: issueNumber
-          });
-
-          const checkRun = await github.rest.checks.create({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            name: 'Build and Test',
-            head_sha: pull.head.sha,
-            status: 'in_progress'
-          });
-
-          core.setOutput("check_run_id", checkRun.data.id);
 
     - name: Show files
       run: ls 
@@ -47,33 +26,3 @@ jobs:
 
     - name: Print Completed Message (Green)
       run: echo -e "\033[32mTest flow completed successfully!\033[0m"
-
-    - name: Update Check Run Status to Success
-      if: success()
-      uses: actions/github-script@v3
-      env:
-        CHECK_RUN_ID: ${{ steps.create_check_run.outputs.check_run_id }}
-      with:
-        script: |
-          await github.rest.checks.update({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            check_run_id: process.env.CHECK_RUN_ID,
-            conclusion: 'success',
-            status: 'completed',
-          });
-
-    - name: Update Check Run Status to Failure
-      if: failure()
-      uses: actions/github-script@v3
-      env:
-        CHECK_RUN_ID: ${{ steps.create_check_run.outputs.check_run_id }}
-      with:
-        script: |
-          await github.rest.checks.update({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            check_run_id: process.env.CHECK_RUN_ID,
-            conclusion: 'failure',
-            status: 'completed',
-          });
