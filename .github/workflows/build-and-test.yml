@@ -1,8 +1,14 @@
 name: Build and Test
 
 on:
-  issue_comment:
-    types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'Pull Request Number'
+        required: true
+      pr_sha:
+        description: 'Pull Request SHA'
+        required: true
 
 permissions:
   checks: write
