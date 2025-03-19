@@ -55,7 +55,7 @@ jobs:
             const check = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: 'manual-pr-check',
+              name: 'Check build Test',
               head_sha: sha,
               status: 'in_progress',
               output: {
