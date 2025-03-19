@@ -35,3 +35,27 @@ jobs:
           name: context-metadata
           path: |
             PullRequestData.txt
+
+      - name: Create and Run Check
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs').promises;
+
+            const prData = JSON.parse(await fs.readFile('PullRequestData.txt', 'utf8'));
+            const sha = prData.headRefOid;
+            const prNumber = prData.number;
+            const prUrl = prData.url;
+
+            const check = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'manual-pr-check',
+              head_sha: sha,
+              status: 'in_progress',
+              output: {
+                title: 'Manual PR Validation',
+                summary: `Validating PR ${prUrl}...`
+              }
+            });
