@@ -1,6 +1,9 @@
 name: Context Preserve
 
 permissions:
+  pull-requests: read
+  checks: write
+  contents: read
   actions: write
 
 on:
