@@ -1,4 +1,4 @@
-name: PR Check
+name: Create Check
 
 on:
   workflow_dispatch:
@@ -18,7 +18,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: context-metadata
-          path: artifact
+          path: ./artifact
+
+      - name: Display downloaded file
+        run: ls ./artifact/
 
       - name: Unzip Artifact
         run: unzip artifact/context-metadata.zip -d artifact/
