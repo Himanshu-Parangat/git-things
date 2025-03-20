@@ -58,13 +58,13 @@ jobs:
               <p align="center">
                 <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
               </p>
-              - **Branch:** \`${{ env.PR_Branch }}\`  
-              - **Title:** \`${{ env.PR_Title }}\`  
-              - **Validating Up to Commit:** ${{ env.PR_SHA }}  
-              - **Total Changed Files:** \`${{ env.PR_Total_changedFiles_count }}\`  
-              - **Files Modified:** \`${TotalChangedFiles}\`  
-              - **Commit Messages:**   \`${CommitMessages}\`  
-              - **Started At:** \`${{ env.START_TIME }}\`  
+              - **Branch:** \`${{ env.PR_Branch }}\`<br>
+              - **Title:** \`${{ env.PR_Title }}\`<br>
+              - **Validating Up to Commit:** ${{ env.PR_SHA }}<br>
+              - **Total Changed Files:** \`${{ env.PR_Total_changedFiles_count }}\`<br>
+              - **Files Modified:** \`${TotalChangedFiles}\`<br>
+              - **Commit Messages:**   \`${CommitMessages}\`<br>
+              - **Started At:** \`${{ env.START_TIME }}\`<br>
             `;
 
             const check = await github.rest.checks.create({
@@ -102,14 +102,14 @@ jobs:
               <p align="center">
                 <img src="https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif" alt="thumbs up good">
               </p>
-              - **Branch:** \`${{ env.PR_Branch }}\`  
-              - **Title:** \`${{ env.PR_Title }}\`  
-              - **Validating Up to Commit:** ${{ env.PR_SHA }}  
-              - **Total Changed Files:** \`${{ env.PR_Total_changedFiles_count }}\`  
-              - **Files Modified:** \`${TotalChangedFiles}\`  
-              - **Commit Messages:**   \`${CommitMessages}\`  
-              - **Started At:** \`${{ env.START_TIME }}\`  
-              - **Completed At:** \`${completedAt}\`  
+              - **Branch:** \`${{ env.PR_Branch }}\`<br>
+              - **Title:** \`${{ env.PR_Title }}\`<br>
+              - **Validating Up to Commit:** ${{ env.PR_SHA }}<br>
+              - **Total Changed Files:** \`${{ env.PR_Total_changedFiles_count }}\`<br>
+              - **Files Modified:** \`${TotalChangedFiles}\`<br>
+              - **Commit Messages:**   \`${CommitMessages}\`<br>
+              - **Started At:** \`${{ env.START_TIME }}\`<br>
+              - **Completed At:** \`${completedAt}\`<br><br>
                
               The build compiled successfully`;
 
