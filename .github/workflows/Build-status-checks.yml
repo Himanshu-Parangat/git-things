@@ -42,8 +42,8 @@ jobs:
           echo "PR_Branch=$(jq -r '.headRefName' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Title=$(jq -r '.title' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Total_changedFiles_count=$(jq -r '.changedFiles' PullRequestData.txt)" >> $GITHUB_ENV
-          echo "PR_Total_changedFiles=$(jq -r '.files | map("- `" + .path) |  join("`</br>")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
-          echo "PR_commits_titel=$( jq -r '.commits | map( "- `" + .messageHeadline) |join("`</br>")' PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_Total_changedFiles=$(jq -r '.files | map("`" + .path) |  join("`, ")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_commits_titel=$( jq -r '.commits | map( "`" + .messageHeadline) |join("`, ")' PullRequestData.txt | base64)" >> $GITHUB_ENV
           echo "START_TIME=$(node -e 'console.log(new Date().toISOString())')" >> $GITHUB_ENV
 
       - name: Create and Run Check
@@ -54,10 +54,7 @@ jobs:
 
             const TotalChangedFiles = Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8');
             const CommitMessages = Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8');
-            const In_progress_Message_summery = `
-              <p align="center">
-                 Validating PR: ${{ env.PR_URL }}
-              </p>
+            const In_progress_Message_summery = `<br>Validating PR:</br> ${{ env.PR_URL }}
               <p align="center">
                 <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
               </p>
@@ -106,10 +103,7 @@ jobs:
             const CommitMessages = Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8');
             const completedAt = new Date().toISOString();
 
-            const completed_Message_summery = `
-              <p align="center">
-                Validated PR: ${{ env.PR_URL }}
-              </p>
+            const completed_Message_summery = `<br>Validated PR:</br> ${{ env.PR_URL }}
               <p align="center">
                 <img src="https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif" alt="thumbs up good">
               </p>
@@ -117,6 +111,7 @@ jobs:
                 Build tests went smoothly—good job, friend! Thanks</br> 
                 For the hard work and precious Time. Take a well-deserved break, okay?
               </p>
+
               - <b>Branch:</b> \`${{ env.PR_Branch }}\`<br>
               - <b>Title:</b> \`${{ env.PR_Title }}\`<br>
               - <b>Validating Up to Commit:</b> ${{ env.PR_SHA }}<br>
