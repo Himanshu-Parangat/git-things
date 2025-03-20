@@ -56,7 +56,7 @@ jobs:
             const CommitMessages = Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8');
             const In_progress_Message_summery = `
               <p align="center">
-                <h3>Validating PR: ${{ env.PR_URL }}</h3>
+                 Validating PR: ${{ env.PR_URL }}
               </p>
               <p align="center">
                 <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
@@ -108,7 +108,7 @@ jobs:
 
             const completed_Message_summery = `
               <p align="center">
-                <h3>Validated PR: ${{ env.PR_URL }}</h3>
+                Validated PR: ${{ env.PR_URL }}
               </p>
               <p align="center">
                 <img src="https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif" alt="thumbs up good">
@@ -116,6 +116,7 @@ jobs:
               <p align="center">
                 Build tests went smoothly—good job, friend! Thanks 
                 For the hard work and precious Time. Take a well-deserved break, okay?
+              </p>
               - <b>Branch:</b> \`${{ env.PR_Branch }}\`<br>
               - <b>Title:</b> \`${{ env.PR_Title }}\`<br>
               - <b>Validating Up to Commit:</b> ${{ env.PR_SHA }}<br>
