@@ -42,8 +42,8 @@ jobs:
           echo "PR_Branch=$(jq -r '.headRefName' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Title=$(jq -r '.title' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Total_changedFiles_count=$(jq -r '.changedFiles' PullRequestData.txt)" >> $GITHUB_ENV
-          echo "PR_Total_changedFiles=$(jq -r '.files | map("\n- " + .path) |  join("")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
-          echo "PR_commits_titel=$( jq -r '.commits | map( "\n- " + .messageHeadline) |join("")' PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_Total_changedFiles=$(jq -r '.files | map("- `" + .path) |  join("`</br>")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_commits_titel=$( jq -r '.commits | map( "- `" + .messageHeadline) |join("`</br>")' PullRequestData.txt | base64)" >> $GITHUB_ENV
           echo "START_TIME=$(node -e 'console.log(new Date().toISOString())')" >> $GITHUB_ENV
 
       - name: Create and Run Check
@@ -70,8 +70,8 @@ jobs:
               - <b>Title:</b> \`${{ env.PR_Title }}\`<br>
               - <b>Validating Up to Commit:</b> ${{ env.PR_SHA }}<br>
               - <b>Total Changed Files:</b> \`${{ env.PR_Total_changedFiles_count }}\`<br>
-              - <b>Files Modified:</b> \`${TotalChangedFiles}\`<br>
-              - <b>Commit Messages:</b>   \`${CommitMessages}\`<br>
+              - <b>Files Modified:</b></br> ${TotalChangedFiles}<br>
+              - <b>Commit Messages:</b></br> ${CommitMessages}<br>
               - <b>Started At:</b> \`${{ env.START_TIME }}\`<br>
             `;
 
@@ -114,15 +114,15 @@ jobs:
                 <img src="https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif" alt="thumbs up good">
               </p>
               <p align="center">
-                Build tests went smoothly—good job, friend! Thanks 
+                Build tests went smoothly—good job, friend! Thanks</br> 
                 For the hard work and precious Time. Take a well-deserved break, okay?
               </p>
               - <b>Branch:</b> \`${{ env.PR_Branch }}\`<br>
               - <b>Title:</b> \`${{ env.PR_Title }}\`<br>
               - <b>Validating Up to Commit:</b> ${{ env.PR_SHA }}<br>
               - <b>Total Changed Files:</b> \`${{ env.PR_Total_changedFiles_count }}\`<br>
-              - <b>Files Modified:</b> \`${TotalChangedFiles}\`<br>
-              - <b>Commit Messages:</b>   \`${CommitMessages}\`<br>
+              - <b>Files Modified:</b></br> ${TotalChangedFiles}<br>
+              - <b>Commit Messages:</b></br> ${CommitMessages}<br>
               - <b>Started At:</b> \`${{ env.START_TIME }}\`<br>
               - <b>Completed At:</b> \`${completedAt}\`<br><br>
                
