@@ -1,4 +1,4 @@
-name: Context Preserve
+name: Build Status Check
 
 permissions:
   actions: write
@@ -60,7 +60,6 @@ jobs:
               output: {
                 title: 'Manual PR Validation',
                 summary: `Validating PR ${{ env.PR_URL }}...`
-                text: 'foo bar'
               },
             });
 
