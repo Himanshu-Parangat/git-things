@@ -52,13 +52,13 @@ jobs:
             const check = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: 'Check build Test',
+              name: 'Run build Test',
               head_sha: '${{ env.PR_SHA }}',
               external_id: '69',
               status: 'in_progress',
               started_at: new Date().toISOString(),
               output: {
-                title: 'Manual PR Validation',
+                title: 'Can it pass the build test?..',
                 summary: `Validating PR ${{ env.PR_URL }}...`
               },
             });
@@ -78,14 +78,14 @@ jobs:
             const check = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: 'Check build Test',
+              name: 'Run build Test',
               head_sha: '${{ env.PR_SHA }}',
               external_id: '69',
               status: 'completed',
               conclusion: 'success',
               completed_at: new Date().toISOString(),
               output: {
-                title: 'Manual PR Validation Done',
+                title: 'Passed the build check successfully',
                 summary: `Validated PR ${{ env.PR_URL }}...`
               },
             });
