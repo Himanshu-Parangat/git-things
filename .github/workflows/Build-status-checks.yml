@@ -1,0 +1,93 @@
+name: Context Preserve
+
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  pull-requests: write
+  statuses: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      PullRequestLink:
+        description: "Enter the Pull Request Link"
+        required: true
+
+jobs:
+  Context-Preserver:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Fetch PR data
+        id: GetPullRequestData
+        run: |
+          gh pr view "${{ github.event.inputs.PullRequestLink }}" --json number,headRefOid,url > PullRequestData.txt
+          if [ $? -ne 0 ]; then
+            echo "Error: Failed to fetch PR data."
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Load Environment
+        id: loadEnvironment
+        run: |
+          PR_NUMBER=$(jq -r '.number' PullRequestData.txt)
+          PR_SHA=$(jq -r '.headRefOid' PullRequestData.txt)
+          PR_URL=$(jq -r '.url' PullRequestData.txt)
+
+          echo "PR_NUMBER=${PR_NUMBER}" >> $GITHUB_ENV
+          echo "PR_SHA=${PR_SHA}" >> $GITHUB_ENV
+          echo "PR_URL=${PR_URL}" >> $GITHUB_ENV
+
+      - name: Create and Run Check
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const check = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Check build Test',
+              head_sha: '${{ env.PR_SHA }}',
+              external_id: '69',
+              status: 'in_progress',
+              started_at: new Date().toISOString(),
+              output: {
+                title: 'Manual PR Validation',
+                summary: `Validating PR ${{ env.PR_URL }}...`
+                text: 'foo bar'
+              },
+            });
+
+      - name: Perform Task
+        id: perform_task
+        run: |
+          echo "Performing task..."
+          sleep 8
+          echo "Task completed."
+
+      - name: Create and Run Check
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const check = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Check build Test',
+              head_sha: '${{ env.PR_SHA }}',
+              external_id: '69',
+              status: 'completed',
+              conclusion: 'success',
+              completed_at: new Date().toISOString(),
+              output: {
+                title: 'Manual PR Validation Done',
+                summary: `Validated PR ${{ env.PR_URL }}...`
+                text: 'foo bar'
+              },
+            });
