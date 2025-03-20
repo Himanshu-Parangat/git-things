@@ -88,6 +88,5 @@ jobs:
               output: {
                 title: 'Manual PR Validation Done',
                 summary: `Validated PR ${{ env.PR_URL }}...`
-                text: 'foo bar'
               },
             });
