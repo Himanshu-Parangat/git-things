@@ -25,7 +25,7 @@ jobs:
       - name: Fetch PR data
         id: GetPullRequestData
         run: |
-          gh pr view "${{ github.event.inputs.PullRequestLink }}" --json number,headRefOid,url,title,changedFiles,commits,files > PullRequestData.txt
+          gh pr view "${{ github.event.inputs.PullRequestLink }}" --json number,headRefOid,headRefName,url,title,changedFiles,commits,files > PullRequestData.txt
           if [ $? -ne 0 ]; then
             echo "Error: Failed to fetch PR data."
             exit 1
@@ -39,6 +39,7 @@ jobs:
           echo "PR_NUMBER=$(jq -r '.number' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_SHA=$(jq -r '.headRefOid' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_URL=$(jq -r '.url' PullRequestData.txt)" >> $GITHUB_ENV
+          echo "PR_Branch=$(jq -r '.headRefName' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Title=$(jq -r '.title' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Total_changedFiles_count=$(jq -r '.changedFiles' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Total_changedFiles=$(jq -r '.files | map("\n- " + .path) |  join("")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
@@ -51,14 +52,19 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
 
-            const In_progress_Message_summery = `**Validating PR:** ${{ env.PR_URL }}...
-              > - **Title:** \`${{ env.PR_Title }}\`  
-              > - **Branch:** \`${{ env.GITHUB_REF_NAME }}\`  
-              > - **Commit SHA:** \`${{ env.PR_SHA }}\`  
-              > - **Total Changed Files:** \`${{ env.PR_Total_changedFiles_count }}\`  
-              > - **Files Modified:** \`${{ env.PR_Total_changedFiles }}\`  
-              > - **Commit Messages:**   \`${{ env.PR_commits_titel }}\`  
-              > - **Started At:** \`${{ env.START_TIME }}\`  
+            const TotalChangedFiles = Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8');
+            const CommitMessages = Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8');
+            const In_progress_Message_summery = `- **Validating PR:** ${{ env.PR_URL }}...
+              <p align="center">
+                <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
+              </p>
+              - **Branch:** \`${{ env.PR_Branch }}\`  
+              - **Title:** \`${{ env.PR_Title }}\`  
+              - **Validating Up to Commit:** ${{ env.PR_SHA }}  
+              - **Total Changed Files:** \`${{ env.PR_Total_changedFiles_count }}\`  
+              - **Files Modified:** \`${TotalChangedFiles}\`  
+              - **Commit Messages:**   \`${CommitMessages}\`  
+              - **Started At:** \`${{ env.START_TIME }}\`  
             `;
 
             const check = await github.rest.checks.create({
@@ -87,19 +93,25 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+
+            const TotalChangedFiles = Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8');
+            const CommitMessages = Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8');
             const completedAt = new Date().toISOString();
 
-            const completed_Message_summery = `**Validated PR:** ${{ env.PR_URL }}...
-              > - **Title:** \`${{ env.PR_Title }}\`  
-              > - **Branch:** \`${{ env.GITHUB_REF_NAME }}\`  
-              > - **Commit SHA:** \`${{ env.PR_SHA }}\`  
-              > - **Total Changed Files:** \`${{ env.PR_Total_changedFiles_count }}\`  
-              > - **Files Modified:** \`${{ env.PR_Total_changedFiles }}\`  
-              > - **Commit Messages:**   \`${{ env.PR_commits_titel }}\`  
-              > - **Started At:** \`${{ env.START_TIME }}\`  
-              > - **Completed At:** \`${completedAt}\`  
-              >  
-              > The build compiled successfully`;
+            const completed_Message_summery = `- **Validated PR:** ${{ env.PR_URL }}...
+              <p align="center">
+                <img src="https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif" alt="thumbs up good">
+              </p>
+              - **Branch:** \`${{ env.PR_Branch }}\`  
+              - **Title:** \`${{ env.PR_Title }}\`  
+              - **Validating Up to Commit:** ${{ env.PR_SHA }}  
+              - **Total Changed Files:** \`${{ env.PR_Total_changedFiles_count }}\`  
+              - **Files Modified:** \`${TotalChangedFiles}\`  
+              - **Commit Messages:**   \`${CommitMessages}\`  
+              - **Started At:** \`${{ env.START_TIME }}\`  
+              - **Completed At:** \`${completedAt}\`  
+               
+              The build compiled successfully`;
 
             const check = await github.rest.checks.create({
               owner: context.repo.owner,
