@@ -116,7 +116,7 @@ jobs:
             });
 
       - name: Perform Task
-        id: perform_task
+        id: perform_skip_task
         run: |
           echo "Performing task..."
           sleep 30
@@ -197,7 +197,7 @@ jobs:
             });
 
       - name: Perform Task
-        id: perform_task
+        id: perform_warning_task
         run: |
           echo "Performing task..."
           sleep 30
@@ -280,7 +280,7 @@ jobs:
 
 
       - name: Perform Task
-        id: perform_task
+        id: perform_failed_task
         run: |
           echo "Performing task..."
           sleep 30
@@ -364,7 +364,7 @@ jobs:
 
 
       - name: Perform Task
-        id: perform_task
+        id: perform_success_task
         run: |
           echo "Performing task..."
           sleep 30
