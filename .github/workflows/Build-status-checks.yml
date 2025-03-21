@@ -42,8 +42,8 @@ jobs:
           echo "PR_Branch=$(jq -r '.headRefName' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Title=$(jq -r '.title' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Total_changedFiles_count=$(jq -r '.changedFiles' PullRequestData.txt)" >> $GITHUB_ENV
-          echo "PR_Total_changedFiles=$(jq -r '.files | map(.path) | join("</br> ")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
-          echo "PR_commits_titel=$( jq -r '.commits | map(.messageHeadline) | join("</br> ")' PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_Total_changedFiles=$(jq -r '.files | map(.path) | join(" ")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_commits_titel=$( jq -r '.commits | map(.messageHeadline) | join(" ")' PullRequestData.txt | base64)" >> $GITHUB_ENV
           echo "START_TIME=$(node -e 'console.log(new Date().toISOString())')" >> $GITHUB_ENV
 
       - name: Create and Run Check
@@ -54,6 +54,9 @@ jobs:
 
             const TotalChangedFiles = Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8');
             const CommitMessages = Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8');
+
+            const totalChangedFilesList = TotalChangedFiles.split('\n').filter(item => item.trim() !== '').map(item => `<li>${item}</li>`).join('');
+            const commitMessagesList = CommitMessages.split('\n').filter(item => item.trim() !== '').map(item => `<li>${item}</li>`).join(''); 
             const In_progress_Message_summery = `<br>Validating PR:</br> ${{ env.PR_URL }}
               <p align="center">
                 <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
@@ -64,13 +67,23 @@ jobs:
               </p>
 
               <ul>
-                <li><strong>Branch:</strong> <code>${{ env.PR_Branch }}</code></li>
-                <li><strong>Title:</strong> <code>${{ env.PR_Title }}</code></li>
-                <li><strong>Validating Up to Commit:</strong> ${{ env.PR_SHA }}</li>
-                <li><strong>Total Changed Files:</strong> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
-                <li><strong>Files Modified:</strong> ${TotalChangedFiles}</li>
-                <li><strong>Commit Messages:</strong> ${CommitMessages}</li>
-                <li><strong>Started At:</strong> <code>${{ env.START_TIME }}</code></li>
+                <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
+                <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
+                <li><b>Validating Up to Commit:</b> ${{ env.PR_SHA }}</li>
+                <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
+                <li>
+                  <b>Files Modified:</b> 
+                  <ol>
+                    ${totalChangedFilesList}
+                  </ol>
+                </li>
+                <li>
+                  <b>Commit Messages:</b>
+                    <ol>
+                      ${commitMessagesList}
+                    </ol>
+                </li>
+                <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
               </ul>
             `;
 
@@ -103,6 +116,9 @@ jobs:
 
             const TotalChangedFiles = Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8');
             const CommitMessages = Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8');
+
+            const totalChangedFilesList = TotalChangedFiles.split('\n').filter(item => item.trim() !== '').map(item => `<li>${item}</li>`).join('');
+            const commitMessagesList = CommitMessages.split('\n').filter(item => item.trim() !== '').map(item => `<li>${item}</li>`).join(''); 
             const completedAt = new Date().toISOString();
 
             const completed_Message_summery = `<br>Validated PR:</br> ${{ env.PR_URL }}
@@ -115,14 +131,24 @@ jobs:
               </p>
 
               <ul>
-                <li><strong>Branch:</strong> <code>${{ env.PR_Branch }}</code></li>
-                <li><strong>Title:</strong> <code>${{ env.PR_Title }}</code></li>
-                <li><strong>Validated Up to Commit:</strong> ${{ env.PR_SHA }}</li>
-                <li><strong>Total Changed Files:</strong> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
-                <li><strong>Files Modified:</strong> ${TotalChangedFiles}</li>
-                <li><strong>Commit Messages:</strong> ${CommitMessages}</li>
-                <li><strong>Started At:</strong> <code>${{ env.START_TIME }}</code></li>
-                <li><strong>Completed At:</strong> <code>${completedAt}</code></li>
+                <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
+                <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
+                <li><b>Validated Up to Commit:</b> ${{ env.PR_SHA }}</li>
+                <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
+                <li>
+                  <b>Files Modified:</b> 
+                  <ol>
+                    ${totalChangedFilesList}
+                  </ol>
+                </li>
+                <li>
+                  <b>Commit Messages:</b>
+                    <ol>
+                      ${commitMessagesList}
+                    </ol>
+                </li>
+                <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
+                <li><b>Completed At:</b> <code>${completedAt}</code></li>
               </ul> 
               The build compiled successfully`;
 
