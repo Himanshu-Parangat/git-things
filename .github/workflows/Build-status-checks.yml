@@ -44,7 +44,16 @@ jobs:
           echo "PR_Total_changedFiles_count=$(jq -r '.changedFiles' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Total_changedFiles=$(jq -r '.files | map(.path)'  PullRequestData.txt | base64)" >> $GITHUB_ENV
           echo "PR_commits_titel=$( jq -r '.commits | map(.messageHeadline)' PullRequestData.txt | base64)" >> $GITHUB_ENV
-          echo "START_TIME=$(node -e 'console.log(new Date().toISOString())')" >> $GITHUB_ENV
+          echo "START_TIME"=$(node -e "
+            const d = new Date();
+            const year = d.getFullYear();
+            const month = d.toLocaleString('en-US', { month: 'short' });
+            const day = d.getDate();
+            const hours = d.getHours();
+            const minutes = d.getMinutes();
+            const seconds = d.getSeconds();
+            console.log(\`\${year} \${month} \${day}, \${hours}:\${minutes}:\${seconds}\`);
+          ") >> $GITHUB_ENV
 
       - name: Create and Run Check
         uses: actions/github-script@v7
@@ -53,15 +62,15 @@ jobs:
           script: |
             const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `<li>${item}</li>`)
+              .map(item => `<li><code>${item}</code></li>`)
               .join('');
 
             const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `<li>${item}</li>`)
+              .map(item => `<li><code>${item}</code></li>`)
               .join('');
 
-            const In_progress_Message_summery = `<br>Validating PR:</br> ${{ env.PR_URL }}
+            const In_progress_Message_summery = `<b>Validating PR:</b> ${{ env.PR_URL }}
               <p align="center">
                 <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
               </p>
@@ -89,7 +98,7 @@ jobs:
                 </li>
                 <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
               </ul>
-            `;
+              The build Compilation is in Progress`;
 
             const check = await github.rest.checks.create({
               owner: context.repo.owner,
@@ -119,17 +128,27 @@ jobs:
           script: |
             const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `<li>${item}</li>`)
+              .map(item => `<li><code>${item}</code></li>`)
               .join('');
 
             const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `<li>${item}</li>`)
+              .map(item => `<li><code>${item}</code></li>`)
               .join('');
 
-            const completedAt = new Date().toISOString();
+            const completedAt = (function() {
+              const d = new Date();
+              const year = d.getFullYear();
+              const month = d.toLocaleString('en-US', { month: 'short' });
+              const day = d.getDate();
+              const hours = d.getHours();
+              const minutes = d.getMinutes();
+              const seconds = d.getSeconds();
 
-            const completed_Message_summery = `<br>Validated PR:</br> ${{ env.PR_URL }}
+              return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
+            })();
+
+            const completed_Message_summery = `<b>Validated PR:</b> ${{ env.PR_URL }}
               <p align="center">
                 <img src="https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif" alt="thumbs up good">
               </p>
