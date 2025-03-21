@@ -63,13 +63,15 @@ jobs:
                 to ensure the code builds successfully. This won't take long.
               </p>
 
-              - <b>Branch:</b> \`${{ env.PR_Branch }}\`<br>
-              - <b>Title:</b> \`${{ env.PR_Title }}\`<br>
-              - <b>Validating Up to Commit:</b> ${{ env.PR_SHA }}<br>
-              - <b>Total Changed Files:</b> \`${{ env.PR_Total_changedFiles_count }}\`<br>
-              - <b>Files Modified:</b></br> ${TotalChangedFiles}<br>
-              - <b>Commit Messages:</b></br> ${CommitMessages}<br>
-              - <b>Started At:</b> \`${{ env.START_TIME }}\`<br>
+              <ul>
+                <li><strong>Branch:</strong> <code>${{ env.PR_Branch }}</code></li>
+                <li><strong>Title:</strong> <code>${{ env.PR_Title }}</code></li>
+                <li><strong>Validating Up to Commit:</strong> ${{ env.PR_SHA }}</li>
+                <li><strong>Total Changed Files:</strong> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
+                <li><strong>Files Modified:</strong> ${TotalChangedFiles}</li>
+                <li><strong>Commit Messages:</strong> ${CommitMessages}</li>
+                <li><strong>Started At:</strong> <code>${{ env.START_TIME }}</code></li>
+              </ul>
             `;
 
             const check = await github.rest.checks.create({
@@ -112,15 +114,16 @@ jobs:
                 For the hard work and precious Time. Take a well-deserved break, okay?
               </p>
 
-              - <b>Branch:</b> \`${{ env.PR_Branch }}\`<br>
-              - <b>Title:</b> \`${{ env.PR_Title }}\`<br>
-              - <b>Validating Up to Commit:</b> ${{ env.PR_SHA }}<br>
-              - <b>Total Changed Files:</b> \`${{ env.PR_Total_changedFiles_count }}\`<br>
-              - <b>Files Modified:</b></br> ${TotalChangedFiles}<br>
-              - <b>Commit Messages:</b></br> ${CommitMessages}<br>
-              - <b>Started At:</b> \`${{ env.START_TIME }}\`<br>
-              - <b>Completed At:</b> \`${completedAt}\`<br><br>
-               
+              <ul>
+                <li><strong>Branch:</strong> <code>${{ env.PR_Branch }}</code></li>
+                <li><strong>Title:</strong> <code>${{ env.PR_Title }}</code></li>
+                <li><strong>Validated Up to Commit:</strong> ${{ env.PR_SHA }}</li>
+                <li><strong>Total Changed Files:</strong> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
+                <li><strong>Files Modified:</strong> ${TotalChangedFiles}</li>
+                <li><strong>Commit Messages:</strong> ${CommitMessages}</li>
+                <li><strong>Started At:</strong> <code>${{ env.START_TIME }}</code></li>
+                <li><strong>Completed At:</strong> <code>${completedAt}</code></li>
+              </ul> 
               The build compiled successfully`;
 
             const check = await github.rest.checks.create({
