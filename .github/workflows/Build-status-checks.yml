@@ -42,8 +42,8 @@ jobs:
           echo "PR_Branch=$(jq -r '.headRefName' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Title=$(jq -r '.title' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Total_changedFiles_count=$(jq -r '.changedFiles' PullRequestData.txt)" >> $GITHUB_ENV
-          echo "PR_Total_changedFiles=$(jq -r '.files | map("`" + .path) |  join("`, ")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
-          echo "PR_commits_titel=$( jq -r '.commits | map( "`" + .messageHeadline) |join("`, ")' PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_Total_changedFiles=$(jq -r '.files | map(.path) | join("</br> ")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_commits_titel=$( jq -r '.commits | map(.messageHeadline) | join("</br> ")' PullRequestData.txt | base64)" >> $GITHUB_ENV
           echo "START_TIME=$(node -e 'console.log(new Date().toISOString())')" >> $GITHUB_ENV
 
       - name: Create and Run Check
