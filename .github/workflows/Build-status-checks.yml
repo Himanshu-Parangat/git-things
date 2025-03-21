@@ -51,18 +51,14 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const totalChangedFilesList = Buffer.from(process.env.PR_Total_changedFiles, 'base64')
-              .toString('utf-8')
-              .split('\n')
+            const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
+              .map(item => `<li>${item}</li>`)
               .join('');
 
-            const commitMessagesList = Buffer.from(process.env.PR_commits_titel, 'base64')
-              .toString('utf-8')
-              .split('\n')
+            const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
+              .map(item => `<li>${item}</li>`)
               .join('');
 
             const In_progress_Message_summery = `<br>Validating PR:</br> ${{ env.PR_URL }}
@@ -121,18 +117,14 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const totalChangedFilesList = Buffer.from(process.env.PR_Total_changedFiles, 'base64')
-              .toString('utf-8')
-              .split('\n')
+            const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
+              .map(item => `<li>${item}</li>`)
               .join('');
 
-            const commitMessagesList = Buffer.from(process.env.PR_commits_titel, 'base64')
-              .toString('utf-8')
-              .split('\n')
+            const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
+              .map(item => `<li>${item}</li>`)
               .join('');
 
             const completedAt = new Date().toISOString();
