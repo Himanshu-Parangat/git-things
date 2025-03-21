@@ -42,8 +42,8 @@ jobs:
           echo "PR_Branch=$(jq -r '.headRefName' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Title=$(jq -r '.title' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Total_changedFiles_count=$(jq -r '.changedFiles' PullRequestData.txt)" >> $GITHUB_ENV
-          echo "PR_Total_changedFiles=$(jq -r '.files | map(.path) | join(" ")'  PullRequestData.txt | base64)" >> $GITHUB_ENV
-          echo "PR_commits_titel=$( jq -r '.commits | map(.messageHeadline) | join(" ")' PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_Total_changedFiles=$(jq -r '.files | map(.path)'  PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_commits_titel=$( jq -r '.commits | map(.messageHeadline)' PullRequestData.txt | base64)" >> $GITHUB_ENV
           echo "START_TIME=$(node -e 'console.log(new Date().toISOString())')" >> $GITHUB_ENV
 
       - name: Create and Run Check
@@ -51,12 +51,20 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const totalChangedFilesList = Buffer.from(process.env.PR_Total_changedFiles, 'base64')
+              .toString('utf-8')
+              .split('\n')
+              .filter(item => item.trim() !== '')
+              .map(item => `<li><code>${item}</code></li>`)
+              .join('');
 
-            const TotalChangedFiles = Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8');
-            const CommitMessages = Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8');
+            const commitMessagesList = Buffer.from(process.env.PR_commits_titel, 'base64')
+              .toString('utf-8')
+              .split('\n')
+              .filter(item => item.trim() !== '')
+              .map(item => `<li><code>${item}</code></li>`)
+              .join('');
 
-            const totalChangedFilesList = TotalChangedFiles.split('\n').filter(item => item.trim() !== '').map(item => `<li>${item}</li>`).join('');
-            const commitMessagesList = CommitMessages.split('\n').filter(item => item.trim() !== '').map(item => `<li>${item}</li>`).join(''); 
             const In_progress_Message_summery = `<br>Validating PR:</br> ${{ env.PR_URL }}
               <p align="center">
                 <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
@@ -113,12 +121,20 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const totalChangedFilesList = Buffer.from(process.env.PR_Total_changedFiles, 'base64')
+              .toString('utf-8')
+              .split('\n')
+              .filter(item => item.trim() !== '')
+              .map(item => `<li><code>${item}</code></li>`)
+              .join('');
 
-            const TotalChangedFiles = Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8');
-            const CommitMessages = Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8');
+            const commitMessagesList = Buffer.from(process.env.PR_commits_titel, 'base64')
+              .toString('utf-8')
+              .split('\n')
+              .filter(item => item.trim() !== '')
+              .map(item => `<li><code>${item}</code></li>`)
+              .join('');
 
-            const totalChangedFilesList = TotalChangedFiles.split('\n').filter(item => item.trim() !== '').map(item => `<li>${item}</li>`).join('');
-            const commitMessagesList = CommitMessages.split('\n').filter(item => item.trim() !== '').map(item => `<li>${item}</li>`).join(''); 
             const completedAt = new Date().toISOString();
 
             const completed_Message_summery = `<br>Validated PR:</br> ${{ env.PR_URL }}
