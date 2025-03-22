@@ -128,19 +128,37 @@ jobs:
             const In_progress_Message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer);
 
 
-            const check = await github.rest.checks.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'Run build Test',
-              head_sha: '${{ env.PR_SHA }}',
-              external_id: '69',
-              status: 'in_progress',
-              started_at: new Date().toISOString(),
-              output: {
-                title: 'Can it pass the build test?..',
-                summary: In_progress_Message_summery
-              },
-            });
+            async function check(id) {
+              return await github.rest.checks.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: 'Run build Test',
+                head_sha: process.env.PR_SHA,
+                external_id: id,
+                status: 'in_progress',
+                started_at: new Date().toISOString(),
+                output: {
+                  title: 'Can it pass the build test?..',
+                  summary: In_progress_Message_summery
+                },
+              });
+            }
+
+            check(69).then(console.log).catch(console.error);
+
+            # const check = await github.rest.checks.create({
+            #   owner: context.repo.owner,
+            #   repo: context.repo.repo,
+            #   name: 'Run build Test',
+            #   head_sha: '${{ env.PR_SHA }}',
+            #   external_id: '69',
+            #   status: 'in_progress',
+            #   started_at: new Date().toISOString(),
+            #   output: {
+            #     title: 'Can it pass the build test?..',
+            #     summary: In_progress_Message_summery
+            #   },
+            # });
 
       # - name: Perform Task
       #   id: perform_skip_task
