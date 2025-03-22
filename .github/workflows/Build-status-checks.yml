@@ -72,14 +72,12 @@ jobs:
               .join('');
 
 
-            function generate_summary(status_gif) {
-              const Message_summery = `<b>Validating PR:</b> ${{ env.PR_URL }}
+            function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer) {
+              const Message_summery = `<b>${status_header}</b> ${{ env.PR_URL }}
                 <p align="center">
-                  <img src="${status_gif}" alt="thinking-test" width="200">
+                  <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}">
                 </p>
-                <p align="center">
-                  Take a break, have some rest & grab some water! Meanwhile, we're running tests<br>
-                  to ensure the code builds successfully. This won't take long.
+                <p align="center">${status_quote}
                 </p>
                 <ul>
                   <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
@@ -100,11 +98,18 @@ jobs:
                   </li>
                   <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
                 </ul>
-                The build Compilation is in Progress`;
+                ${status_footer}`;
               return Message_summery
 
             }
-            const In_progress_Message_summery = generate_summary("https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif");
+
+            const status_header = "Validating PR:"
+            const status_img = "https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif"
+            const status_img_alt = "thinking-test"
+            const status_img_width = "200"
+            const status_quote = "Take a break, have some rest & grab some water! Meanwhile, we're running tests<br>to ensure the code builds successfully. This won't take long."
+            const status_footer = "The build Compilation is in Progress"
+            const In_progress_Message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer);
 
 
             const check = await github.rest.checks.create({
