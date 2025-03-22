@@ -85,7 +85,7 @@ jobs:
             })();
 
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer) {
-              const header = `<b>${status_header}</b> ${{ env.PR_URL }}`;
+              const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
               const image_body = `<p align='center'> <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}"> </p>`;
               const quote_body = `<p align="center">${status_quote}</p></br>`;
               const Branch = `<li><b>Branch:</b> <code>${ process.env.PR_Branch }</code></li>`;
@@ -104,7 +104,8 @@ jobs:
                 Total_Changed_Files,
                 Files_Modified,
                 Commit_Messages,
-                Started_At
+                Started_At,
+                Finished_At
                 ].join('');
 
               return [
