@@ -72,16 +72,15 @@ jobs:
               .join('');
 
 
-            function generate_summary() {
+            function generate_summary(status_gif) {
               const Message_summery = `<b>Validating PR:</b> ${{ env.PR_URL }}
                 <p align="center">
-                  <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
+                  <img src="${status_gif}" alt="thinking-test" width="200">
                 </p>
                 <p align="center">
                   Take a break, have some rest & grab some water! Meanwhile, we're running tests<br>
                   to ensure the code builds successfully. This won't take long.
                 </p>
-
                 <ul>
                   <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
                   <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
@@ -105,7 +104,7 @@ jobs:
               return Message_summery
 
             }
-            const In_progress_Message_summery = generate_summary();
+            const In_progress_Message_summary = generate_summary("https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif");
 
 
             const check = await github.rest.checks.create({
