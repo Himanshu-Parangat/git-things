@@ -105,7 +105,7 @@ jobs:
               return Message_summery
 
             }
-            const In_progress_Message_summary = generate_summary();
+            const In_progress_Message_summery = generate_summary();
 
 
             const check = await github.rest.checks.create({
