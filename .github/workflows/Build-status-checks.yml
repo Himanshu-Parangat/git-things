@@ -104,7 +104,7 @@ jobs:
               return Message_summery
 
             }
-            const In_progress_Message_summary = generate_summary("https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif");
+            const In_progress_Message_summery = generate_summary("https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif");
 
 
             const check = await github.rest.checks.create({
