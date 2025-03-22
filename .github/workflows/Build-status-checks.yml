@@ -85,7 +85,7 @@ jobs:
                 <li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>
                 <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li></ul>`;
               
-            return header + image_body quote_body + Message_summery + status_footer
+            return header + image_body + quote_body + Message_summery + status_footer
 
             }
 
