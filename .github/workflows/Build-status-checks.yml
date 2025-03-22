@@ -74,9 +74,8 @@ jobs:
 
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer) {
               const header = `<b>${status_header}</b> ${{ env.PR_URL }}`
-              const Message_summery = `<p align="center">
-                  <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}">
-                </p>
+              const image_body = `<p align='center'> <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}"> </p>`
+              const Message_summery = `
                 <p align="center">${status_quote}
                 </p>
                 <ul>
@@ -99,7 +98,7 @@ jobs:
                   <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
                 </ul>
                 ${status_footer}`;
-              return header + Message_summery
+              return header + image_body + Message_summery
 
             }
 
