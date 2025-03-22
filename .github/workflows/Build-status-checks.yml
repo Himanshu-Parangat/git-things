@@ -71,35 +71,42 @@ jobs:
               .map(item => `<li><code>${item}</code></li>`)
               .join('');
 
-            const In_progress_Message_summery = `<b>Validating PR:</b> ${{ env.PR_URL }}
-              <p align="center">
-                <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
-              </p>
-              <p align="center">
-                Take a break, have some rest & grab some water! Meanwhile, we're running tests<br>
-                to ensure the code builds successfully. This won't take long.
-              </p>
 
-              <ul>
-                <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
-                <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
-                <li><b>Validating Up to Commit:</b> ${{ env.PR_SHA }}</li>
-                <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
-                <li>
-                  <b>Files Modified:</b> 
-                  <ol>
-                    ${totalChangedFilesList}
-                  </ol>
-                </li>
-                <li>
-                  <b>Commit Messages:</b>
+            function generate_summary() {
+              const Message_summery = `<b>Validating PR:</b> ${{ env.PR_URL }}
+                <p align="center">
+                  <img src="https://media1.tenor.com/m/t80Qwz2QouMAAAAd/yuru-yuri-ayano-sugiura.gif" alt="thinking-test" width="200">
+                </p>
+                <p align="center">
+                  Take a break, have some rest & grab some water! Meanwhile, we're running tests<br>
+                  to ensure the code builds successfully. This won't take long.
+                </p>
+
+                <ul>
+                  <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
+                  <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
+                  <li><b>Validating Up to Commit:</b> ${{ env.PR_SHA }}</li>
+                  <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
+                  <li>
+                    <b>Files Modified:</b> 
                     <ol>
-                      ${commitMessagesList}
+                      ${totalChangedFilesList}
                     </ol>
-                </li>
-                <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
-              </ul>
-              The build Compilation is in Progress`;
+                  </li>
+                  <li>
+                    <b>Commit Messages:</b>
+                      <ol>
+                        ${commitMessagesList}
+                      </ol>
+                  </li>
+                  <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
+                </ul>
+                The build Compilation is in Progress`;
+              return Message_summery
+
+            }
+            const In_progress_Message_summary = generate_summary();
+
 
             const check = await github.rest.checks.create({
               owner: context.repo.owner,
