@@ -55,6 +55,16 @@ jobs:
             console.log(\`\${year} \${month} \${day}, \${hours}:\${minutes}:\${seconds}\`);
           ") >> $GITHUB_ENV
 
+      - name: Detect target
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
+              .filter(item => item.trim() !== '')
+
+            totalChangedFilesList.map(item => console.log(item));
+
       # In_progress
       - name: Create and Run Check(InProgress)
         uses: actions/github-script@v7
@@ -128,23 +138,20 @@ jobs:
             const In_progress_Message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer);
 
 
-            function run_test() {
-              const check = await github.rest.checks.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                name: 'Run build Test',
-                head_sha: '${{ env.PR_SHA }}',
-                external_id: '69',
-                status: 'in_progress',
-                started_at: new Date().toISOString(),
-                output: {
-                  title: 'Can it pass the build test?..',
-                  summary: In_progress_Message_summery
-                },
-              });
-            }
+            const check = await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'Run build Test',
+              head_sha: '${{ env.PR_SHA }}',
+              external_id: '69',
+              status: 'in_progress',
+              started_at: new Date().toISOString(),
+              output: {
+                title: 'Can it pass the build test?..',
+                summary: In_progress_Message_summery
+              },
+            });
 
-            run_test()
 
       # - name: Perform Task
       #   id: perform_skip_task
