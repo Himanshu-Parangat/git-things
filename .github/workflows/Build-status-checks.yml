@@ -71,23 +71,51 @@ jobs:
               .map(item => `<li><code>${item}</code></li>`)
               .join('');
 
+            const started_at = process.env.START_TIME
+            const finished_At = (function() {
+              const d = new Date();
+              const year = d.getFullYear();
+              const month = d.toLocaleString('en-US', { month: 'short' });
+              const day = d.getDate();
+              const hours = d.getHours();
+              const minutes = d.getMinutes();
+              const seconds = d.getSeconds();
+
+              return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
+            })();
 
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer) {
-              const header = `<b>${status_header}</b> ${{ env.PR_URL }}`
-              const image_body = `<p align='center'> <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}"> </p>`
-              const quote_body = `<p align="center">${status_quote}</p>`
-              const Branch = `<li><b>Branch:</b> <code>${ process.env.PR_Branch }</code></li>`
-              const Title = `<li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>`
-              const Validating_Up_to_Commit = `<li><b>Validating Up to Commit:</b> ${{ env.PR_SHA }}</li>`
-              const Total_Changed_Files = `<li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>`
-              const Files_Modified = `<li><b>Files Modified:</b> <ol>${totalChangedFilesList}</ol></li>`
-              const Commit_Messages = `<li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>`
-              const Started_At = `<li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>`
+              const header = `<b>${status_header}</b> ${{ env.PR_URL }}`;
+              const image_body = `<p align='center'> <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}"> </p>`;
+              const quote_body = `<p align="center">${status_quote}</p></br>`;
+              const Branch = `<li><b>Branch:</b> <code>${ process.env.PR_Branch }</code></li>`;
+              const Title = `<li><b>Title:</b> <code>${ process.env.PR_Title }</code></li>`;
+              const Validating_Up_to_Commit = `<li><b>Validating Up to Commit:</b> ${ process.env.PR_SHA }</li>`;
+              const Total_Changed_Files = `<li><b>Total Changed Files:</b> <code>${ process.env.PR_Total_changedFiles_count }</code></li>`;
+              const Files_Modified = `<li><b>Files Modified:</b><ol>${totalChangedFilesList}</ol></li>`;
+              const Commit_Messages = `<li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>`;
+              const Started_At = `<li><b>Started At:</b> <code>${started_at}</code></li>`;
+              const Finished_At = `<li><b>Finished_At At:</b> <code>${finished_At}</code></li>`;
 
-              const Message_body = Branch + Title + Validating_Up_to_Commit + Total_Changed_Files + Files_Modified + Commit_Messages + Started_At
-            
-              return header + image_body + quote_body + `<ul>` + Message_body + `</ul>` + status_footer
+              const Message_body = [
+                Branch,
+                Title,
+                Validating_Up_to_Commit,
+                Total_Changed_Files,
+                Files_Modified,
+                Commit_Messages,
+                Started_At
+                ].join('');
 
+              return [
+                header,
+                image_body,
+                quote_body,
+                '<ul>',
+                Message_body,
+                '</ul>',
+                status_footer
+              ].join('');
             }
 
             const status_header = "Validating PR:"
