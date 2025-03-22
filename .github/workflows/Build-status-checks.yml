@@ -128,13 +128,13 @@ jobs:
             const In_progress_Message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer);
 
 
-            async function check(id) {
-              return await github.rest.checks.create({
+            function run_test() {
+              const check = await github.rest.checks.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 name: 'Run build Test',
-                head_sha: process.env.PR_SHA,
-                external_id: id,
+                head_sha: '${{ env.PR_SHA }}',
+                external_id: '69',
                 status: 'in_progress',
                 started_at: new Date().toISOString(),
                 output: {
@@ -144,21 +144,7 @@ jobs:
               });
             }
 
-            check(69).then(console.log).catch(console.error);
-
-            # const check = await github.rest.checks.create({
-            #   owner: context.repo.owner,
-            #   repo: context.repo.repo,
-            #   name: 'Run build Test',
-            #   head_sha: '${{ env.PR_SHA }}',
-            #   external_id: '69',
-            #   status: 'in_progress',
-            #   started_at: new Date().toISOString(),
-            #   output: {
-            #     title: 'Can it pass the build test?..',
-            #     summary: In_progress_Message_summery
-            #   },
-            # });
+            run_test()
 
       # - name: Perform Task
       #   id: perform_skip_task
