@@ -73,8 +73,8 @@ jobs:
 
 
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer) {
-              const Message_summery = `<b>${status_header}</b> ${{ env.PR_URL }}
-                <p align="center">
+              const header = `<b>${status_header}</b> ${{ env.PR_URL }}`
+              const Message_summery = `<p align="center">
                   <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}">
                 </p>
                 <p align="center">${status_quote}
@@ -99,7 +99,7 @@ jobs:
                   <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
                 </ul>
                 ${status_footer}`;
-              return Message_summery
+              return header + Message_summery
 
             }
 
@@ -126,252 +126,252 @@ jobs:
               },
             });
 
-      - name: Perform Task
-        id: perform_skip_task
-        run: |
-          echo "Performing task..."
-          sleep 30
-          echo "somting went wrong(not really)."
-
-      # skipped
-      - name: Create and Run Check(skipped)
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
-              .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
-              .join('');
-
-            const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
-              .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
-              .join('');
-
-            const skippedAt = (function() {
-              const d = new Date();
-              const year = d.getFullYear();
-              const month = d.toLocaleString('en-US', { month: 'short' });
-              const day = d.getDate();
-              const hours = d.getHours();
-              const minutes = d.getMinutes();
-              const seconds = d.getSeconds();
-
-              return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
-            })();
-
-            const skipped_Message_summery = `<b>Skipping PR:</b> ${{ env.PR_URL }}
-              <p align="center">
-                <img src="https://media1.tenor.com/m/iora7DooHl0AAAAd/vkay-hmn.gif" alt="vibing summer" width="300">
-              </p>
-              <p align="center">  
-                Skip, skip, skip—There is Nothing new to build, So this will be skipped!</br>  
-                Oh, and you should definitely take a break and drink some water—don’t let that skip!
-              </p>
-
-              <ul>
-                <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
-                <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
-                <li><b>Validated Up to Commit:</b> ${{ env.PR_SHA }}</li>
-                <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
-                <li>
-                  <b>Files Modified:</b> 
-                  <ol>
-                    ${totalChangedFilesList}
-                  </ol>
-                </li>
-                <li>
-                  <b>Commit Messages:</b>
-                    <ol>
-                      ${commitMessagesList}
-                    </ol>
-                </li>
-                <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
-                <li><b>Skipped At:</b> <code>${skippedAt}</code></li>
-              </ul> 
-              The build step got skipped Nothing to compile`;
-
-            const check = await github.rest.checks.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'Run build Test',
-              head_sha: '${{ env.PR_SHA }}',
-              external_id: '69',
-              status: 'completed',
-              conclusion: 'skipped',
-              completed_at: new Date().toISOString(),
-              output: {
-                title: 'Nothing to compile Skipping',
-                summary: skipped_Message_summery
-              },
-            });
-
-      - name: Perform Task
-        id: perform_warning_task
-        run: |
-          echo "Performing task..."
-          sleep 30
-          echo "somting went wrong(not really)."
-
-      # warning
-      - name: Create and Run Check(warning)
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
-              .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
-              .join('');
-
-            const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
-              .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
-              .join('');
-
-            const warningAt = (function() {
-              const d = new Date();
-              const year = d.getFullYear();
-              const month = d.toLocaleString('en-US', { month: 'short' });
-              const day = d.getDate();
-              const hours = d.getHours();
-              const minutes = d.getMinutes();
-              const seconds = d.getSeconds();
-
-              return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
-            })();
-
-            const Warning_Message_summery = `<b>Validated PR:</b> ${{ env.PR_URL }}
-              <p align="center">
-                <img src="https://media1.tenor.com/m/75aAMJUb_S4AAAAd/anime-gochiusa.gif" alt="no idea what hppend" width="300">
-              </p>
-
-              <p align="center">
-                Hmm... The build test ran into an unexpected Behavior. Honestly, I'm just as confused as you are!</br>
-                Need to Check the logs for more details, Take a break, and we will notify you. 
-              </p>              
-
-              <ul>
-                <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
-                <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
-                <li><b>Validated Up to Commit:</b> ${{ env.PR_SHA }}</li>
-                <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
-                <li>
-                  <b>Files Modified:</b> 
-                  <ol>
-                    ${totalChangedFilesList}
-                  </ol>
-                </li>
-                <li>
-                  <b>Commit Messages:</b>
-                    <ol>
-                      ${commitMessagesList}
-                    </ol>
-                </li>
-                <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
-                <li><b>Unexpended Behaviour At:</b> <code>${warningAt}</code></li>
-              </ul> 
-              Some Unexpended Behaviour Observed, check logs`;
-
-            const check = await github.rest.checks.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'Run build Test',
-              head_sha: '${{ env.PR_SHA }}',
-              external_id: '69',
-              status: 'completed',
-              conclusion: 'neutral',
-              completed_at: new Date().toISOString(),
-              output: {
-                title: 'Build Test Unexpended Behaviour Warnings',
-                summary: Warning_Message_summery
-              },
-            });
-
-
-      - name: Perform Task
-        id: perform_failed_task
-        run: |
-          echo "Performing task..."
-          sleep 30
-          echo "Task completed."
-
-
-      # failed
-      - name: Create and Run Check(failed)
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
-              .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
-              .join('');
-
-            const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
-              .filter(item => item.trim() !== '')
-              .map(item => `<li><code>${item}</code></li>`)
-              .join('');
-
-            const failedAt = (function() {
-              const d = new Date();
-              const year = d.getFullYear();
-              const month = d.toLocaleString('en-US', { month: 'short' });
-              const day = d.getDate();
-              const hours = d.getHours();
-              const minutes = d.getMinutes();
-              const seconds = d.getSeconds();
-
-              return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
-            })();
-
-            const Failed_Message_summery = `<b>Build test failed for PR:</b> ${{ env.PR_URL }}
-              <p align="center">
-                <img src="https://media1.tenor.com/m/UDzn7Mcr_gwAAAAd/anime-frieren.gif" alt="nod-left-right-no" width="200">
-              </p>
-
-              <p align="center">
-                Oops! The build process didn’t succeed—another day, another grind.</br> 
-                Need to Check the logs for details, Take a break and wait for someone to notify you. :3
-              </p>              
-
-              <ul>
-                <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
-                <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
-                <li><b>Validated Up to Commit:</b> ${{ env.PR_SHA }}</li>
-                <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
-                <li>
-                  <b>Files Modified:</b> 
-                  <ol>
-                    ${totalChangedFilesList}
-                  </ol>
-                </li>
-                <li>
-                  <b>Commit Messages:</b>
-                    <ol>
-                      ${commitMessagesList}
-                    </ol>
-                </li>
-                <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
-                <li><b>Failed At:</b> <code>${failedAt}</code></li>
-              </ul> 
-              The build didn't compiled`;
-
-            const check = await github.rest.checks.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              name: 'Run build Test',
-              head_sha: '${{ env.PR_SHA }}',
-              external_id: '69',
-              status: 'completed',
-              conclusion: 'failure',
-              completed_at: new Date().toISOString(),
-              output: {
-                title: 'build Test Failed',
-                summary: Failed_Message_summery
-              },
-            });
+      # - name: Perform Task
+      #   id: perform_skip_task
+      #   run: |
+      #     echo "Performing task..."
+      #     sleep 30
+      #     echo "somting went wrong(not really)."
+      #
+      # # skipped
+      # - name: Create and Run Check(skipped)
+      #   uses: actions/github-script@v7
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
+      #         .filter(item => item.trim() !== '')
+      #         .map(item => `<li><code>${item}</code></li>`)
+      #         .join('');
+      #
+      #       const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
+      #         .filter(item => item.trim() !== '')
+      #         .map(item => `<li><code>${item}</code></li>`)
+      #         .join('');
+      #
+      #       const skippedAt = (function() {
+      #         const d = new Date();
+      #         const year = d.getFullYear();
+      #         const month = d.toLocaleString('en-US', { month: 'short' });
+      #         const day = d.getDate();
+      #         const hours = d.getHours();
+      #         const minutes = d.getMinutes();
+      #         const seconds = d.getSeconds();
+      #
+      #         return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
+      #       })();
+      #
+      #       const skipped_Message_summery = `<b>Skipping PR:</b> ${{ env.PR_URL }}
+      #         <p align="center">
+      #           <img src="https://media1.tenor.com/m/iora7DooHl0AAAAd/vkay-hmn.gif" alt="vibing summer" width="300">
+      #         </p>
+      #         <p align="center">  
+      #           Skip, skip, skip—There is Nothing new to build, So this will be skipped!</br>  
+      #           Oh, and you should definitely take a break and drink some water—don’t let that skip!
+      #         </p>
+      #
+      #         <ul>
+      #           <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
+      #           <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
+      #           <li><b>Validated Up to Commit:</b> ${{ env.PR_SHA }}</li>
+      #           <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
+      #           <li>
+      #             <b>Files Modified:</b> 
+      #             <ol>
+      #               ${totalChangedFilesList}
+      #             </ol>
+      #           </li>
+      #           <li>
+      #             <b>Commit Messages:</b>
+      #               <ol>
+      #                 ${commitMessagesList}
+      #               </ol>
+      #           </li>
+      #           <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
+      #           <li><b>Skipped At:</b> <code>${skippedAt}</code></li>
+      #         </ul> 
+      #         The build step got skipped Nothing to compile`;
+      #
+      #       const check = await github.rest.checks.create({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         name: 'Run build Test',
+      #         head_sha: '${{ env.PR_SHA }}',
+      #         external_id: '69',
+      #         status: 'completed',
+      #         conclusion: 'skipped',
+      #         completed_at: new Date().toISOString(),
+      #         output: {
+      #           title: 'Nothing to compile Skipping',
+      #           summary: skipped_Message_summery
+      #         },
+      #       });
+      #
+      # - name: Perform Task
+      #   id: perform_warning_task
+      #   run: |
+      #     echo "Performing task..."
+      #     sleep 30
+      #     echo "somting went wrong(not really)."
+      #
+      # # warning
+      # - name: Create and Run Check(warning)
+      #   uses: actions/github-script@v7
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
+      #         .filter(item => item.trim() !== '')
+      #         .map(item => `<li><code>${item}</code></li>`)
+      #         .join('');
+      #
+      #       const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
+      #         .filter(item => item.trim() !== '')
+      #         .map(item => `<li><code>${item}</code></li>`)
+      #         .join('');
+      #
+      #       const warningAt = (function() {
+      #         const d = new Date();
+      #         const year = d.getFullYear();
+      #         const month = d.toLocaleString('en-US', { month: 'short' });
+      #         const day = d.getDate();
+      #         const hours = d.getHours();
+      #         const minutes = d.getMinutes();
+      #         const seconds = d.getSeconds();
+      #
+      #         return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
+      #       })();
+      #
+      #       const Warning_Message_summery = `<b>Validated PR:</b> ${{ env.PR_URL }}
+      #         <p align="center">
+      #           <img src="https://media1.tenor.com/m/75aAMJUb_S4AAAAd/anime-gochiusa.gif" alt="no idea what hppend" width="300">
+      #         </p>
+      #
+      #         <p align="center">
+      #           Hmm... The build test ran into an unexpected Behavior. Honestly, I'm just as confused as you are!</br>
+      #           Need to Check the logs for more details, Take a break, and we will notify you. 
+      #         </p>              
+      #
+      #         <ul>
+      #           <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
+      #           <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
+      #           <li><b>Validated Up to Commit:</b> ${{ env.PR_SHA }}</li>
+      #           <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
+      #           <li>
+      #             <b>Files Modified:</b> 
+      #             <ol>
+      #               ${totalChangedFilesList}
+      #             </ol>
+      #           </li>
+      #           <li>
+      #             <b>Commit Messages:</b>
+      #               <ol>
+      #                 ${commitMessagesList}
+      #               </ol>
+      #           </li>
+      #           <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
+      #           <li><b>Unexpended Behaviour At:</b> <code>${warningAt}</code></li>
+      #         </ul> 
+      #         Some Unexpended Behaviour Observed, check logs`;
+      #
+      #       const check = await github.rest.checks.create({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         name: 'Run build Test',
+      #         head_sha: '${{ env.PR_SHA }}',
+      #         external_id: '69',
+      #         status: 'completed',
+      #         conclusion: 'neutral',
+      #         completed_at: new Date().toISOString(),
+      #         output: {
+      #           title: 'Build Test Unexpended Behaviour Warnings',
+      #           summary: Warning_Message_summery
+      #         },
+      #       });
+      #
+      #
+      # - name: Perform Task
+      #   id: perform_failed_task
+      #   run: |
+      #     echo "Performing task..."
+      #     sleep 30
+      #     echo "Task completed."
+      #
+      #
+      # # failed
+      # - name: Create and Run Check(failed)
+      #   uses: actions/github-script@v7
+      #   with:
+      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+      #     script: |
+      #       const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
+      #         .filter(item => item.trim() !== '')
+      #         .map(item => `<li><code>${item}</code></li>`)
+      #         .join('');
+      #
+      #       const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
+      #         .filter(item => item.trim() !== '')
+      #         .map(item => `<li><code>${item}</code></li>`)
+      #         .join('');
+      #
+      #       const failedAt = (function() {
+      #         const d = new Date();
+      #         const year = d.getFullYear();
+      #         const month = d.toLocaleString('en-US', { month: 'short' });
+      #         const day = d.getDate();
+      #         const hours = d.getHours();
+      #         const minutes = d.getMinutes();
+      #         const seconds = d.getSeconds();
+      #
+      #         return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
+      #       })();
+      #
+      #       const Failed_Message_summery = `<b>Build test failed for PR:</b> ${{ env.PR_URL }}
+      #         <p align="center">
+      #           <img src="https://media1.tenor.com/m/UDzn7Mcr_gwAAAAd/anime-frieren.gif" alt="nod-left-right-no" width="200">
+      #         </p>
+      #
+      #         <p align="center">
+      #           Oops! The build process didn’t succeed—another day, another grind.</br> 
+      #           Need to Check the logs for details, Take a break and wait for someone to notify you. :3
+      #         </p>              
+      #
+      #         <ul>
+      #           <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
+      #           <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
+      #           <li><b>Validated Up to Commit:</b> ${{ env.PR_SHA }}</li>
+      #           <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
+      #           <li>
+      #             <b>Files Modified:</b> 
+      #             <ol>
+      #               ${totalChangedFilesList}
+      #             </ol>
+      #           </li>
+      #           <li>
+      #             <b>Commit Messages:</b>
+      #               <ol>
+      #                 ${commitMessagesList}
+      #               </ol>
+      #           </li>
+      #           <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
+      #           <li><b>Failed At:</b> <code>${failedAt}</code></li>
+      #         </ul> 
+      #         The build didn't compiled`;
+      #
+      #       const check = await github.rest.checks.create({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         name: 'Run build Test',
+      #         head_sha: '${{ env.PR_SHA }}',
+      #         external_id: '69',
+      #         status: 'completed',
+      #         conclusion: 'failure',
+      #         completed_at: new Date().toISOString(),
+      #         output: {
+      #           title: 'build Test Failed',
+      #           summary: Failed_Message_summery
+      #         },
+      #       });
 
 
       - name: Perform Task
