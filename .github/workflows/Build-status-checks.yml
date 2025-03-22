@@ -76,16 +76,17 @@ jobs:
               const header = `<b>${status_header}</b> ${{ env.PR_URL }}`
               const image_body = `<p align='center'> <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}"> </p>`
               const quote_body = `<p align="center">${status_quote}</p>`
-              const Message_summery = `<ul>
-                <li><b>Branch:</b> <code>${ process.env.PR_Branch }</code></li>
-                <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
-                <li><b>Validating Up to Commit:</b> ${{ env.PR_SHA }}</li>
-                <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
-                <li><b>Files Modified:</b> <ol>${totalChangedFilesList}</ol></li>
-                <li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>
-                <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li></ul>`;
-              
-            return header + image_body + quote_body + Message_summery + status_footer
+              const Branch = `<li><b>Branch:</b> <code>${ process.env.PR_Branch }</code></li>`
+              const Title = `<li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>`
+              const Validating_Up_to_Commit = `<li><b>Validating Up to Commit:</b> ${{ env.PR_SHA }}</li>`
+              const Total_Changed_Files = `<li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>`
+              const Files_Modified = `<li><b>Files Modified:</b> <ol>${totalChangedFilesList}</ol></li>`
+              const Commit_Messages = `<li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>`
+              const Started_At = `<li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>`
+
+              const Message_body = Branch + Title + Validating_Up_to_Commit + Total_Changed_Files + Files_Modified + Commit_Messages + started_at
+            
+              return header + image_body + quote_body + `<ul>` + Message_body + `</ul>` + status_footer
 
             }
 
