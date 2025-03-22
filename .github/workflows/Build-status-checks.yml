@@ -84,7 +84,7 @@ jobs:
               const Commit_Messages = `<li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>`
               const Started_At = `<li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>`
 
-              const Message_body = Branch + Title + Validating_Up_to_Commit + Total_Changed_Files + Files_Modified + Commit_Messages + started_at
+              const Message_body = Branch + Title + Validating_Up_to_Commit + Total_Changed_Files + Files_Modified + Commit_Messages + Started_At
             
               return header + image_body + quote_body + `<ul>` + Message_body + `</ul>` + status_footer
 
