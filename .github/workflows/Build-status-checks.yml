@@ -93,7 +93,8 @@ jobs:
             console.log(resultString);
 
             const encodedResult = Buffer.from(resultString).toString('base64').replace(/\n/g, '');
-            fs.appendFileSync(process.env.GITHUB_ENV, `Target_BUILD=${encodedResult}\n`);
+            console.log(`echo "Target_BUILD=${encodedResult}" >> $GITHUB_ENV`);
+            # fs.appendFileSync(process.env.GITHUB_ENV, `Target_BUILD=${encodedResult}\n`);
 
             console.log("env variable stuuf\n");
             console.log(process.env.Target_BUILD);
