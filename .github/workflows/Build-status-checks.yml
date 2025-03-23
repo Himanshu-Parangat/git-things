@@ -65,7 +65,7 @@ jobs:
 
             totalChangedFilesList.map(item => console.log(item));
 
-            const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
+            const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
 
             commitMessagesList.map(item => console.log(item))
