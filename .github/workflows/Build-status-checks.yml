@@ -61,31 +61,31 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
-              .filter(item => item.trim() !== '')
-
-            const patterns = [
-              { pattern: "^firewall/reverseProxy/*", target: "reverseProxy" },
-              { pattern: "^firewall/waf/*", target: "waf" },
-              { pattern: "^testing-env/application/*", target: "application" },
-              { pattern: "^testing-env/server/*", target: "server" },
-              { pattern: "^testing-env/simulator/*", target: "simulator" },
-              { pattern: "^docs/*", target: "documentation" },
-              { pattern: "^Makefile", target: "all" },
-            ];
-
-            const getTarget = (filePath) => {
-              for (const { pattern, target } of patterns) {
-                const regex = new RegExp(pattern);
-                if (regex.test(filePath)) {
-                  return target;
-                }
-              }
-              return "skip";
-            };
-            const targets = totalChangedFilesList.map(item => getTarget(item));
+            # const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
+            #   .filter(item => item.trim() !== '')
+            #
+            # const patterns = [
+            #   { pattern: "^firewall/reverseProxy/*", target: "reverseProxy" },
+            #   { pattern: "^firewall/waf/*", target: "waf" },
+            #   { pattern: "^testing-env/application/*", target: "application" },
+            #   { pattern: "^testing-env/server/*", target: "server" },
+            #   { pattern: "^testing-env/simulator/*", target: "simulator" },
+            #   { pattern: "^docs/*", target: "documentation" },
+            #   { pattern: "^Makefile", target: "all" },
+            # ];
+            #
+            # const getTarget = (filePath) => {
+            #   for (const { pattern, target } of patterns) {
+            #     const regex = new RegExp(pattern);
+            #     if (regex.test(filePath)) {
+            #       return target;
+            #     }
+            #   }
+            #   return "skip";
+            # };
+            # const targets = totalChangedFilesList.map(item => getTarget(item));
             # const result = targets.includes("all") ? ["all"] : targets;
-            console.log(targets);
+            # console.log(targets);
             console.log("env variable stuuf\n");
             console.log(process.env.Target_BUILD);
             # const resultString = JSON.stringify(result);
