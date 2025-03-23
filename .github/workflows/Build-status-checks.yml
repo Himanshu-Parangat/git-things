@@ -85,14 +85,12 @@ jobs:
             };
 
             const targets = totalChangedFilesList.map(item => getTarget(item));
-            console.log(targets);
-            const resultString = JSON.stringify(targets);
-            console.log("stringify stuff\n");
-            console.log(resultString);
-            const encodedResult = Buffer.from(resultString).toString('base64').replace(/\n/g, '');
-            core.exportVariable('Target_BUILD', encodedResult)
-            console.log("env variable stuuf\n");
-            console.log(process.env.Target_BUILD);
+            core.exportVariable(
+              'Target_BUILD',
+              Buffer.from(JSON.stringify(targets.includes("all") ? ["all"] : targets))
+                .toString('base64')
+                .replace(/\n/g, '')
+            );
 
       # In_progress
       - name: Create and Run Check(InProgress)
@@ -140,7 +138,7 @@ jobs:
               const Commit_Messages = `<li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>`;
               const Started_At = `<li><b>Started At:</b> <code>${started_at}</code></li>`;
               const Finished_At = `<li><b>Finished_At At:</b> <code>${finished_At}</code></li>`;
-              const Status_footer = `</br><b>Components build Target:</b> ${components_build_target}</br>`;
+              const Status_footer = `</br><b>Build Target:</b> ${components_build_target}`;
 
               const Message_body = [
                 Branch,
@@ -161,7 +159,7 @@ jobs:
                 Message_body,
                 '</ul>',
                 Status_footer,
-                additional_info
+                '</br><b>', additional_info, '</b>'
               ].join('');
             }
 
