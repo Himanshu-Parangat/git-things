@@ -90,7 +90,7 @@ jobs:
             console.log("stringify stuff\n");
             console.log(resultString);
             const encodedResult = Buffer.from(resultString).toString('base64').replace(/\n/g, '');
-            console.log(`echo "Target_BUILD=${encodedResult}" >> $GITHUB_ENV`);
+            core.exportVariable('Target_BUILD', encodedResult)
             console.log("env variable stuuf\n");
             console.log(process.env.Target_BUILD);
 
