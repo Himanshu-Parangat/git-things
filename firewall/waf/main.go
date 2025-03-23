@@ -42,6 +42,6 @@ func main() {
 	http.HandleFunc("/", index)
 
 	address := GetFirewallAddress()
-	log.Println("\n\nServer is running on http://" + address)
+	log.Println("\n\nwaf is running on http://" + address)
 	log.Fatal(http.ListenAndServe(address, nil))
 }
