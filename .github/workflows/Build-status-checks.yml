@@ -42,8 +42,8 @@ jobs:
           echo "PR_Branch=$(jq -r '.headRefName' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Title=$(jq -r '.title' PullRequestData.txt)" >> $GITHUB_ENV
           echo "PR_Total_changedFiles_count=$(jq -r '.changedFiles' PullRequestData.txt)" >> $GITHUB_ENV
-          echo "PR_Total_changedFiles=$(jq -rc '.files | map(.path)'  PullRequestData.txt | base64)" >> $GITHUB_ENV
-          echo "PR_commits_titel=$( jq -rc '.commits | map(.messageHeadline)' PullRequestData.txt | base64)" >> $GITHUB_ENV
+          echo "PR_Total_changedFiles=$(jq -rc '.files | map(.path)'  PullRequestData.txt | base64 | tr -d '\n')" >> $GITHUB_ENV
+          echo "PR_commits_titel=$( jq -rc '.commits | map(.messageHeadline)' PullRequestData.txt | base64 | tr -d '\n')" >> $GITHUB_ENV
           echo "START_TIME"=$(node -e "
             const d = new Date();
             const year = d.getFullYear();
@@ -64,6 +64,12 @@ jobs:
               .filter(item => item.trim() !== '')
 
             totalChangedFilesList.map(item => console.log(item));
+
+            const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
+              .filter(item => item.trim() !== '')
+
+            commitMessagesList.map(item => console.log(item))
+
 
       # In_progress
       - name: Create and Run Check(InProgress)
