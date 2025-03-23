@@ -128,7 +128,12 @@ jobs:
               return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
             })();
 
-            function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer) {
+            const components_build_target = JSON.parse(Buffer.from(process.env.Target_BUILD, 'base64').toString('utf-8'))
+              .filter(item => item.trim() !== '')
+              .map(item => `<code>${item}</code>`)
+              .join(', ');
+
+            function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info) {
               const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
               const image_body = `<p align='center'> <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}"> </p>`;
               const quote_body = `<p align="center">${status_quote}</p></br>`;
@@ -140,6 +145,7 @@ jobs:
               const Commit_Messages = `<li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>`;
               const Started_At = `<li><b>Started At:</b> <code>${started_at}</code></li>`;
               const Finished_At = `<li><b>Finished_At At:</b> <code>${finished_At}</code></li>`;
+              const Status_footer = `</br><b>Components build Target:</b> ${components_build_target}`;
 
               const Message_body = [
                 Branch,
@@ -159,7 +165,8 @@ jobs:
                 '<ul>',
                 Message_body,
                 '</ul>',
-                status_footer
+                Status_footer,
+                additional_info
               ].join('');
             }
 
@@ -168,8 +175,8 @@ jobs:
             const status_img_alt = "thinking-test"
             const status_img_width = "200"
             const status_quote = "Take a break, have some rest & grab some water! Meanwhile, we're running tests<br>to ensure the code builds successfully. This won't take long."
-            const status_footer = "The build Compilation is in Progress"
-            const In_progress_Message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_footer);
+            const status_additional_info = "The build Compilation is in Progress"
+            const In_progress_Message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_additional_info);
 
 
             const check = await github.rest.checks.create({
