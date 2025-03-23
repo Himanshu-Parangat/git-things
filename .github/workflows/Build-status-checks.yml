@@ -82,7 +82,9 @@ jobs:
               }
               return "skip";
             };
-            const result = totalChangedFilesList.map(item => getTarget(item));
+
+            const targets = totalChangedFilesList.map(item => getTarget(item));
+            const result = targets.includes("all") ? ["all"] : targets;
 
             console.log(result);
 
