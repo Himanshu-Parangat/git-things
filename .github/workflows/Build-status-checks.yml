@@ -83,23 +83,17 @@ jobs:
               }
               return "skip";
             };
-
             const targets = totalChangedFilesList.map(item => getTarget(item));
-            const result = targets.includes("all") ? ["all"] : targets;
-
-            console.log(result);
+            # const result = targets.includes("all") ? ["all"] : targets;
+            console.log(targets);
+            console.log("env variable stuuf\n");
+            console.log(process.env.Target_BUILD);
             # const resultString = JSON.stringify(result);
-
             # console.log("stringify stuff\n");
             # console.log(resultString);
-
             # const encodedResult = Buffer.from(resultString).toString('base64').replace(/\n/g, '');
             # console.log(`echo "Target_BUILD=${encodedResult}" >> $GITHUB_ENV`);
             # fs.appendFileSync(process.env.GITHUB_ENV, `Target_BUILD=${encodedResult}\n`);
-
-            console.log("env variable stuuf\n");
-            console.log(process.env.Target_BUILD);
-
 
       # In_progress
       - name: Create and Run Check(InProgress)
