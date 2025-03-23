@@ -111,6 +111,7 @@ func main(){
 	http.HandleFunc("/dashboard", dashboard)
 	
 	address := GetSimulatorAddress()
+	log.Println("\n\nnow changing files for simulator")
 	log.Println("\n\nsimulator is running on http://"+address)
 	log.Fatal(http.ListenAndServe(address, nil))
 }
