@@ -86,6 +86,10 @@ jobs:
 
             const targets = totalChangedFilesList.map(item => getTarget(item));
             console.log(targets);
+            const resultString = JSON.stringify(targets);
+            console.log("stringify stuff\n");
+            console.log(resultString);
+
 
       # In_progress
       - name: Create and Run Check(InProgress)
