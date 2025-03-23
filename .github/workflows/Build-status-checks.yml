@@ -87,6 +87,16 @@ jobs:
             const result = targets.includes("all") ? ["all"] : targets;
 
             console.log(result);
+            const resultString = JSON.stringify(result);
+
+            console.log("stringify stuff\n");
+            console.log(resultString);
+
+            const encodedResult = Buffer.from(resultString).toString('base64').replace(/\n/g, '');
+            fs.appendFileSync(process.env.GITHUB_ENV, `Target_BUILD=${encodedResult}\n`);
+
+            console.log("env variable stuuf\n");
+            console.log(process.env.Target_BUILD);
 
 
       # In_progress
