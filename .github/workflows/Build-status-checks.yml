@@ -140,7 +140,7 @@ jobs:
               const Commit_Messages = `<li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>`;
               const Started_At = `<li><b>Started At:</b> <code>${started_at}</code></li>`;
               const Finished_At = `<li><b>Finished_At At:</b> <code>${finished_At}</code></li>`;
-              const Status_footer = `</br><b>Components build Target:</b> ${components_build_target}`;
+              const Status_footer = `</br><b>Components build Target:</b> ${components_build_target}</br>`;
 
               const Message_body = [
                 Branch,
