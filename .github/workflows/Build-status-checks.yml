@@ -55,7 +55,7 @@ jobs:
             console.log(\`\${year} \${month} \${day}, \${hours}:\${minutes}:\${seconds}\`);
           ") >> $GITHUB_ENV
 
-      - name: Detect target
+      - name: File Change Target Mapping
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -63,12 +63,28 @@ jobs:
             const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
 
-            totalChangedFilesList.map(item => console.log(item));
+            const patterns = [
+              { pattern: "^firewall/reverseProxy/*", target: "reverseProxy" },
+              { pattern: "^firewall/waf/*", target: "waf" },
+              { pattern: "^testing-env/application/*", target: "application" },
+              { pattern: "^testing-env/server/*", target: "server" },
+              { pattern: "^testing-env/simulator/*", target: "simulator" },
+              { pattern: "^docs/*", target: "documentation" },
+              { pattern: "^Makefile", target: "all" },
+            ];
 
-            const commitMessagesList = JSON.parse(Buffer.from(process.env.PR_commits_titel, 'base64').toString('utf-8'))
-              .filter(item => item.trim() !== '')
+            const getTarget = (filePath) => {
+              for (const { pattern, target } of patterns) {
+                const regex = new RegExp(pattern);
+                if (regex.test(filePath)) {
+                  return target;
+                }
+              }
+              return "skip";
+            };
+            const result = totalChangedFilesList.map(item => getTarget(item));
 
-            commitMessagesList.map(item => console.log(item))
+            console.log(result);
 
 
       # In_progress
