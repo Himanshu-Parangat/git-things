@@ -54,7 +54,7 @@ jobs:
             const seconds = d.getSeconds();
             console.log(\`\${year} \${month} \${day}, \${hours}:\${minutes}:\${seconds}\`);
           ") >> $GITHUB_ENV
-          echo "Target_BUILD=$(echo '["test","foo","bar"]' | base64 | tr -d '\n' )" >> $GITHUB_ENV
+          # echo "Target_BUILD=$(echo '["test","foo","bar"]' | base64 | tr -d '\n' )" >> $GITHUB_ENV
 
       - name: File Change Target Mapping
         uses: actions/github-script@v7
@@ -89,7 +89,10 @@ jobs:
             const resultString = JSON.stringify(targets);
             console.log("stringify stuff\n");
             console.log(resultString);
-
+            const encodedResult = Buffer.from(resultString).toString('base64').replace(/\n/g, '');
+            console.log(`echo "Target_BUILD=${encodedResult}" >> $GITHUB_ENV`);
+            console.log("env variable stuuf\n");
+            console.log(process.env.Target_BUILD);
 
       # In_progress
       - name: Create and Run Check(InProgress)
