@@ -234,7 +234,15 @@ jobs:
           }
 
           build_all(){
-           echo "building all..."
+            echo "building all..."
+            mkdir -p logs
+            local log_file="logs/build_all.log"
+
+            if make &> "$log_file"; then
+              echo -e "\033[32m [passed]All components compiled successfully!\033[0m"
+            else
+              echo -e "\033[31m [failed]Some components need changes\033[0m"
+            fi
           }
 
           [[ $TARGET_REVERSEPROXY == "true" ]] && build_reverseProxy || echo "TARGET_REVERSEPROXY not found skipping..."
@@ -247,14 +255,92 @@ jobs:
 
           sleep 30
           echo "updating status..."
+
+          echo "CONCLUSION=$(echo "success")" >> $GITHUB_ENV
+          # echo "CONCLUSION=$(echo "failure")" >> $GITHUB_ENV
+          # echo "CONCLUSION=$(echo "skipped")" >> $GITHUB_ENV
+          # echo "CONCLUSION=$(echo "neutral")" >> $GITHUB_ENV
+
+          # echo "CONCLUSION=$(echo "action_required")" >> $GITHUB_ENV
+          # echo "CONCLUSION=$(echo "cancelled")" >> $GITHUB_ENV
+          # echo "CONCLUSION=$(echo "stale")" >> $GITHUB_ENV
+          # echo "CONCLUSION=$(echo "timed_out")" >> $GITHUB_ENV
       
 
-      # success
+      # update
       - name: Create and Run Check(success)
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const conclusion = process.env.CONCLUSION;
+
+            let status_header, status_img, status_img_alt, status_img_width, status_quote, status_additional_info;
+            let update_status, update_conclusion, update_title;
+
+            if (conclusion === "success") {
+              update_status = 'completed' 
+              update_conclusion = 'success'
+              update_title = 'test passed successfully'
+
+              status_header = "Validating PR:"
+              status_img = "https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif"
+              status_img_alt = "thumbs-up good"
+              status_img_width = "200"
+              status_quote = "Build tests went smoothly—good job, friend! Thanks</br>For the hard work and precious Time. Take a well-deserved break, okay?"
+              status_additional_info = "The build compiled successfully"
+            } else if (conclusion === "failure") {
+              update_status = 'completed' 
+              update_conclusion = 'failure'
+              update_title = 'build Test Failed'
+
+              status_header = "Build test failed for PR:"
+              status_img = "https://media1.tenor.com/m/UDzn7Mcr_gwAAAAd/anime-frieren.gif"
+              status_img_alt = "nod-left-right-no"
+              status_img_width = "200"
+              status_quote = "Oops! The build process didn't succeed—another day, another grind.</br>Need to Check the logs for details, Take a break and wait for someone to notify you. :3"
+              status_additional_info = "The build compiled successfully"
+
+            } else if (conclusion === "skipped") {
+
+              update_status = 'completed' 
+              update_conclusion = 'skipped'
+              update_title = 'Nothing to compile Skipping'
+
+              status_header = "Skipping PR:"
+              status_img = "https://media1.tenor.com/m/iora7DooHl0AAAAd/vkay-hmn.gif"
+              status_img_alt = "nod-left-right-no"
+              status_img_width = "200"
+              status_quote = "Skip, skip, skip—there is nothing new to build, so this will be skipped!</br>oh, and you should definitely take a break and drink some water don't let that skip!"
+              status_additional_info = "The build step got skipped Nothing to compile"
+            } else if (conclusion === 'nutral') {
+              update_status = 'completed' 
+              update_conclusion = 'success'
+              update_title = 'Test Result Overwritten'
+
+              status_header = "Check Result was Overwritten for PR:"
+              status_img = "https://media1.tenor.com/m/rKkO5hy-V9IAAAAC/anime-girl.gif"
+              status_img_alt = "shocked funny"
+              status_img_width = "300"
+              status_quote = "Woo! No way! Someone overwrote the test results to accommodate these changes,</br>You should go and get some rest and stay hydrated—you'll be Informed soon."
+              status_additional_info = "Test was passed forcefully"
+
+            } else {
+              update_status = 'completed' 
+              update_conclusion = 'nutral'
+              update_title = 'Unexpected Behavior Detected'
+
+              status_header = "PR Needs Manual Intervention:"
+              status_img = "https://media1.tenor.com/m/75aAMJUb_S4AAAAd/anime-gochiusa.gif"
+              status_img_alt = "no idea what hppend"
+              status_img_width = "300"
+              status_quote = "Hmm... The build test ran into an unexpected Behavior. Honestly, I'm just as confused as you are!</br>Need to Check the logs for more details, Take a break, and we will notify you."
+              status_additional_info = "Some Unexpended Behaviour Observed, check logs"
+            }
+
+
+
+
             const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
               .map(item => `<li><code>${item}</code></li>`)
@@ -265,7 +351,8 @@ jobs:
               .map(item => `<li><code>${item}</code></li>`)
               .join('');
 
-            const completedAt = (function() {
+            const started_at = process.env.START_TIME
+            const finished_At = (function() {
               const d = new Date();
               const year = d.getFullYear();
               const month = d.toLocaleString('en-US', { month: 'short' });
@@ -277,36 +364,49 @@ jobs:
               return `${year} ${month} ${day}, ${hours}:${minutes}:${seconds}`;
             })();
 
-            const completed_Message_summery = `<b>Validated PR:</b> ${{ env.PR_URL }}
-              <p align="center">
-                <img src="https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif" alt="thumbs up good">
-              </p>
-              <p align="center">
-                Build tests went smoothly—good job, friend! Thanks</br> 
-                For the hard work and precious Time. Take a well-deserved break, okay?
-              </p>
+            const components_build_target = JSON.parse(Buffer.from(process.env.Target_BUILD, 'base64').toString('utf-8'))
+              .filter(item => item.trim() !== '')
+              .map(item => `<code>${item}</code>`)
+              .join(', ');
 
-              <ul>
-                <li><b>Branch:</b> <code>${{ env.PR_Branch }}</code></li>
-                <li><b>Title:</b> <code>${{ env.PR_Title }}</code></li>
-                <li><b>Validated Up to Commit:</b> ${{ env.PR_SHA }}</li>
-                <li><b>Total Changed Files:</b> <code>${{ env.PR_Total_changedFiles_count }}</code></li>
-                <li>
-                  <b>Files Modified:</b> 
-                  <ol>
-                    ${totalChangedFilesList}
-                  </ol>
-                </li>
-                <li>
-                  <b>Commit Messages:</b>
-                    <ol>
-                      ${commitMessagesList}
-                    </ol>
-                </li>
-                <li><b>Started At:</b> <code>${{ env.START_TIME }}</code></li>
-                <li><b>Completed At:</b> <code>${completedAt}</code></li>
-              </ul> 
-              The build compiled successfully`;
+            function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info) {
+              const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
+              const image_body = `<p align='center'> <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}"> </p>`;
+              const quote_body = `<p align="center">${status_quote}</p></br>`;
+              const Branch = `<li><b>Branch:</b> <code>${ process.env.PR_Branch }</code></li>`;
+              const Title = `<li><b>Title:</b> <code>${ process.env.PR_Title }</code></li>`;
+              const Validating_Up_to_Commit = `<li><b>Validating Up to Commit:</b> ${ process.env.PR_SHA }</li>`;
+              const Total_Changed_Files = `<li><b>Total Changed Files:</b> <code>${ process.env.PR_Total_changedFiles_count }</code></li>`;
+              const Files_Modified = `<li><b>Files Modified:</b><ol>${totalChangedFilesList}</ol></li>`;
+              const Commit_Messages = `<li><b>Commit Messages:</b><ol>${commitMessagesList}</ol></li>`;
+              const Started_At = `<li><b>Started At:</b> <code>${started_at}</code></li>`;
+              const Finished_At = `<li><b>Finished At:</b> <code>${finished_At}</code></li>`;
+              const Status_footer = `</br><b>Build Target:</b> ${components_build_target}`;
+
+              const Message_body = [
+                Branch,
+                Title,
+                Validating_Up_to_Commit,
+                Total_Changed_Files,
+                Files_Modified,
+                Commit_Messages,
+                Started_At,
+                Finished_At
+                ].join('');
+
+              return [
+                header,
+                image_body,
+                quote_body,
+                '<ul>',
+                Message_body,
+                '</ul>',
+                Status_footer,
+                '</br><b>', additional_info, '</b>'
+              ].join('');
+            }
+
+            const status_message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_additional_info);
 
             const check = await github.rest.checks.create({
               owner: context.repo.owner,
@@ -314,11 +414,11 @@ jobs:
               name: 'Run build Test',
               head_sha: '${{ env.PR_SHA }}',
               external_id: '69',
-              status: 'completed',
-              conclusion: 'success',
+              status: update_status,
+              conclusion: update_conclusion,
               completed_at: new Date().toISOString(),
               output: {
-                title: 'Passed the build check successfully',
-                summary: completed_Message_summery
+                title: update_title,
+                summary: status_message_summery
               },
             });
