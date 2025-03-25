@@ -399,6 +399,8 @@ jobs:
             const fs = require('fs');
             const build_logs = 'logs/build.log';
             
+            let log_summary;
+
             try {
               const logContent = fs.readFileSync(build_logs, 'utf8');
               const log_summary = `<details><summary>Logs Summary</summary><mark>bash</mark><pre><code>${logContent}</code></pre></details>`
@@ -407,7 +409,7 @@ jobs:
               console.log(error)
             }
 
-            function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info) {
+            function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info, log_summary) {
               const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
               const image_body = `<p align='center'> <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}"> </p>`;
               const quote_body = `<p align="center">${status_quote}</p></br>`;
@@ -445,7 +447,7 @@ jobs:
               ].join('');
             }
 
-            const status_message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_additional_info);
+            const status_message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_additional_info, log_summary);
 
             const check = await github.rest.checks.create({
               owner: context.repo.owner,
