@@ -13,6 +13,25 @@ on:
       PullRequestLink:
         description: "Enter the Pull Request Link"
         required: true
+        type: string
+
+      OverrideTestResult:
+        description: 'Focre Overwrite Result'
+        required: false
+        default: false
+        type: boolean
+
+      OverrideStatusTo:
+        description: 'Focre Status Check to'
+        required: false
+        default: 'overwrite'
+        type: choice
+        options:
+          - success
+          - failure
+          - skipped
+          - neutral
+          - overwrite
 
 jobs:
   Context-Preserver:
@@ -255,8 +274,16 @@ jobs:
 
           sleep 30
           echo "updating status..."
-
           echo "CONCLUSION=$(echo "success")" >> $GITHUB_ENV
+
+          OVERRIDE="${{ github.event.inputs.OverrideTestResult }}"
+          FORCED_STATUS="${{ github.event.inputs.overrideStatusTo }}"
+
+          if [ "$OVERRIDE" == "true" ]; then
+            echo "Forcing test result to: $FORCED_STATUS"
+            echo "CONCLUSION=$FORCED_STATUS" >> $GITHUB_ENV
+          fi
+
           # echo "CONCLUSION=$(echo "failure")" >> $GITHUB_ENV
           # echo "CONCLUSION=$(echo "skipped")" >> $GITHUB_ENV
           # echo "CONCLUSION=$(echo "neutral")" >> $GITHUB_ENV
@@ -313,7 +340,7 @@ jobs:
               status_img_width = "200"
               status_quote = "Skip, skip, skip—there is nothing new to build, so this will be skipped!</br>oh, and you should definitely take a break and drink some water don't let that skip!"
               status_additional_info = "The build step got skipped Nothing to compile"
-            } else if (conclusion === 'nutral') {
+            } else if (conclusion === 'overwrite') {
               update_status = 'completed' 
               update_conclusion = 'success'
               update_title = 'Test Result Overwritten'
@@ -327,7 +354,7 @@ jobs:
 
             } else {
               update_status = 'completed' 
-              update_conclusion = 'nutral'
+              update_conclusion = 'neutral'
               update_title = 'Unexpected Behavior Detected'
 
               status_header = "PR Needs Manual Intervention:"
