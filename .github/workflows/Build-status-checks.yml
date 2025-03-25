@@ -403,9 +403,9 @@ jobs:
 
             try {
               const logContent = fs.readFileSync(build_logs, 'utf8');
-              const log_summary = `<details><summary>Logs Summary</summary><mark>bash</mark><pre><code>${logContent}</code></pre></details>`
+              log_summary = `<details><summary>Logs Summary</summary><mark>bash</mark><pre><code>${logContent}</code></pre></details>`
             } catch (error) {
-              const log_summary = `<details><summary>Logs Summary</summary><mark>bash</mark><pre><code>Nothing to see here!! Ask Maintainers</code></pre></details>`
+              log_summary = `<details><summary>Logs Summary</summary><mark>bash</mark><pre><code>Nothing to see here!! Ask Maintainers</code></pre></details>`
               console.log(error)
             }
 
