@@ -225,9 +225,7 @@ jobs:
             fi
           done
 
-          # echo "${results[@]}" | jq -R -s 'split(" ")'
-          #
-          #
+          echo "${results[@]}" | jq -R -s 'split(" ")'
           # TARGET_REVERSEPROXY=$(echo $TARGET | jq 'contains(["reverseProxy"])')
           # TARGET_WAF=$(echo $TARGET | jq 'contains(["waf"])')
           # TARGET_APPLICATION=$(echo $TARGET | jq 'contains(["application"])')
