@@ -296,6 +296,11 @@ func getBatchData(w http.ResponseWriter, resp *http.Request) {
 	w.Write(data)
 }
 
+func nopla()  {
+	
+	cdcd
+}
+
 func main() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/api/v1/data", getData)
