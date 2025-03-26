@@ -225,11 +225,12 @@ jobs:
             fi
           done
 
+          echo "${results[@]}" | tr -d '\n' | jq -R -s 'split(" ")' 
+
           # echo "${results[@]}" | jq -R -s 'split(" ")'
           # RESULT_STATUS="$("  >> $GITHUB_ENV
           # echo $(echo ${{ env.RESULT_STATUS }} | base64 -d)
 
-          echo '${results[@]}' | tr -d '\n' | jq -R -s 'split(" ")' 
           # TARGET_REVERSEPROXY=$(echo $TARGET | jq 'contains(["reverseProxy"])')
           # TARGET_WAF=$(echo $TARGET | jq 'contains(["waf"])')
           # TARGET_APPLICATION=$(echo $TARGET | jq 'contains(["application"])')
