@@ -371,10 +371,6 @@ jobs:
 
 
             const log_summary = "<b> ![foo](https://img.shields.io/badge/bar-passing-brightgreen?logo=go) </b>"
-            # const log_summary = JSON.parse(Buffer.from(process.env.RESULT_STATUS, 'base64').toString('utf-8'))
-            #   .filter(item => item.trim() !== '')
-            #   .map(item => `<b>${item}</b>`)
-            #   .join(', ');
 
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info, log_summary) {
               const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
