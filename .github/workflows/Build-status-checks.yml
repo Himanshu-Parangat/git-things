@@ -216,12 +216,12 @@ jobs:
 
           for target in "${components[@]}"; do
             build_target="build-$target"
-            if make $build_target; then
-              echo -e "\033[32m \n\n[passed] $target component build successfully!\033[0m"
-                results+=("${target}:pass")
-            else
-              echo -e "\033[31m [failed] $target components need changes\033[0m"
+            if !make "$build_target" 2>&1; then
+              echo -e "\033[31m[failed] $target components need changes\033[0m\n\n"
                 results+=("${target}:failed")
+            else
+              echo -e "\033[32m[passed] $target component build successfully!\033[0m\n\n"
+                results+=("${target}:pass")
             fi
           done
 
@@ -231,48 +231,6 @@ jobs:
           # RESULT_STATUS="$("  >> $GITHUB_ENV
           # echo $(echo ${{ env.RESULT_STATUS }} | base64 -d)
 
-          # TARGET_REVERSEPROXY=$(echo $TARGET | jq 'contains(["reverseProxy"])')
-          # TARGET_WAF=$(echo $TARGET | jq 'contains(["waf"])')
-          # TARGET_APPLICATION=$(echo $TARGET | jq 'contains(["application"])')
-          # TARGET_SERVER=$(echo $TARGET | jq 'contains(["server"])')
-          # TARGET_SIMULATOR=$(echo $TARGET | jq 'contains(["simulator"])')
-          # TARGET_DOCUMENTATION=$(echo $TARGET | jq 'contains(["documentation"])')
-          # TARGET_ALL=$(echo $TARGET | jq 'contains(["all"])')
-          #
-          # echo "REVERSEPROXY   Need build? => $TARGET_REVERSEPROXY"
-          # echo "WAF            Need build? => $TARGET_WAF"
-          # echo "APPLICATION    Need build? => $TARGET_APPLICATION"
-          # echo "SERVER         Need build? => $TARGET_SERVER"
-          # echo "SIMULATOR      Need build? => $TARGET_SIMULATOR"
-          # echo "DOCUMENTATION  Need build? => $TARGET_DOCUMENTATION"
-          # echo "ALL            Need build? => $TARGET_ALL"
-          #
-          # echo -e "\n\n"
-          # build_reverseProxy(){
-          #  echo "building reverseProxy..."
-          # }
-          #
-          # build_waf(){
-          #  echo "building waf..."
-          # }
-          #
-          # build_application(){
-          #  echo "building application..."
-          # }
-          #
-          # build_server(){
-          #  echo "building server..."
-          # }
-          #
-          # build_simulator(){
-          #  echo "building simulator..."
-          # }
-          #
-          # build_documentation(){
-          #  echo "building documentation..."
-          # }
-          #
-          # build_all(){
           #
           # if make "<name of component>"; then
           #     echo -e "\033[32m [passed]All components compiled successfully!\033[0m"
@@ -281,15 +239,8 @@ jobs:
           #   fi
           # }
           #
-          # [[ $TARGET_REVERSEPROXY == "true" ]] && build_reverseProxy || echo "TARGET_REVERSEPROXY not found skipping..."
-          # [[ $TARGET_WAF == "true" ]] && build_waf || echo "TARGET_WAF not found skipping..."
-          # [[ $TARGET_APPLICATION == "true" ]] && build_application || echo "TARGET_APPLICATION not found skipping..."
-          # [[ $TARGET_SERVER == "true" ]] && build_server || echo "TARGET_SERVER not found skipping..."
-          # [[ $TARGET_SIMULATOR == "true" ]] && build_simulator || echo "TARGET_SIMULATOR not found skipping..."
-          # [[ $TARGET_DOCUMENTATION == "true" ]] && build_documentation || echo "TARGET_DOCUMENTATION not found skipping..."
-          # [[ $TARGET_ALL == "true" ]] && build_all || echo "TARGET_ALL not found skipping..."
 
-          sleep 20
+          sleep 10
           echo "updating status..."
           echo "CONCLUSION=$(echo "success")" >> $GITHUB_ENV
 
