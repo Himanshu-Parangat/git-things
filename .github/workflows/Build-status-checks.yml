@@ -216,7 +216,7 @@ jobs:
 
           for target in "${components[@]}"; do
             build_target="build-$target"
-            if !make "$build_target" 2>&1; then
+            if ! make "$build_target" 2>&1; then
               echo -e "\033[31m[failed] $target components need changes\033[0m\n\n"
                 results+=("${target}:failed")
             else
