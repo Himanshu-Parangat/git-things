@@ -370,7 +370,7 @@ jobs:
               .join(', ');
 
 
-            const log_summary = "<b> ![foo](https://img.shields.io/badge/bar-passing-brightgreen?logo=go) </b>"
+            const log_summary = "![foo](https://img.shields.io/badge/bar-passing-brightgreen?logo=go)"
 
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info, log_summary) {
               const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
