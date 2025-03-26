@@ -220,17 +220,17 @@ jobs:
             if ! make "$build_target" 2>&1; then
               echo -e "\033[31m[failed] $target components need changes\033[0m\n\n"
                 results+=("${target}:failing")
-                results_badge+=("![${target}](https://img.shields.io/badge/${target}-failing-red?logo=go)")
+                # results_badge+=("![${target}](https://img.shields.io/badge/${target}-failing-red?logo=go)")
             else
               echo -e "\033[32m[passed] $target component build successfully!\033[0m\n\n"
                 results+=("${target}:passing")
-                results_badge+=("![${target}](https://img.shields.io/badge/${target}-passing-brightgreen?logo=go)")
+                # results_badge+=("![${target}](https://img.shields.io/badge/${target}-passing-brightgreen?logo=go)")
             fi
           done
 
           echo "${results[@]}" | tr -d '\n' | jq -R -s 'split(" ")' 
 
-          echo "RESULT_STATUS=$(echo "${results_badge[@]}" | jq -R -sc 'split(" ")' | base64 | tr -d `\n`)" >> $GITHUB_ENV
+          # echo "RESULT_STATUS=$(echo "${results_badge[@]}" | jq -R -sc 'split(" ")' | base64 | tr -d `\n`)" >> $GITHUB_ENV
 
           # echo "${results[@]}" | jq -R -s 'split(" ")'
           # RESULT_STATUS="$("  >> $GITHUB_ENV
@@ -370,10 +370,11 @@ jobs:
               .join(', ');
 
 
-            const log_summary = JSON.parse(Buffer.from(process.env.RESULT_STATUS, 'base64').toString('utf-8'))
-              .filter(item => item.trim() !== '')
-              .map(item => `<b>${item}</b>`)
-              .join(', ');
+            const log_summary = "<b> ![foo](https://img.shields.io/badge/bar-passing-brightgreen?logo=go) </b>"
+            # const log_summary = JSON.parse(Buffer.from(process.env.RESULT_STATUS, 'base64').toString('utf-8'))
+            #   .filter(item => item.trim() !== '')
+            #   .map(item => `<b>${item}</b>`)
+            #   .join(', ');
 
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info, log_summary) {
               const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
