@@ -6,6 +6,8 @@ Blue=\033[0;34m
 Purple=\033[0;35m
 Cyan=\033[0;36m
 White=\033[0;37m
+Black=\033[0;30m
+Gray=\033[0;90m
 Reset=\033[0m
 
 
@@ -24,14 +26,16 @@ OS=$(shell go env GOOS)
 
 .DEFAULT_GOAL := help
 
-.PHONY: help ensure metadata \
+.PHONY: % help ensure metadata \
 	build-reverseProxy build-waf build-server build-application build-simulator build-all \
 	run-reverseProxy run-waf run-server run-application run-simulator \
 	deps-reverseProxy deps-waf deps-server deps-application deps-simulator deps-all \
 	clean-reverseProxy clean-waf clean-server clean-application clean-simulator clean-all
 
 # wild match if target does not match anything match help.
-%:;@$(MAKE) help
+%:
+	@printf "\n$(Gray)[Dead]$(Cyan) The target $(Red)'$@'$(Cyan) is not hooked up to anything meaningful.$(Reset)"
+	@printf "\n$(Yellow)[Hint]$(Cyan) Try running $(Green)'make help'$(Cyan) for usage information.$(Reset)\n"
 
 help:
 	@printf "\n$(Purple)[Greeting]$(Cyan) This Makefile is for Automating Build process for CNSS Reverse Proxy firewall$(Reset)\n"
