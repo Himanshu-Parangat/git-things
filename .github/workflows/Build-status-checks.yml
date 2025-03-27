@@ -104,7 +104,7 @@ jobs:
 
             const targets = totalChangedFilesList.map(item => getTarget(item));
             core.exportVariable(
-              'Target_BUILD',
+              'TARGETS_BUILD',
               Buffer.from(JSON.stringify(targets.includes("all") ? ["all"] : targets))
                 .toString('base64')
                 .replace(/\n/g, '')
@@ -115,7 +115,7 @@ jobs:
               .filter(target => target !== "all");
 
             core.exportVariable(
-              'ALL_Target',
+              'ALL_TARGETS',
               Buffer.from(JSON.stringify(all_targets))
                 .toString('base64')
                 .replace(/\n/g, '')
@@ -221,8 +221,8 @@ jobs:
         run: |
           echo "Performing Selective Compilation task..."
 
-          all_components=($(echo "${{env.All_Target}}" | base64 -d | tr -d '\n' | jq -rc '.[]'))
-          detected_components=($(echo "${{env.Target_BUILD}}" | base64 -d | tr -d '\n'  | jq -rc '.[]'))
+          all_components=($(echo "${{env.ALL_TARGETS}}" | base64 -d | tr -d '\n' | jq -rc '.[]'))
+          detected_components=($(echo "${{env.TARGETS_BUILD}}" | base64 -d | tr -d '\n'  | jq -rc '.[]'))
 
           echo -e "\n env value all components"
           echo ${{ env.All_Target }}
