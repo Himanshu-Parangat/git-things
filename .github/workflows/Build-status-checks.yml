@@ -225,17 +225,11 @@ jobs:
           detected_components=($(echo "${{env.TARGETS_BUILD}}" | base64 -d | tr -d '\n'  | jq -rc '.[]'))
 
           echo -e "\n env value all components"
-          echo ${{ env.All_Target }}
+          echo ${{ env.ALL_TARGETS }}
 
           echo -e "\n env value detected components"
           echo ${{ env.TARGETS_BUILD }}
 
-
-          echo -e "\n env value all components decode"
-          echo $all_components
-
-          echo -e "\n env value detected components decode"
-          echo $detected_components
 
           echo -e "\n[All components] these are all components"
           echo -e "${all_components[@]}"
