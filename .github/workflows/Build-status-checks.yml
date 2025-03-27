@@ -223,19 +223,77 @@ jobs:
 
           all_components=($(echo "${{env.ALL_TARGETS}}" | base64 -d | tr -d '\n' | jq -rc '.[]'))
           detected_components=($(echo "${{env.TARGETS_BUILD}}" | base64 -d | tr -d '\n'  | jq -rc '.[]'))
+          results=()
 
-          echo -e "\n env value all components"
-          echo ${{ env.ALL_TARGETS }}
+          perform_skipping(){
+            echo -e "\n[All build] okay skipping all Compilation"
 
-          echo -e "\n env value detected components"
-          echo ${{ env.TARGETS_BUILD }}
+            local components=("$@")
+            for target in "${components[@]}"; do
+              echo "[component] $target"
+
+              echo -e "\033[35m[skipping] $target component skipped!\033[0m\n\n"
+                results+=("${target}:skipping")
+                
+            done
+          }
 
 
-          echo -e "\n[All components] these are all components"
-          echo -e "${all_components[@]}"
+          perform_all_compilation(){
+            echo -e "\n[All build] okay all Compilation"
+            local components=("$@")
+            for target in "${components[@]}"; do
+              echo "[component] $target"
+              build_target="build-$target"
+              # if ! make "$build_target" 2>&1; then
+              if ! echo "$build_target" 2>&1; then
+                echo -e "\033[31m[failed] $target components need changes\033[0m\n\n"
+                  results+=("${target}:failing")
+              else
+                echo -e "\033[32m[passed] $target component build successfully!\033[0m\n\n"
+                  results+=("${target}:passing")
+              fi
+            done
+          }
 
-          echo -e "\n[target components] these are the detected components"
-          echo -e "${detected_components[@]}"
+
+          perform_selective_compilation(){
+            echo -e "\n[seletive build] okay seletive Compilation"
+            local components=("$@")
+            for target in "${components[@]}"; do
+              build_target="build-$target"
+              # if ! make "$build_target" 2>&1; then
+              if ! echo "$build_target" 2>&1; then
+                echo -e "\033[31m[failed] $target components need changes\033[0m\n\n"
+                  results+=("${target}:failing")
+              else
+                echo -e "\033[32m[passed] $target component build successfully!\033[0m\n\n"
+                  results+=("${target}:passing")
+              fi
+            done
+          }
+
+
+          for components in "${detected_components[@]}"; do
+            DO_TASK="all"
+            echo -e "checking target: $components"
+            case "$components" in
+              all) DO_TASK="all" ;;
+              skip) DO_TASK="skip" ;;
+              *) DO_TASK="selective" ;;
+            esac
+          done
+
+
+          case "$DO_TASK" in
+              skip) perform_skipping "${all_components[@]}" ;;
+              all) perform_all_compilation "${all_components[@]}" ;;
+              *) perform_selective_compilation "${detected_components[@]}" ;;
+          esac
+
+
+          echo "${results[@]}" | tr -d "\n"  | jq -R -s 'split(" ")'
+
 
           # for item in "${statuses[@]}"; do
           #   current_status=$(echo "$item" | cut -d':' -f2)
