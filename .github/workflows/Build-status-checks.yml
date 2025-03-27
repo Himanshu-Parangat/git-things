@@ -221,8 +221,8 @@ jobs:
         run: |
           echo "Performing Selective Compilation task..."
 
-          all_components=($(echo "${All_Target}" | base64 -d | tr -d '\n' | jq -rc '.[]'))
-          detected_components=($(echo "${Target_BUILD}" | base64 -d | tr -d '\n'  | jq -rc '.[]'))
+          all_components=($(echo "${{ env.All_Target }}" | base64 -d | tr -d '\n' | jq -rc '.[]'))
+          detected_components=($(echo "${{ env.Target_BUILD }}" | base64 -d | tr -d '\n'  | jq -rc '.[]'))
 
 
           echo -e "\n[All components] these are all components"
@@ -236,7 +236,7 @@ jobs:
 
           Status="neutral"
 
-          echo "\n Current status is set to: $Status"
+          echo -e "\n Current status is set to: $Status"
 
           echo "CONCLUSION=$(echo $Status)" >> $GITHUB_ENV
 
