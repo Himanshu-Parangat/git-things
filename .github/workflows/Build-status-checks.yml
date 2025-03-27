@@ -110,6 +110,17 @@ jobs:
                 .replace(/\n/g, '')
             );
 
+            const all_targets = patterns
+              .map(item => item.target)
+              .filter(target => target !== "all");
+
+            core.exportVariable(
+              'ALL_Target',
+              Buffer.from(JSON.stringify(all_targets))
+                .toString('base64')
+                .replace(/\n/g, '')
+            );
+
       # In_progress
       - name: Create and Run Check(InProgress)
         uses: actions/github-script@v7
@@ -210,44 +221,24 @@ jobs:
         run: |
           echo "Performing Selective Compilation task..."
 
-          components=($(echo ${{env.Target_BUILD}} | base64 -d | jq -rc '.[]' ))
+          all_components=($(echo "${All_Target}" | tr -d '\n' | jq -rc '.[]'))
+          detected_components=($(echo "${Target_BUILD}" | tr -d '\n'  | jq -rc '.[]'))
 
-          results=()
-          results_badge=()
 
-          for target in "${components[@]}"; do
-            build_target="build-$target"
-            if ! make "$build_target" 2>&1; then
-              echo -e "\033[31m[failed] $target components need changes\033[0m\n\n"
-                results+=("${target}:failing")
-                # results_badge+=("![${target}](https://img.shields.io/badge/${target}-failing-red?logo=go)")
-            else
-              echo -e "\033[32m[passed] $target component build successfully!\033[0m\n\n"
-                results+=("${target}:passing")
-                # results_badge+=("![${target}](https://img.shields.io/badge/${target}-passing-brightgreen?logo=go)")
-            fi
-          done
+          echo -e "\n[All components] these are all components"
+          echo -e "${all_components[@]}"
 
-          echo "${results[@]}" | tr -d '\n' | jq -R -s 'split(" ")' 
+          echo -e "\n[target components] these are the detected components"
+          echo -e "${detected_components[@]}"
 
-          # echo "RESULT_STATUS=$(echo "${results_badge[@]}" | jq -R -sc 'split(" ")' | base64 | tr -d `\n`)" >> $GITHUB_ENV
+          # for item in "${statuses[@]}"; do
+          #   current_status=$(echo "$item" | cut -d':' -f2)
 
-          # echo "${results[@]}" | jq -R -s 'split(" ")'
-          # RESULT_STATUS="$("  >> $GITHUB_ENV
-          # echo $(echo ${{ env.RESULT_STATUS }} | base64 -d)
+          Status="neutral"
 
-          #
-          # if make "<name of component>"; then
-          #     echo -e "\033[32m [passed]All components compiled successfully!\033[0m"
-          #   else
-          #     echo -e "\033[31m [failed]Some components need changes\033[0m"
-          #   fi
-          # }
-          #
+          echo "\n Current status is set to: $Status"
 
-          sleep 10
-          echo "updating status..."
-          echo "CONCLUSION=$(echo "success")" >> $GITHUB_ENV
+          echo "CONCLUSION=$(echo $Status)" >> $GITHUB_ENV
 
           OVERRIDE="${{ github.event.inputs.OverrideTestResult }}"
           FORCED_STATUS="${{ github.event.inputs.overrideStatusTo }}"
