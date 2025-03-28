@@ -291,8 +291,8 @@ jobs:
               *) perform_selective_compilation "${detected_components[@]}" ;;
           esac
 
-
-          echo 'RESULT=$(echo "${results[@]}" | tr -d "\n"  | jq -R -s -c 'split(" ")')' | base64 | tr -d '\n' >> $GITHUB_ENV
+          RESULT=$( echo "${results[@]}" | tr -d "\n"  | jq -R -s -c 'split(" ")' )
+          echo "RESULT=$(echo "$RESULT" | base64 | tr -d '\n')" >> $GITHUB_ENV
           echo "${{env.RESULT}}" | base64 -d 
 
 
