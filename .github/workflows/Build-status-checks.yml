@@ -326,11 +326,11 @@ jobs:
               const [components, status] = entry.split(':');
               console.log(components, "is", status);
               
-              if (status === "success") {
+              if (status === "passing") {
                 count_success_components++;
-              } else if (status === "skip") {
+              } else if (status === "skipping") {
                 count_skipped_components++;
-              } else if (status === "failure") {
+              } else if (status === "failing") {
                 count_failure_components++;
               } else {
                 count_unexpected_behaviour++;
@@ -343,7 +343,7 @@ jobs:
             console.log("Success Components:", count_success_components);
             console.log("Skipped Components:", count_skipped_components);
             console.log("Failure Components:", count_failure_components);
-            console.log("Unexpected Behaviour Components:", count_unexpected_behaviour);
+            console.log("Unexpected Behaviour:", count_unexpected_behaviour);
             
 
             const finalStatus = "success"
