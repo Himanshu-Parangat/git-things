@@ -298,24 +298,6 @@ jobs:
 
           echo "BUILD_RESULT=$(echo "$build_result" | base64 | tr -d '\n')" >> $GITHUB_ENV
 
-          echo "the env varible is set to ${{ env.BUILD_RESULT }}"
-
-          # echo "${results[@]}"
-          #
-          # data=$(echo ${Target_BUILD[@]} | tr -d '\n' |  jq -R -c 'split(" ")')
-          #
-          # ENV_VAL="DATA=$( echo $data | base64 )"
-          #
-          # echo $ENV_VAL
-
-
-          # RESULT=$(printf "%s\n" "${results[@]}" | jq -R -s -c 'split("\n")[:-1]') 
-          # echo "RESULT=$(echo "$RESULT" | base64 | tr -d '\n')" >> $GITHUB_ENV
-          # echo "$RESULT" | base64 -d
-
-
-          # for item in "${statuses[@]}"; do
-          #   current_status=$(echo "$item" | cut -d':' -f2)
 
           Status="neutral"
 
@@ -331,15 +313,14 @@ jobs:
             echo "CONCLUSION=$FORCED_STATUS" >> $GITHUB_ENV
           fi
 
-          # echo "CONCLUSION=$(echo "failure")" >> $GITHUB_ENV
-          # echo "CONCLUSION=$(echo "skipped")" >> $GITHUB_ENV
-          # echo "CONCLUSION=$(echo "neutral")" >> $GITHUB_ENV
+      - name: Check for outcome
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const conclusion = process.env.BUILD_RESULT;
 
-          # echo "CONCLUSION=$(echo "action_required")" >> $GITHUB_ENV
-          # echo "CONCLUSION=$(echo "cancelled")" >> $GITHUB_ENV
-          # echo "CONCLUSION=$(echo "stale")" >> $GITHUB_ENV
-          # echo "CONCLUSION=$(echo "timed_out")" >> $GITHUB_ENV
-      
+            console.log(conclusion)
 
       # update
       - name: Create and Run Check(success)
