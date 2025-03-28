@@ -307,6 +307,7 @@ jobs:
             const results = JSON.parse(Buffer.from(process.env.BUILD_RESULT, 'base64').toString('utf-8'))
             console.log(results)
 
+            let finalStatus;
             results.forEach(entry => {
 
             if (!entry.includes(':')) {
@@ -315,17 +316,20 @@ jobs:
             }
 
             const [components, status] = entry.split(':');
-            let status = rawStatus;
 
-            if (status === "pass") status = "success";
-            else if (status === "skip") status = "skipped";
-            else status = "failure";
+            if (status === "pass"){
+              finalStatus = "success";
+            } else if (status === "skip"){
+              finalStatus = "skipped";
+            } else {
+              finalStatus = "failure";
+            }
 
-            console.log(server, "is", status)
+            console.log(components, "is", status)
             })
 
-            console.log("[conclusion] ", status)
-            core.exportVariable('CONCLUSION',status);
+            console.log("[conclusion] ", finalStatus)
+            core.exportVariable('CONCLUSION',finalStatus);
 
             const override = core.getInput("OverrideTestResult") === "true";
             const forcedStatus = core.getInput("overrideStatusTo");
