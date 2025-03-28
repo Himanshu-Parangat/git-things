@@ -299,20 +299,6 @@ jobs:
           echo "BUILD_RESULT=$(echo "$build_result" | base64 | tr -d '\n')" >> $GITHUB_ENV
 
 
-          Status="neutral"
-
-          echo -e "\n Current status is set to: $Status"
-
-          echo "CONCLUSION=$(echo $Status)" >> $GITHUB_ENV
-
-          OVERRIDE="${{ github.event.inputs.OverrideTestResult }}"
-          FORCED_STATUS="${{ github.event.inputs.overrideStatusTo }}"
-
-          if [ "$OVERRIDE" == "true" ]; then
-            echo "Forcing test result to: $FORCED_STATUS"
-            echo "CONCLUSION=$FORCED_STATUS" >> $GITHUB_ENV
-          fi
-
       - name: Check for outcome
         uses: actions/github-script@v7
         with:
@@ -329,6 +315,7 @@ jobs:
             }
 
             const [components, status] = entry.split(':');
+            let status = rawStatus;
 
             if (status === "pass") status = "success";
             else if (status === "skip") status = "skipped";
@@ -339,7 +326,6 @@ jobs:
 
             console.log("[conclusion] ", status)
             core.exportVariable('CONCLUSION',status);
-
 
             const override = core.getInput("OverrideTestResult") === "true";
             const forcedStatus = core.getInput("overrideStatusTo");
