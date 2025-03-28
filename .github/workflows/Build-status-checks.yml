@@ -318,9 +318,20 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const conclusion = process.env.BUILD_RESULT;
-
+            const conclusion = JSON.parse(Buffer.from(process.env.BUILD_RESULT, 'base64').toString('utf-8'))
             console.log(conclusion)
+
+            conclusion.forEach(entry => {
+
+            if (!entry.includes(':')) {
+               console.log("Invalid entry:", entry);
+               return;
+            }
+
+            const [server, status] = entry.split(':');
+
+            console.log(server, "is", status)
+            })
 
       # update
       - name: Create and Run Check(success)
