@@ -293,7 +293,9 @@ jobs:
 
           RESULT=$( echo "${results[@]}" | tr -d "\n"  | jq -R -s -c 'split(" ")' )
           echo "RESULT=$(echo "$RESULT" | base64 | tr -d '\n')" >> $GITHUB_ENV
-          echo "${{env.RESULT}}" | base64 -d 
+
+          echo "value"
+          echo $(echo  ${{env.RESULT}}" | base64 -d) 
 
 
           # for item in "${statuses[@]}"; do
