@@ -291,11 +291,10 @@ jobs:
               *) perform_selective_compilation "${detected_components[@]}" ;;
           esac
 
-          RESULT=$( echo "${results[@]}" | tr -d "\n"  | jq -R -s -c 'split(" ")' )
-          echo "RESULT=$(echo "$RESULT" | base64 | tr -d '\n')" >> $GITHUB_ENV
-
           echo "value"
-          echo $(echo  ${{env.RESULT}}" | base64 -d) 
+          RESULT=$(printf "%s\n" "${results[@]}" | jq -R -s -c 'split("\n")[:-1]') 
+          echo "RESULT=$(echo "$RESULT" | base64 | tr -d '\n')" >> $GITHUB_ENV
+          echo "$RESULT" | base64 -d
 
 
           # for item in "${statuses[@]}"; do
