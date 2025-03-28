@@ -348,13 +348,13 @@ jobs:
             let status;
 
             if (count_unexpected_behaviour > 0) {
-                status = "warn";
+                status = "unexpected";
             } else if (count_total_components === count_success_components) {
-                status = "pass";
+                status = "success";
             } else if (count_total_components === count_skipped_components) {
-                status = "skip";
+                status = "skipped";
             } else {
-                status = "fail";
+                status = "failure";
             }
 
             console.log("[conclusion] ", status)
