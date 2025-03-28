@@ -307,11 +307,11 @@ jobs:
             const results = JSON.parse(Buffer.from(process.env.BUILD_RESULT, 'base64').toString('utf-8'))
             console.log(results)
 
-            let count_total_componentns = 0;
+            let count_total_components = 0;
             let count_failure_components = 0;
             let count_success_components = 0;
-            let count_unexpected_behavour = 0;
             let count_skipped_components = 0;
+            let count_unexpected_behaviour = 0;
 
 
             results.forEach(entry => {
