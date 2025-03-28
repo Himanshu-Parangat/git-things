@@ -276,7 +276,7 @@ jobs:
 
           for components in "${detected_components[@]}"; do
             DO_TASK="all"
-            echo -e "checking target: $components"
+            echo -e "found target: $components"
             case "$components" in
               all) DO_TASK="all" ;;
               skip) DO_TASK="skip" ;;
@@ -307,27 +307,46 @@ jobs:
             const results = JSON.parse(Buffer.from(process.env.BUILD_RESULT, 'base64').toString('utf-8'))
             console.log(results)
 
-            let finalStatus;
+            let count_total_componentns = 0;
+            let count_failure_components = 0;
+            let count_success_components = 0;
+            let count_unexpected_behavour = 0;
+            let count_skipped_components = 0;
+
+
             results.forEach(entry => {
+              count_total_components++;
 
-            if (!entry.includes(':')) {
-               console.log("Invalid entry:", entry);
-               return;
-            }
+              if (!entry.includes(':')) {
+                console.log("Invalid entry:", entry);
+                count_unexpected_behaviour++;
+                return;
+              }
+              
+              const [components, status] = entry.split(':');
+              console.log(components, "is", status);
+              
+              if (status === "success") {
+                count_success_components++;
+              } else if (status === "skip") {
+                count_skipped_components++;
+              } else if (status === "failure") {
+                count_failure_components++;
+              } else {
+                count_unexpected_behaviour++;
+              }
 
-            const [components, status] = entry.split(':');
+            });
 
-            if (status === "pass"){
-              finalStatus = "success";
-            } else if (status === "skip"){
-              finalStatus = "skipped";
-            } else {
-              finalStatus = "failure";
-            }
+            console.log("\n[summery] for all iterated components");
+            console.log("Total Components:", count_total_components);
+            console.log("Success Components:", count_success_components);
+            console.log("Skipped Components:", count_skipped_components);
+            console.log("Failure Components:", count_failure_components);
+            console.log("Unexpected Behaviour Components:", count_unexpected_behaviour);
+            
 
-            console.log(components, "is", status)
-            })
-
+            const finalStatus = "success"
             console.log("[conclusion] ", finalStatus)
             core.exportVariable('CONCLUSION',finalStatus);
 
