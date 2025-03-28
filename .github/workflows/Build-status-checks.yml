@@ -345,10 +345,20 @@ jobs:
             console.log("Failure Components:", count_failure_components);
             console.log("Unexpected Behaviour:", count_unexpected_behaviour);
             
+            let status;
 
-            const finalStatus = "success"
-            console.log("[conclusion] ", finalStatus)
-            core.exportVariable('CONCLUSION',finalStatus);
+            if (count_unexpected_behaviour > 0) {
+                status = "warn";
+            } else if (count_total_components === count_success_components) {
+                status = "pass";
+            } else if (count_total_components === count_skipped_components) {
+                status = "skip";
+            } else {
+                status = "fail";
+            }
+
+            console.log("[conclusion] ", status)
+            core.exportVariable('CONCLUSION',status);
 
             const override = core.getInput("OverrideTestResult") === "true";
             const forcedStatus = core.getInput("overrideStatusTo");
