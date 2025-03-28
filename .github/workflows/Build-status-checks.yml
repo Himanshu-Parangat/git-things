@@ -318,20 +318,36 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const conclusion = JSON.parse(Buffer.from(process.env.BUILD_RESULT, 'base64').toString('utf-8'))
-            console.log(conclusion)
+            const results = JSON.parse(Buffer.from(process.env.BUILD_RESULT, 'base64').toString('utf-8'))
+            console.log(results)
 
-            conclusion.forEach(entry => {
+            results.forEach(entry => {
 
             if (!entry.includes(':')) {
                console.log("Invalid entry:", entry);
                return;
             }
 
-            const [server, status] = entry.split(':');
+            const [components, status] = entry.split(':');
+
+            if (status === "pass") status = "success";
+            else if (status === "skip") status = "skipped";
+            else status = "failure";
 
             console.log(server, "is", status)
             })
+
+            console.log("[conclusion] ", status)
+            core.exportVariable('CONCLUSION',status);
+
+
+            const override = core.getInput("OverrideTestResult") === "true";
+            const forcedStatus = core.getInput("overrideStatusTo");
+
+            if (override) {
+              console.log(`Forcing test result to: ${forcedStatus}`);
+              core.exportVariable("CONCLUSION", forcedStatus);
+            }
 
       # update
       - name: Create and Run Check(success)
