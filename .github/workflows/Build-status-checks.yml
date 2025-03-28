@@ -296,6 +296,9 @@ jobs:
 
           echo $build_result
 
+          echo "BUILD_RESULT=$(echo $build_result | base64 | tr -d '\n')" >> GITHUB_ENV
+
+          echo "the env varible is set to ${{ env.BUILD_RESULT }}"
 
           # echo "${results[@]}"
           #
