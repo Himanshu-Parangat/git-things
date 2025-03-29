@@ -510,7 +510,8 @@ jobs:
 
             const log_contents = JSON.parse(Buffer.from(process.env.STATUS_BADGES, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `${item}&nbsp;`);
+              .map(item => `${item}`)
+              .join(' ');
 
             const log_summary = `<details><summary><b>Status summery</b></summary>${log_contents}</details>`
 
