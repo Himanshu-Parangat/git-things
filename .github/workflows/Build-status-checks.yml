@@ -346,7 +346,7 @@ jobs:
 
 
             console.log(" ");
-            console.log(`\033[0;31m[Summary] Component status \033[0m`);
+            console.log("\033[0;31m[Summary] Component status \033[0m");
             results.forEach(entry => {
               count_total_components++;
 
@@ -373,7 +373,7 @@ jobs:
             });
 
             console.log(" ");
-            console.log(`\033[0;31m[Summary] For All Iterated Component \033[0m`);
+            console.log("\033[0;31m[Summary] For All Iterated Component \033[0m");
             console.log("Total Components:", count_total_components);
             console.log("Success Components:", count_success_components);
             console.log("Skipped Components:", count_skipped_components);
