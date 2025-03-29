@@ -291,11 +291,12 @@ jobs:
               *) perform_selective_compilation "${detected_components[@]}" ;;
           esac
 
-          echo "setting value"
+          echo "\033[0;35m[Finished] Build Process ended with the Result.\033[0m"
           build_result=$(echo ${results[@]} | tr -d '\n' | jq -R -c 'split(" ")' )
 
           echo $build_result
 
+          echo "\033[0;35m[Exporting Env] result is set to the Environment Variable 'BUILD_RESULT' \033[0m"
           echo "BUILD_RESULT=$(echo "$build_result" | base64 | tr -d '\n')" >> $GITHUB_ENV
 
 
@@ -344,6 +345,8 @@ jobs:
             let badges=[];
 
 
+            console.log(" ");
+            console.log(`\033[0;31m[Summary] Component status \033[0m`);
             results.forEach(entry => {
               count_total_components++;
 
@@ -369,7 +372,8 @@ jobs:
 
             });
 
-            console.log("\n[summery] for all iterated components");
+            console.log(" ");
+            console.log(`\033[0;31m[Summary] For All Iterated Component \033[0m`);
             console.log("Total Components:", count_total_components);
             console.log("Success Components:", count_success_components);
             console.log("Skipped Components:", count_skipped_components);
@@ -395,16 +399,22 @@ jobs:
                 status = "failure";
             }
 
-            console.log("[conclusion] ", status)
-            core.exportVariable('CONCLUSION',status);
 
-            const override = core.getInput("OverrideTestResult") === "true";
+            const OverrideTestResult = core.getInput("OverrideTestResult");
             const forcedStatus = core.getInput("overrideStatusTo");
+            let finalStatus = status;
 
-            if (override) {
-              console.log(`Forcing test result to: ${forcedStatus}`);
-              core.exportVariable("CONCLUSION", forcedStatus);
+
+            console.log(`\033[0;31m[Overwrite] Detected flag ${OverrideTestResult}, Detected status ${forcedStatus}\033[0m`);
+            if (OverrideTestResult === "true" ) {
+              console.log(`\033[0;31m[conclusion] Forcing test result from ${status} to: ${forcedStatus}\033[0m`);
+              finalStatus = forcedStatus
+            } else {
+            console.log(`\033[0;35m[conclusion] is set to: ${status}\033[0m`)
+              finalStatus = status
             }
+
+            core.exportVariable("CONCLUSION",finalStatus);
 
       # update
       - name: Create and Run Check(success)
