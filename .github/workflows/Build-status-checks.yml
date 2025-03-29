@@ -399,11 +399,9 @@ jobs:
                 status = "failure";
             }
 
-
-            const OverrideTestResult = core.getInput("OverrideTestResult");
-            const forcedStatus = core.getInput("overrideStatusTo");
+            const OverrideTestResult = "${{ inputs.OverrideTestResult }}";
+            const forcedStatus = "${{ inputs.OverrideStatusTo }}";
             let finalStatus = status;
-
 
             console.log(`[Overwrite] Detected flag ${OverrideTestResult}, Detected status ${forcedStatus}`);
             if (OverrideTestResult === "true" ) {
