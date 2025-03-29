@@ -471,7 +471,8 @@ jobs:
               .join(', ');
 
 
-            const log_summary = "![foo](https://img.shields.io/badge/bar-passing-brightgreen?logo=go)"
+            const log_contents = `<img src="https://img.shields.io/badge/Component-passing-brightgreen?logo=check&logoColor=white" alt="Component Passing"><img src="https://img.shields.io/badge/Component-failing-red?logo=check&logoColor=white" alt="Component Passing">`
+            const log_summary = `<details><summary><b>Build log summery</b></summary>${log_contents}</details>`
 
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info, log_summary) {
               const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
@@ -506,8 +507,8 @@ jobs:
                 Message_body,
                 '</ul>',
                 Status_footer,
-                '</br><b>', additional_info, '</b>',
-                log_summary
+                log_summary,
+                '</br><b>', additional_info, '</b>'
               ].join('');
             }
 
