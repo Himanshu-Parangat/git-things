@@ -378,8 +378,7 @@ jobs:
 
             core.exportVariable(
               'STATUS_BADGES',
-              Buffer.from(JSON.stringify(badges))
-                .replace(/\n/g, '')
+              Buffer.from(JSON.stringify(badges).replace(/\n/g, ''))
                 .toString('base64')
                 .replace(/\n/g, '')
             );
