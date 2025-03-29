@@ -405,12 +405,12 @@ jobs:
             let finalStatus = status;
 
 
-            console.log(`\033[0;31m[Overwrite] Detected flag ${OverrideTestResult}, Detected status ${forcedStatus}\033[0m`);
+            console.log(`[Overwrite] Detected flag ${OverrideTestResult}, Detected status ${forcedStatus}`);
             if (OverrideTestResult === "true" ) {
-              console.log(`\033[0;31m[conclusion] Forcing test result from ${status} to: ${forcedStatus}\033[0m`);
+              console.log(`[conclusion] Forcing test result from ${status} to: ${forcedStatus}`);
               finalStatus = forcedStatus
             } else {
-            console.log(`\033[0;35m[conclusion] is set to: ${status}\033[0m`)
+            console.log(`[conclusion] is set to: ${status}`)
               finalStatus = status
             }
 
