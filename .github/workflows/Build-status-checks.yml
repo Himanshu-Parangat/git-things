@@ -331,7 +331,7 @@ jobs:
                 default:
                   logo = "go";
               }
-              const imgTag = `<img src="https://img.shields.io/badge/${component}-${status}-${color}?logo=${logo}" alt="${component}-status-${status}">&nbsp;`;
+              const imgTag = `<img src='https://img.shields.io/badge/${component}-${status}-${color}?logo=${logo}' alt='${component}-status-${status}'>&nbsp;`;
               return imgTag;
             }
 
