@@ -215,6 +215,11 @@ jobs:
               },
             });
 
+      - name: Checkout PR code
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.PR_SHA }}
+          fetch-depth: 0
 
       - name: Perform Selective Compilation Task
         id: perform_skip_task
