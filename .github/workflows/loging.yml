@@ -24,4 +24,7 @@ jobs:
         run: |
           data="foo"
           echo "hi"
-          echo "::notice::got info ${data}"
+          echo "::notice::got info $(echo data)"
+          echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
+          echo "::warning file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
+          echo "::error file=app.js,line=1,col=5,endColumn=7,title=YOUR-TITLE::Missing semicolon"
