@@ -24,4 +24,4 @@ jobs:
         run: |
           data="foo"
           echo "hi"
-          echo "::workflow-command parameter1={data},parameter2={data}::{command value}"
+          echo "::notice::got info ${data}"
