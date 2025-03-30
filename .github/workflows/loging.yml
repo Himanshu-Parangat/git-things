@@ -12,6 +12,9 @@ jobs:
         with:
           script: |
             console.log("\x1b[35mThis is purple text\x1b[0m");
+            core.error('Missing semicolon')
+            core.error('Missing semicolon', {file: 'app.js'})
+            core.error('Missing semicolon', {file: 'cor.ds', startLine: 1})
 
 
       - name: Log purple text using github-script
