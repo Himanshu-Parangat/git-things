@@ -12,3 +12,10 @@ jobs:
         with:
           script: |
             console.log("\x1b[35mThis is purple text\x1b[0m");
+
+
+      - name: Log purple text using github-script
+        run: |
+          data="foo"
+          echo "hi"
+          echo "::workflow-command parameter1={data},parameter2={data}::{command value}"
