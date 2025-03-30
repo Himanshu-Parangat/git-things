@@ -218,12 +218,13 @@ jobs:
       - name: Checkout PR code
         uses: actions/checkout@v4
         with:
-          ref: ${{ env.PR_SHA }}
+          ref: ${{ env.PR_Branch }}
           fetch-depth: 0
 
       - name: branch status
         run: |
           echo -e "\033[1;32m[CHECKOUT] Successfully checked out branch: $(git branch --show-current)\033[0m"
+          echo -e "\033[1;32m[CHECKOUT] Branch should match: ${{ env.PR_Branch }}\033[0m"
 
       - name: Perform Selective Compilation Task
         id: perform_skip_task
