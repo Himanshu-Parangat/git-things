@@ -427,73 +427,79 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+
+            const statusConfigs = {
+              success: {
+                update_status : 'completed' ,
+                update_conclusion : 'success',
+                update_title : 'test passed successfully',
+                status_header : "Validating PR:",
+                status_img : "https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif",
+                status_img_alt : "thumbs-up good",
+                status_img_width : "200",
+                status_quote : "Build tests went smoothly╬ô├ç├╢good job, friend! Thanks</br>For the hard work and precious Time. Take a well-deserved break, okay?",
+                status_additional_info : "The build compiled successfully",
+              },
+              failure: {
+                update_status : 'completed' ,
+                update_conclusion : 'failure',
+                update_title : 'build Test Failed',
+                status_header : "Build test failed for PR:",
+                status_img : "https://media1.tenor.com/m/UDzn7Mcr_gwAAAAd/anime-frieren.gif",
+                status_img_alt : "nod-left-right-no",
+                status_img_width : "200",
+                status_quote : "Oops! The build process didn't succeed╬ô├ç├╢another day, another grind.</br>Need to Check the logs for details, Take a break and wait for someone to notify you. :3",
+                status_additional_info : "The build test Failed",
+              },
+              skipped: {
+                update_status : 'completed' ,
+                update_conclusion : 'skipped',
+                update_title : 'Nothing to compile Skipping',
+                status_header : "Skipping PR:",
+                status_img : "https://media1.tenor.com/m/iora7DooHl0AAAAd/vkay-hmn.gif",
+                status_img_alt : "nod-left-right-no",
+                status_img_width : "200",
+                status_quote : "Skip, skip, skip╬ô├ç├╢there is nothing new to build, so this will be skipped!</br>oh, and you should definitely take a break and drink some water don't let that skip!",
+                status_additional_info : "The build step got skipped Nothing to compile",
+              },
+              overwrite: {
+                update_status : 'completed' ,
+                update_conclusion : 'success',
+                update_title : 'Test Result Overwritten',
+                status_header : "Check Result was Overwritten for PR:",
+                status_img : "https://media1.tenor.com/m/rKkO5hy-V9IAAAAC/anime-girl.gif",
+                status_img_alt : "shocked funny",
+                status_img_width : "300",
+                status_quote : "Woo! No way! Someone overwrote the test results to accommodate these changes,</br>You should go and get some rest and stay hydrated╬ô├ç├╢you'll be Informed soon.",
+                status_additional_info : "Test was passed forcefully",
+              },
+              default : {
+                update_status : 'completed' ,
+                update_conclusion : 'neutral',
+                update_title : 'Unexpected Behavior Detected',
+                status_header : "PR Needs Manual Intervention:",
+                status_img : "https://media1.tenor.com/m/75aAMJUb_S4AAAAd/anime-gochiusa.gif",
+                status_img_alt : "no idea what hppend",
+                status_img_width : "300",
+                status_quote : "Hmm... The build test ran into an unexpected Behavior. Honestly, I'm just as confused as you are!</br>Need to Check the logs for more details, Take a break, and we will notify you.",
+                status_additional_info : "Some Unexpended Behaviour Observed, check logs",
+              }
+            };
+
+
             const conclusion = process.env.CONCLUSION;
 
-            let status_header, status_img, status_img_alt, status_img_width, status_quote, status_additional_info;
-            let update_status, update_conclusion, update_title;
+            const config = statusConfigs[conclusion] || statusConfigs.default;
 
-            if (conclusion === "success") {
-              update_status = 'completed' 
-              update_conclusion = 'success'
-              update_title = 'test passed successfully'
-
-              status_header = "Validating PR:"
-              status_img = "https://media.tenor.com/0XDvs2JB8RsAAAAj/meiling-thumbs-up.gif"
-              status_img_alt = "thumbs-up good"
-              status_img_width = "200"
-              status_quote = "Build tests went smoothly—good job, friend! Thanks</br>For the hard work and precious Time. Take a well-deserved break, okay?"
-              status_additional_info = "The build compiled successfully"
-            } else if (conclusion === "failure") {
-              update_status = 'completed' 
-              update_conclusion = 'failure'
-              update_title = 'build Test Failed'
-
-              status_header = "Build test failed for PR:"
-              status_img = "https://media1.tenor.com/m/UDzn7Mcr_gwAAAAd/anime-frieren.gif"
-              status_img_alt = "nod-left-right-no"
-              status_img_width = "200"
-              status_quote = "Oops! The build process didn't succeed—another day, another grind.</br>Need to Check the logs for details, Take a break and wait for someone to notify you. :3"
-              status_additional_info = "The build test Failed"
-
-            } else if (conclusion === "skipped") {
-
-              update_status = 'completed' 
-              update_conclusion = 'skipped'
-              update_title = 'Nothing to compile Skipping'
-
-              status_header = "Skipping PR:"
-              status_img = "https://media1.tenor.com/m/iora7DooHl0AAAAd/vkay-hmn.gif"
-              status_img_alt = "nod-left-right-no"
-              status_img_width = "200"
-              status_quote = "Skip, skip, skip—there is nothing new to build, so this will be skipped!</br>oh, and you should definitely take a break and drink some water don't let that skip!"
-              status_additional_info = "The build step got skipped Nothing to compile"
-            } else if (conclusion === 'overwrite') {
-              update_status = 'completed' 
-              update_conclusion = 'success'
-              update_title = 'Test Result Overwritten'
-
-              status_header = "Check Result was Overwritten for PR:"
-              status_img = "https://media1.tenor.com/m/rKkO5hy-V9IAAAAC/anime-girl.gif"
-              status_img_alt = "shocked funny"
-              status_img_width = "300"
-              status_quote = "Woo! No way! Someone overwrote the test results to accommodate these changes,</br>You should go and get some rest and stay hydrated—you'll be Informed soon."
-              status_additional_info = "Test was passed forcefully"
-
-            } else {
-              update_status = 'completed' 
-              update_conclusion = 'neutral'
-              update_title = 'Unexpected Behavior Detected'
-
-              status_header = "PR Needs Manual Intervention:"
-              status_img = "https://media1.tenor.com/m/75aAMJUb_S4AAAAd/anime-gochiusa.gif"
-              status_img_alt = "no idea what hppend"
-              status_img_width = "300"
-              status_quote = "Hmm... The build test ran into an unexpected Behavior. Honestly, I'm just as confused as you are!</br>Need to Check the logs for more details, Take a break, and we will notify you."
-              status_additional_info = "Some Unexpended Behaviour Observed, check logs"
-            }
-
-
-
+            const  status_header = config.status_header
+            const  status_img = config.status_img
+            const  status_img_alt = config.status_img_alt
+            const  status_img_width = config.status_img_width
+            const  status_quote = config.status_quote
+            const  status_additional_info = config.status_additional_info
+            const  update_status = config.update_status
+            const  update_conclusion = config.update_conclusion
+            const  update_title = config.update_title
 
             const totalChangedFilesList = JSON.parse(Buffer.from(process.env.PR_Total_changedFiles, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
