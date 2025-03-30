@@ -197,7 +197,7 @@ jobs:
             const status_img_alt = "thinking-test"
             const status_img_width = "200"
             const status_quote = "Take a break, have some rest & grab some water! Meanwhile, we're running tests<br>to ensure the code builds successfully. This won't take long."
-            const status_additional_info = "The build Compilation is in Progress"
+            const status_additional_info = "The build builds is in Progress"
             const In_progress_Message_summery = generate_summary( status_header, status_img, status_img_alt, status_img_width, status_quote, status_additional_info);
 
 
@@ -226,17 +226,18 @@ jobs:
           echo -e "\033[1;32m[CHECKOUT] Successfully checked out branch: $(git branch --show-current)\033[0m"
           echo -e "\033[1;32m[CHECKOUT] Branch should match: ${{ env.PR_Branch }}\033[0m"
 
-      - name: Perform Selective Compilation Task
+      - name: Perform Selective builds Task
         id: perform_skip_task
         run: |
-          echo "Checking build task..."
+          echo -e "\033[0;35m[Check] Checking build task... \033[0m"
+
 
           all_components=($(echo "${{env.ALL_TARGETS}}" | base64 -d | tr -d '\n' | jq -rc '.[]'))
           detected_components=($(echo "${{env.TARGETS_BUILD}}" | base64 -d | tr -d '\n'  | jq -rc '.[]'))
           results=()
 
           perform_skipping(){
-            echo -e "\n[All build] okay skipping all Compilation"
+            echo -e "\033[0;35m[All build] okay skipping all builds \033[0m"
 
             local components=("$@")
             for target in "${components[@]}"; do
@@ -249,8 +250,8 @@ jobs:
           }
 
 
-          perform_all_compilation(){
-            echo -e "\n[All build] okay all Compilation"
+          perform_all_builds()
+            echo -e "\033[0;35m[All build] okay all builds \033[0m"
             local components=("$@")
             for target in "${components[@]}"; do
               echo "[component] $target"
@@ -267,8 +268,8 @@ jobs:
           }
 
 
-          perform_selective_compilation(){
-            echo -e "\n[seletive build] okay seletive Compilation"
+          perform_selective_builds(){
+            echo -e "\033[0;35m[seletive build] okay seletive builds \033[0m"
             local components=("$@")
             for target in "${components[@]}"; do
               build_target="build-$target"
@@ -297,17 +298,17 @@ jobs:
 
           case "$DO_TASK" in
               skip) perform_skipping "${all_components[@]}" ;;
-              all) perform_all_compilation "${all_components[@]}" ;;
-              *) perform_selective_compilation "${detected_components[@]}" ;;
+              all) perform_all_builds "${all_components[@]}" ;;
+              *) perform_selective_builds "${detected_components[@]}" ;;
           esac
 
-          echo "\033[0;35m[Finished] Build Process ended with the Result.\033[0m"
+          echo -e "\033[0;35m[Finished] Build Process ended with the Result.\033[0m"
           build_result=$(echo ${results[@]} | tr -d '\n' | jq -R -c 'split(" ")' )
 
           echo $build_result
 
-          echo "\033[0;35m[Exporting Env] result is set to the Environment Variable 'BUILD_RESULT' \033[0m"
-          echo "BUILD_RESULT=$(echo "$build_result" | base64 | tr -d '\n')" >> $GITHUB_ENV
+          echo -e "\033[0;35m[Exporting Env] result is set to the Environment Variable 'BUILD_RESULT' \033[0m"
+          echo -e "BUILD_RESULT=$(echo "$build_result" | base64 | tr -d '\n')" >> $GITHUB_ENV
 
 
       - name: Check for outcome
@@ -356,7 +357,7 @@ jobs:
 
 
             console.log(" ");
-            console.log("\033[0;31m[Summary] Component status \033[0m");
+            console.log("\033[0;35m[Summary] Component status \033[0m");
             results.forEach(entry => {
               count_total_components++;
 
@@ -383,7 +384,7 @@ jobs:
             });
 
             console.log(" ");
-            console.log("\033[0;31m[Summary] For All Iterated Component \033[0m");
+            console.log("\033[0;35m[Summary] For All Iterated Component \033[0m");
             console.log("Total Components:", count_total_components);
             console.log("Success Components:", count_success_components);
             console.log("Skipped Components:", count_skipped_components);
@@ -413,12 +414,13 @@ jobs:
             const forcedStatus = "${{ inputs.OverrideStatusTo }}";
             let finalStatus = status;
 
-            console.log(`[Overwrite] Detected flag ${OverrideTestResult}, Detected status ${forcedStatus}`);
+            console.log(" ");
             if (OverrideTestResult === "true" ) {
-              console.log(`[conclusion] Forcing test result from ${status} to: ${forcedStatus}`);
+              console.log("\033[0;35m[Overwrite] Detected flag for overwrite: " + OverrideTestResult + " Detected status: " + forcedStatus + "\033[0m");
+              console.log("\033[0;35m[Overwrite] Forcing test result from " + status + " to: " + forcedStatus + "\033[0m");
               finalStatus = forcedStatus
             } else {
-            console.log(`[conclusion] is set to: ${status}`)
+              console.log("\033[0;35m[conclusion] is set to: " + status + "\033[0m");
               finalStatus = status
             }
 
