@@ -302,7 +302,6 @@ func main() {
 	http.HandleFunc("/api/v1/data", getData)
 	http.HandleFunc("/api/v1/data/", getBatchData)
 	http.HandleFunc("/headers", headers)
-onmainbranch
 	address := GetServerAddress()
 	log.Println("\n\nServer is running on http://" + address)
 	log.Fatal(http.ListenAndServe(address, nil))
