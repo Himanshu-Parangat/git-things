@@ -240,8 +240,6 @@ jobs:
 
             local components=("$@")
             for target in "${components[@]}"; do
-              echo "[component] $target"
-
               echo -e "\033[35m[skipping] $target component skipped!\033[0m\n\n"
                 results+=("${target}:skipping")
                 
@@ -253,9 +251,7 @@ jobs:
             echo -e "\033[0;35m[All build] okay all builds \033[0m"
             local components=("$@")
             for target in "${components[@]}"; do
-              echo "[component] $target"
               build_target="build-$target"
-              # if ! echo "$build_target" 2>&1; then
               if ! make "$build_target" 2>&1; then
                 echo -e "\033[31m[failed] $target components need changes\033[0m\n\n"
                   results+=("${target}:failing")
@@ -272,7 +268,7 @@ jobs:
             local components=("$@")
             for target in "${components[@]}"; do
               build_target="build-$target"
-              # if ! echo "$build_target" 2>&1; then
+              echo -e "\033[32m[running] $target 'make $build_target'!\033[0m"
               if ! make "$build_target" 2>&1; then
                 echo -e "\033[31m[failed] $target components need changes\033[0m\n\n"
                   results+=("${target}:failing")
@@ -415,8 +411,8 @@ jobs:
 
             console.log(" ");
             if (OverrideTestResult === "true" ) {
-              console.log("\033[0;35m[Overwrite] Detected flag for overwrite: " + OverrideTestResult + " Detected status: " + forcedStatus + "\033[0m");
-              console.log("\033[0;35m[Overwrite] Forcing test result from " + status + " to: " + forcedStatus + "\033[0m");
+              console.log("\033[0;31m[Overwrite] Detected flag for overwrite: " + OverrideTestResult + ", Detected status: " + forcedStatus + "\033[0m");
+              console.log("\033[0;31m[Overwrite] Forcing test result from " + status + " to: " + forcedStatus + "\033[0m");
               finalStatus = forcedStatus
             } else {
               console.log("\033[0;35m[conclusion] is set to: " + status + "\033[0m");
