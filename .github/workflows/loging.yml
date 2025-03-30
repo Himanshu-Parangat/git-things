@@ -1,0 +1,14 @@
+name: Test Manual Trigger Logging
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log purple text using github-script
+        uses: actions/github-script@v7
+        with:
+          script: |
+            console.log("\x1b[35mThis is purple text\x1b[0m");
