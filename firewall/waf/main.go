@@ -41,7 +41,7 @@ func index(w http.ResponseWriter, resp *http.Request) {
 func main() {
 	http.HandleFunc("/", index)
 
-	address := GetFirewallAddress()
+	address := GetFirewaallAddress()
 	log.Println("\n\nServer is running on http://" + address)
 	log.Fatal(http.ListenAndServe(address, nil))
 }
