@@ -11,7 +11,7 @@ import (
 	"os"
 )
 
-//go:embed components/index.html
+://go:embed components/index.html
 var templateFiles embed.FS
 
 func GetServerAddress() string {
