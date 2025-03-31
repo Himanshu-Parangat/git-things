@@ -293,7 +293,7 @@ jobs:
             echo -e "found target: $components"
             case "$components" in
               all) DO_TASK="all" ;;
-              skip) DO_TASK="misc" ;;
+              misc) DO_TASK="skip" ;;
               *) DO_TASK="selective" ;;
             esac
           done
