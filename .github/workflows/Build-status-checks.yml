@@ -34,7 +34,7 @@ on:
           - overwrite
 
 jobs:
-  PR-Build-Validation:
+  Pr-Build-Validation:
     runs-on: ubuntu-latest
 
     steps:
@@ -52,7 +52,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Load Environment
+      - name: Load PR Data to Environment Variables
         id: load-pr-environment
         run: |
           echo "PR_NUMBER=$(jq -r '.number' PullRequestData.txt)" >> $GITHUB_ENV
@@ -74,7 +74,7 @@ jobs:
             console.log(\`\${year} \${month} \${day}, \${hours}:\${minutes}:\${seconds}\`);
           ") >> $GITHUB_ENV
 
-      - name: File Change Target Mapping
+      - name: Analyze File Changes & Target Mapping
         id: file-changes-targets-mapping
         uses: actions/github-script@v7
         with:
@@ -122,7 +122,7 @@ jobs:
                 .replace(/\n/g, '')
             );
 
-      - name: Create Status Check
+      - name: Create Initial Status Check
         id: create-status-checks
         uses: actions/github-script@v7
         with:
@@ -229,8 +229,8 @@ jobs:
           echo -e "\033[1;32m[CHECKOUT] Successfully checked out branch: $(git branch --show-current)\033[0m"
           echo -e "\033[1;32m[CHECKOUT] Branch should match: ${{ env.PR_Branch }}\033[0m"
 
-      - name: Perform Selective builds Task
-        id: perform_skip_task
+      - name: Conditional Build & Status Annotation
+        id: conditional-build-and-status-annotation
         run: |
           echo -e "\033[0;35m[Check] Checking build task... \033[0m"
 
@@ -308,9 +308,8 @@ jobs:
           echo -e "\033[0;35m[Exporting Env] result is set to the Environment Variable 'BUILD_RESULT' \033[0m"
           echo -e "BUILD_RESULT=$(echo "$build_result" | base64 | tr -d '\n')" >> $GITHUB_ENV
 
-
-      - name: Check for outcome
-        id: check-for-outcome
+      - name: Evaluate Build Conclusion & Generate Status Badges
+        id: check-for-outcome-and-badges
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -537,7 +536,8 @@ jobs:
               .map(item => `${item}`)
               .join(' ');
 
-            const log_summary = `<details><summary><b>Status summery</b></summary>${log_contents}</details>`
+            const redirect_url = process.env.PullRequestLink + "/files"
+            const log_summary = `<details><summary><b>Status summery</b></summary><a href="${redirect_url}">${log_contents}</a></details>`
 
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info, log_summary) {
               const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
