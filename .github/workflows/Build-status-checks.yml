@@ -340,7 +340,7 @@ jobs:
               }
 
               switch (component) {
-                case "document":
+                case "documentation":
                   logo = "readthedocs";
                   break;
                 default:
