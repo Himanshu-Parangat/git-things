@@ -539,6 +539,9 @@ jobs:
             const redirect_url = process.env.PullRequestLink + "/files"
             const log_summary = `<details><summary><b>Status summery</b></summary><a href="${redirect_url}">${log_contents}</a></details>`
 
+            console.log("\033[0;35m[Redirected Url] is set to: " + redirect_url + "\033[0m");
+            console.log("\033[0;35m[Log Summary] is set to: " + log_summary + "\033[0m");
+
             function generate_summary(status_header, status_img, status_img_alt, status_img_width, status_quote, additional_info, log_summary) {
               const header = `<b>${status_header}</b> ${process.env.PR_URL}`;
               const image_body = `<p align='center'> <img src="${status_img}" alt="${status_img_alt}" width="${status_img_width}"> </p>`;
