@@ -531,13 +531,14 @@ jobs:
               .map(item => `<code>${item}</code>`)
               .join(', ');
 
+            const redirect_url = process.env.PR_URL + "/files"
+
             const log_contents = JSON.parse(Buffer.from(process.env.STATUS_BADGES, 'base64').toString('utf-8'))
               .filter(item => item.trim() !== '')
-              .map(item => `${item}`)
+              .map(item => `<a href="${redirect_url}">${item}</a>`)
               .join(' ');
 
-            const redirect_url = process.env.PullRequestLink + "/files"
-            const log_summary = `<details><summary><b>Status summery</b></summary><a href="${redirect_url}">${log_contents}</a></details>`
+            const log_summary = `<details><summary><b>Status summery</b></summary>${log_contents}</details>`
 
             console.log("\033[0;35m[Redirected Url] is set to: " + redirect_url + "\033[0m");
             console.log("\033[0;35m[Log Summary] is set to: " + log_summary + "\033[0m");
