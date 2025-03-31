@@ -100,16 +100,21 @@ jobs:
                   return target;
                 }
               }
-              return "skip";
+              return "misc";
             };
 
-            const targets = totalChangedFilesList.map(item => getTarget(item));
-            core.exportVariable(
-              'TARGETS_BUILD',
-              Buffer.from(JSON.stringify(targets.includes("all") ? ["all"] : targets))
-                .toString('base64')
-                .replace(/\n/g, '')
-            );
+            const targets = totalChangedFilesList.map(getTarget);
+
+            const nonMiscTargets = targets.filter(target => target !== "misc");
+            const finalTargets = nonMiscTargets.length > 0 ? nonMiscTargets : ["misc"];
+
+            const targetsToExport = finalTargets.includes("all") ? ["all"] : finalTargets;
+
+            const encodedTargets = Buffer.from(JSON.stringify(targetsToExport))
+              .toString('base64')
+              .replace(/\n/g, '');
+
+            core.exportVariable('TARGETS_BUILD', encodedTargets);
 
             const all_targets = patterns
               .map(item => item.target)
@@ -288,7 +293,7 @@ jobs:
             echo -e "found target: $components"
             case "$components" in
               all) DO_TASK="all" ;;
-              skip) DO_TASK="skip" ;;
+              skip) DO_TASK="misc" ;;
               *) DO_TASK="selective" ;;
             esac
           done
