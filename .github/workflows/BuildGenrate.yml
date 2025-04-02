@@ -1,35 +1,34 @@
-name: Generate Artifacts Workflow
+name: Build All Workflow
 
 on:
   workflow_dispatch:
 
 jobs:
-
-  dependency_resolve:
-    uses: ./.github/workflows/DependencyResolution.yml
-
-  cache-go-modules:
-    uses: ./.github/workflows/GoCache.yml
-
-
-  manual_job:
+  build-all-components:
     runs-on: ubuntu-latest
-    needs: cache-go-modules
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+          cache: 'gomod'
+
       - name: Display Build Help message
         run: make help
 
-      - name: Build All components
+      - name: Build All Components
         run: make build-all
 
-      - name: Upload Each Artifact Files With Names
+      - name: Ensure bin directory exists
+        run: mkdir -p bin
+
+      - name: Upload Built Binaries
         uses: actions/upload-artifact@v4
         with:
-          name: Built-Binarys-bundle
+          name: built-binaries
           path: bin/*
           if-no-files-found: error
           retention-days: 4
