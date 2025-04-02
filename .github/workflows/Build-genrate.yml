@@ -18,17 +18,6 @@ jobs:
           check-latest: true
 
 
-      - name: Cache Go modules - Server
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/testing-env/server/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-
-
       - name: Check for needed cache
         id: check-server-gomod
         shell: bash
@@ -47,10 +36,10 @@ jobs:
             
             if [ -f "$path/go.sum" ]; then
               echo "$name=true" >> $GITHUB_OUTPUT
-              echo -e "::notice:: \e[35mCache needed for module $name for $path/go.mod\e[0m"
+              echo -e "::notice:: \e[32mCache needed for module $name for $path/go.mod\e[0m"
             else
               echo "$name=false" >> $GITHUB_OUTPUT
-              echo -e "::warning:: \e[32m Ignoring module $name for non-existing $path/go.mod\e[0m"
+              echo -e "::warning:: \e[35mIgnoring module $name for non-existing $path/go.mod\e[0m"
             fi
           done
 
