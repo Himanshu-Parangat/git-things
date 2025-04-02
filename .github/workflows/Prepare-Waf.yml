@@ -8,8 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: Checkout repository
+      - name: Checkout Production
         uses: actions/checkout@v4
+        with:
+          ref: production
 
       - name: Setup Go
         uses: actions/setup-go@v4

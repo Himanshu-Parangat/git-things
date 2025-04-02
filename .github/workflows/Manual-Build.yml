@@ -13,8 +13,11 @@ jobs:
     needs: application
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout production
+        uses: actions/checkout@v4
+        with:
+          ref: production
+
       - name: Run Prepare-ReverseProxy workflow
         uses: actions/github-script@v6
         with:
@@ -33,8 +36,11 @@ jobs:
     needs: simulator
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout production
+        uses: actions/checkout@v4
+        with:
+          ref: production
+
       - name: Run Prepare-Waf workflow
         uses: actions/github-script@v6
         with:
@@ -53,8 +59,11 @@ jobs:
     needs: reverse-proxy
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout production
+        uses: actions/checkout@v4
+        with:
+          ref: production
+
       - name: Run Prepare-Server workflow
         uses: actions/github-script@v6
         with:
@@ -72,8 +81,11 @@ jobs:
     name: Prepare Application
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout production
+        uses: actions/checkout@v4
+        with:
+          ref: production
+
       - name: Run Prepare-Application workflow
         uses: actions/github-script@v6
         with:
@@ -92,8 +104,11 @@ jobs:
     needs: server
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout production
+        uses: actions/checkout@v4
+        with:
+          ref: production
+
       - name: Run Prepare-Simulator workflow
         uses: actions/github-script@v6
         with:
