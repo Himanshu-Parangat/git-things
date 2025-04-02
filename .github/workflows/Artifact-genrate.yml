@@ -1,4 +1,4 @@
-name: Build All Workflow
+name: Build All Artifacts
 on:
   workflow_dispatch:
 jobs:
