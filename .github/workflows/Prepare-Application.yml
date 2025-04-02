@@ -1,7 +1,7 @@
 name: Build Application 
 
 on:
-  workflow_call:
+  workflow_dispatch:
 
 jobs:
   dependency_resolve:
