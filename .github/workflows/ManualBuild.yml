@@ -1,0 +1,43 @@
+name: Manual Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger-workflows:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Prepare-Application
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: Prepare-Application.yml
+          ref: main
+
+      - name: Trigger Prepare-ReverseProxy
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: Prepare-ReverseProxy.yml
+          ref: main
+
+      - name: Trigger Prepare-Server
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: Prepare-Server.yml
+          ref: main
+
+      - name: Trigger Prepare-Simulator
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: Prepare-Simulator.yml
+          ref: main
+
+      - name: Trigger Prepare-Waf
+        uses: peter-evans/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: Prepare-Waf.yml
+          ref: main
