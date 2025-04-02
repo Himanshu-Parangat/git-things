@@ -10,6 +10,7 @@ Black=\033[0;30m
 Gray=\033[0;90m
 Reset=\033[0m
 
+# TODOS docker
 
 BIN_DIR=bin
 
