@@ -3,9 +3,10 @@ on:
   push: 
     branches:
       - main 
+  workflow_dispatch:
 
-permissions:  
-      contents: write 
+permissions:
+  contents: write 
 
 jobs: 
   branch-sync:
