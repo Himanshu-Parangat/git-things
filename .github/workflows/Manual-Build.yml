@@ -8,24 +8,6 @@ permissions:
   contents: read
 
 jobs:
-  application:
-    name: Prepare Application
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Run Prepare-Application workflow
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'Prepare-Application.yml',
-              ref: 'main'
-            })
-            
   reverse-proxy:
     name: Prepare Reverse Proxy
     needs: application
@@ -44,6 +26,27 @@ jobs:
               workflow_id: 'Prepare-ReverseProxy.yml',
               ref: 'main'
             })
+
+
+  waf:
+    name: Prepare WAF
+    needs: simulator
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run Prepare-Waf workflow
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'Prepare-Waf.yml',
+              ref: 'main'
+            })
+
             
   server:
     name: Prepare Server
@@ -63,7 +66,27 @@ jobs:
               workflow_id: 'Prepare-Server.yml',
               ref: 'main'
             })
+
+
+  application:
+    name: Prepare Application
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run Prepare-Application workflow
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'Prepare-Application.yml',
+              ref: 'main'
+            })
             
+
   simulator:
     name: Prepare Simulator
     needs: server
@@ -80,24 +103,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               workflow_id: 'Prepare-Simulator.yml',
-              ref: 'main'
-            })
-            
-  waf:
-    name: Prepare WAF
-    needs: simulator
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Run Prepare-Waf workflow
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'Prepare-Waf.yml',
               ref: 'main'
             })
