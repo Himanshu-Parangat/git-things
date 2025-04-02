@@ -1,14 +1,14 @@
 name: Build All Workflow
-
 on:
   workflow_dispatch:
-
 jobs:
   build-all-components:
     runs-on: ubuntu-latest
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -16,6 +16,7 @@ jobs:
           go-version: 'stable'
           cache: false
           check-latest: true
+
 
       - name: Cache Go modules - Server
         uses: actions/cache@v3
@@ -28,7 +29,7 @@ jobs:
             ${{ runner.os }}-go-
 
 
-      - name: Check if server go.mod exists
+      - name: Check for needed cache
         id: check-server-gomod
         shell: bash
         run: |
@@ -46,47 +47,18 @@ jobs:
             
             if [ -f "$path/go.mod" ]; then
               echo "$name=true" >> $GITHUB_OUTPUT
-              echo "✅ $path/go.mod exists (module: $name)"
-              echo "::notice:: Cache needed for module $name for non existing  $path/go.mod"
+              echo "::notice:: Cache needed for module $name for $path/go.mod"
+              echo -e "\e[35m::notice:: Cache needed for module $name for $path/go.mod\e[0m"
             else
               echo "$name=false" >> $GITHUB_OUTPUT
               echo "::warning:: Ignoring module $name for non existing $path/go.mod"
+              echo -e "\e[32m::warning:: Ignoring module $name for non-existing $path/go.mod\e[0m"  # Green
             fi
           done
 
 
-      - name: Cache Go modules - Application
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/testing-env/application/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-
-      - name: Cache Go modules - Simulator
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/testing-env/simulator/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-
-      - name: Cache Go modules - WAF
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cache/go-build
-            ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/firewall/waf/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-
-
       - name: Cache Go modules - Reverse Proxy
+        if: steps.check-server-gomod.outputs.reverseProxy == 'true'
         uses: actions/cache@v3
         with:
           path: |
@@ -97,14 +69,61 @@ jobs:
             ${{ runner.os }}-go-
 
 
+      - name: Cache Go modules - WAF
+        if: steps.check-server-gomod.outputs.waf == 'true'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/firewall/waf/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+
+      - name: Cache Go modules - Server
+        if: steps.check-server-gomod.outputs.server == 'true'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/testing-env/server/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+
+      - name: Cache Go modules - Application
+        if: steps.check-server-gomod.outputs.application == 'true'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/testing-env/application/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+
+      - name: Cache Go modules - Simulator
+        if: steps.check-server-gomod.outputs.simulator == 'true'
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/testing-env/simulator/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+
       - name: Display Build Help message
         run: make help
+
 
       - name: Build All Components
         run: make build-all
 
-      - name: Ensure bin directory exists
-        run: mkdir -p bin
 
       - name: Upload Built Binaries
         uses: actions/upload-artifact@v4
