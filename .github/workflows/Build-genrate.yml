@@ -45,7 +45,7 @@ jobs:
           for path in "${!modules[@]}"; do
             name="${modules[$path]}"
             
-            if [ -f "$path/go.mod" ]; then
+            if [ -f "$path/go.sum" ]; then
               echo "$name=true" >> $GITHUB_OUTPUT
               echo "::notice:: Cache needed for module $name for $path/go.mod"
               echo -e "\e[35m::notice:: Cache needed for module $name for $path/go.mod\e[0m"
