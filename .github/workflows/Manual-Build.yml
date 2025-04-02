@@ -3,6 +3,10 @@ name: Manual Workflow
 on:
   workflow_dispatch:
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   application:
     name: Prepare Application
