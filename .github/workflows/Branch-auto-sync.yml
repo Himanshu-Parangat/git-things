@@ -4,6 +4,9 @@ on:
     branches:
       - main 
 
+permissions:  
+      contents: write 
+
 jobs: 
   branch-sync:
     runs-on: ubuntu-latest 
@@ -15,23 +18,23 @@ jobs:
       
       - name: Set up git 
         run: | 
-          echo -e "::notice:: \e[35m[Set]Setting up Git user\e[0m"
+          echo -e "::notice:: \e[35m[Set] Setting up Git user\e[0m"
           git config --global user.name 'GitHub Actions Bot'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'  
-          echo -e "::notice:: \e[32m[Configure]Git user configured\e[0m"
+          echo -e "::notice:: \e[32m[Configure] Git user configured\e[0m"
       
       - name: Push changes to production when main is updated
         if: github.ref == 'refs/heads/main' 
         run: | 
-          echo -e "::notice:: \e[35m[Fetch]Fetching latest changes from origin\e[0m"
+          echo -e "::notice:: \e[35m[Fetch] Fetching latest changes from origin\e[0m"
           git fetch origin 
-          echo -e "::notice:: \e[35m[Production]Checking out production branch\e[0m"
+          echo -e "::notice:: \e[35m[Production] Checking out production branch\e[0m"
           git checkout production || git checkout -b production
           echo -e "::notice:: \e[32m[Sync]Merging main into production\e[0m"
           git merge main -X theirs 
           if [ $? -ne 0 ]; then
-            echo -e "::warning:: \e[35m[Resolve]Merge conflicts detected and resolved using 'theirs' strategy\e[0m"
+            echo -e "::warning:: \e[35m[Resolve] Merge conflicts detected and resolved using 'theirs' strategy\e[0m"
           fi
-          echo -e "::notice:: \e[32m[Push]Pushing changes to production\e[0m"
+          echo -e "::notice:: \e[32m[Push] Pushing changes to production\e[0m"
           git push origin production 
-          echo -e "::notice:: \e[32m[Done]Production branch successfully updated\e[0m"
+          echo -e "::notice:: \e[32m[Done] Production branch successfully updated\e[0m"
