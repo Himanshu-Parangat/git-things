@@ -47,12 +47,10 @@ jobs:
             
             if [ -f "$path/go.sum" ]; then
               echo "$name=true" >> $GITHUB_OUTPUT
-              echo "::notice:: Cache needed for module $name for $path/go.mod"
-              echo -e "\e[35m::notice:: Cache needed for module $name for $path/go.mod\e[0m"
+              echo -e "::notice:: \e[35mCache needed for module $name for $path/go.mod\e[0m"
             else
               echo "$name=false" >> $GITHUB_OUTPUT
-              echo "::warning:: Ignoring module $name for non existing $path/go.mod"
-              echo -e "\e[32m::warning:: Ignoring module $name for non-existing $path/go.mod\e[0m"  # Green
+              echo -e "::warning:: \e[32m Ignoring module $name for non-existing $path/go.mod\e[0m"
             fi
           done
 
