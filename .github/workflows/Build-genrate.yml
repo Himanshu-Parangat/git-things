@@ -1,0 +1,115 @@
+name: Build All Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-all-components:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+          cache: false
+          check-latest: true
+
+      - name: Cache Go modules - Server
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/testing-env/server/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+
+      - name: Check if server go.mod exists
+        id: check-server-gomod
+        shell: bash
+        run: |
+          declare -A modules=(
+            ["firewall/reverseProxy"]="reverseProxy"
+            ["firewall/waf"]="waf"
+            ["testing-env/server"]="server"
+            ["testing-env/application"]="application"
+            ["testing-env/simulator"]="simulator"
+          )
+          
+          echo "Checking for Go modules..."
+          for path in "${!modules[@]}"; do
+            name="${modules[$path]}"
+            
+            if [ -f "$path/go.mod" ]; then
+              echo "$name=true" >> $GITHUB_OUTPUT
+              echo "✅ $path/go.mod exists (module: $name)"
+              echo "::notice:: Cache needed for module $name for non existing  $path/go.mod"
+            else
+              echo "$name=false" >> $GITHUB_OUTPUT
+              echo "::warning:: Ignoring module $name for non existing $path/go.mod"
+            fi
+          done
+
+
+      - name: Cache Go modules - Application
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/testing-env/application/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Cache Go modules - Simulator
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/testing-env/simulator/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Cache Go modules - WAF
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/firewall/waf/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+
+      - name: Cache Go modules - Reverse Proxy
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/firewall/reverseProxy/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+
+      - name: Display Build Help message
+        run: make help
+
+      - name: Build All Components
+        run: make build-all
+
+      - name: Ensure bin directory exists
+        run: mkdir -p bin
+
+      - name: Upload Built Binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: built-binaries
+          path: bin/*
+          if-no-files-found: error
+          retention-days: 4
