@@ -210,6 +210,7 @@ func main() {
 	http.HandleFunc("/", checkQueryParams)
 
 	address := GetReverseProxyAddress()
+	log.Printf("\n\nReverse Proxy is ready")
 	log.Printf("\n\nReverse Proxy is running on http://%s\nRequests will be forwarded to the target http://%s", address, GetServerAddress())
 	log.Fatal(http.ListenAndServe(address, nil))
 }
