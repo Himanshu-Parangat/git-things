@@ -303,6 +303,8 @@ func main() {
 	http.HandleFunc("/api/v1/data/", getBatchData)
 	http.HandleFunc("/headers", headers)
 	address := GetServerAddress()
+	log.Println("server initiliing.. all set up")
+	log.Println("server status ready")
 	log.Println("\n\nServer is running on http://" + address)
 	log.Fatal(http.ListenAndServe(address, nil))
 }
