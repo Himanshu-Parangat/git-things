@@ -11,21 +11,18 @@ on:
         required: true
         type: string
 
-
 jobs:
   fetch-pr-data:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create seprate directory
-      - run: | 
+      - name: Create separate directory and add JSON
+        run: |
           mkdir gh-automation
           echo '{"foo":"bar"}' > gh-automation/pr-data.json
 
-      - name: check PR data
-      - run: cat gh-automation/pr-data.json | jq
+      - name: Check PR data
+        run: cat gh-automation/pr-data.json | jq
 
-      - name: check PR
-      - run: echo "${{ github.repository }}"
-
-
+      - name: Check PR
+        run: echo "${{ github.repository }}"
