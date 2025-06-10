@@ -12,8 +12,12 @@ on:
         type: string
 
 jobs:
-  fetch-pr-data:
+  Validate-pr-link:
     runs-on: ubuntu-latest
+    outputs:
+      pr_number:
+        description: "The extracted Pull Request number"
+        value: ${{ steps.validate-step.outputs.pr_number }} 
 
     steps:
       - name: Check And Validate PR Inuput Link
@@ -23,34 +27,51 @@ jobs:
           GITHUB_BASE_URL="https://github.com/"
           RESOURCE_TYPE="pull/"
 
-          echo "::notice:: Validating URL: $INPUT_URL"
-
+          echo "::notice:: Starting validation for URL: $INPUT_URL"
+          echo "::notice:: Checking base URL prefix $GITHUB_BASE_URL..."
           if [[ ! "$INPUT_URL" == "$GITHUB_BASE_URL"* ]]; then
               echo "::error:: Base URL didn't match. Expected: $GITHUB_BASE_URL"
               exit 1
           fi
+          echo "::notice:: Base URL prefix matched."
 
+          echo "::notice:: Checking repository Belogs to $BASE_REPO..."
           if [[ ! "$INPUT_URL" == "$GITHUB_BASE_URL$BASE_REPO"* ]]; then
               echo "::error:: PR does not belong to this repository. Expected prefix: $GITHUB_BASE_URL$BASE_REPO"
               exit 1
           fi
+          echo "::notice:: Repository Belogs to $BASE_REPO Confirmed..."
 
+          echo "::notice:: Checking resource type (must be 'pull' request)..."
           if [[ ! "$INPUT_URL" == "$GITHUB_BASE_URL$BASE_REPO$RESOURCE_TYPE"* ]]; then
               echo "::error:: Not a pull request link. Expected: ${GITHUB_BASE_URL}${BASE_REPO}${RESOURCE_TYPE}..."
               exit 1
           fi
+          echo "::notice:: Resource type 'pull' request confirmed."
 
 
           PR_SCHEMA="$GITHUB_BASE_URL$BASE_REPO$RESOURCE_TYPE"
-
           RESOURCE_ID_PART="${INPUT_URL#$PR_SCHEMA}"
-
+          PR_NUMBER=""
+          
+          echo "::notice:: Attempting to extract PR number from '$RESOURCE_ID_PART'..."
           if [[ "$RESOURCE_ID_PART" =~ ^([0-9]+) ]]; then
               PR_NUMBER="${BASH_REMATCH[1]}"
+              echo "::notice:: Successfully extracted PR number: $PR_NUMBER"
           else
               echo "::error:: Can't find PR ID or PR ID is not a number. Check URL. Expected: ${GITHUB_BASE_URL}${BASE_REPO}${RESOURCE_TYPE}<NUMBER>"
               exit 1
           fi
 
+          echo "::notice:: All URL validations successful! for $PR_SCHEMA$RESOURCE_ID"
+          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
-          echo "URL validation successful! $PR_SCHEMA$RESOURCE_ID"
+  fetch-pr-data:
+    runs-on: ubuntu-latest
+    needs: Validate-pr-link
+    steps:
+      - name: Access PR Number from previous job
+        run: |
+          EXTRACTED_PR_NUMBER="${{ needs.Validate-pr-link.outputs.pr_number }}"
+          echo "::notice:: Received PR Number from 'validate-pr-link' job: $EXTRACTED_PR_NUMBER"
+
