@@ -1,0 +1,31 @@
+name: Auto Annotate commits
+
+permissions:
+  pull-requests: write
+
+on:
+  workflow_dispatch:
+    inputs:
+      PullRequestLink:
+        description: "Enter the Pull Request Link"
+        required: true
+        type: string
+
+
+jobs:
+  fetch-pr-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create seprate directory
+      - run: | 
+          mkdir gh-automation
+          echo '{"foo":"bar"}' > gh-automation/pr-data.json
+
+      - name: check PR data
+      - run: cat gh-automation/pr-data.json | jq
+
+      - name: check PR
+      - run: echo "${{ github.repository }}"
+
+
