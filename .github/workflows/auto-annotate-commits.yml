@@ -16,13 +16,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Create separate directory and add JSON
-        run: |
-          mkdir gh-automation
-          echo '{"foo":"bar"}' > gh-automation/pr-data.json
+      - name: Check And Validate PR Inuput Link
+        run: | 
+          INPUT_URL="${{ github.event.inputs.PullRequestLink }}"
+          BASE_REPO="${{ github.repository }}/" 
+          GITHUB_BASE_URL="https://github.com/"
+          RESOURCE_TYPE="pull/"
 
-      - name: Check PR data
-        run: cat gh-automation/pr-data.json | jq
+          echo "::notice:: Validating URL: $INPUT_URL"
 
-      - name: Check PR
-        run: echo "${{ github.repository }}"
+          if [[ ! "$INPUT_URL" == "$GITHUB_BASE_URL"* ]]; then
+              echo "::error:: Base URL didn't match. Expected: $GITHUB_BASE_URL"
+              exit 1
+          fi
+
+          if [[ ! "$INPUT_URL" == "$GITHUB_BASE_URL$BASE_REPO"* ]]; then
+              echo "::error:: PR does not belong to this repository. Expected prefix: $GITHUB_BASE_URL$BASE_REPO"
+              exit 1
+          fi
+
+          if [[ ! "$INPUT_URL" == "$GITHUB_BASE_URL$BASE_REPO$RESOURCE_TYPE"* ]]; then
+              echo "::error:: Not a pull request link. Expected: ${GITHUB_BASE_URL}${BASE_REPO}${RESOURCE_TYPE}..."
+              exit 1
+          fi
+
+
+          PR_SCHEMA="$GITHUB_BASE_URL$BASE_REPO$RESOURCE_TYPE"
+
+          RESOURCE_ID_PART="${INPUT_URL#$PR_SCHEMA}"
+
+          if [[ "$RESOURCE_ID_PART" =~ ^([0-9]+) ]]; then
+              PR_NUMBER="${BASH_REMATCH[1]}"
+          else
+              echo "::error:: Can't find PR ID or PR ID is not a number. Check URL. Expected: ${GITHUB_BASE_URL}${BASE_REPO}${RESOURCE_TYPE}<NUMBER>"
+              exit 1
+          fi
+
+
+          echo "URL validation successful! $PR_SCHEMA$RESOURCE_ID"
