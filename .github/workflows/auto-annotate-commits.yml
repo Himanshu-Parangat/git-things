@@ -15,10 +15,11 @@ jobs:
   Validate-pr-link:
     runs-on: ubuntu-latest
     outputs:
-      pr_number: ${{ steps.validate-step.outputs.pr_number }} 
+      pr_link: ${{ steps.validate-link-step.outputs.pr_link }} 
         
     steps:
       - name: Check And Validate PR Inuput Link
+        id: validate-link-step
         run: | 
           INPUT_URL="${{ github.event.inputs.PullRequestLink }}"
           BASE_REPO="${{ github.repository }}/" 
@@ -61,8 +62,8 @@ jobs:
               exit 1
           fi
 
-          echo "::notice:: All URL validations successful! for $PR_SCHEMA$RESOURCE_ID"
-          echo "pr_number=$PR_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "::notice:: PR Link validations successful! for $PR_SCHEMA$PR_NUMBER"
+          echo "pr_link=$PR_SCHEMA$PR_NUMBER" >> "$GITHUB_OUTPUT"
 
   fetch-pr-data:
     runs-on: ubuntu-latest
@@ -70,6 +71,6 @@ jobs:
     steps:
       - name: Access PR Number from previous job
         run: |
-          EXTRACTED_PR_NUMBER="${{ needs.Validate-pr-link.outputs.pr_number }}"
-          echo "::notice:: Received PR Number from 'validate-pr-link' job: $EXTRACTED_PR_NUMBER"
+          VALIDATED_PR_LINK="${{ needs.Validate-pr-link.outputs.pr_link }}"
+          echo "::notice:: Received PR link from 'validate-pr-link' job: $VALIDATED_PR_LINK"
 
