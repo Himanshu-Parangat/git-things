@@ -11,6 +11,8 @@ import (
 	"os"
 )
 
+//fixed bug for ci
+
 //go:embed components/index.html
 var templateFiles embed.FS
 
